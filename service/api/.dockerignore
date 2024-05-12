@@ -1,0 +1,32 @@
+# editor directories and files
+.idea/
+.vscode/
+
+# env files
+.env*
+
+# secret files
+.secret*
+
+# misc
+.DS_Store
+
+# dependencies
+.venv/
+
+# fastapi
+
+
+
+########## ########## ########## ########## ##########
+LICENSE
+README.md
+
+.git/
+.gitignore
+
+Dockerfile*
+docker-compose*
+.dockerignore*
+
+**/__pycache__

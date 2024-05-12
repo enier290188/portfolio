@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+##### App #####
+fastapi = { version = "==0.111.0" }
+pydantic = { version = "==2.7.1", extras = ["email"] }
+pydantic-settings = { version = "==2.2.1" }
+uvicorn = { version = "==0.29.0" }
+gunicorn = { version = "==22.0.0" }
+##### Auth #####
+python-multipart = { version = "==0.0.9" }
+python-jose = { version = "==3.3.0", extras = ["cryptography"] }
+passlib = { version = "==1.7.4" }
+##### DB #####
+sqlalchemy = { version = "==2.0.30", extras = ["asyncio"] }
+alembic = { version = "==1.13.1" }
+psycopg = { version = "==3.1.18", extras = ["binary", "pool"] }
+
+[dev-packages]
+##### Test #####
+pytest = { version = "==8.2.0" }
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.1"
