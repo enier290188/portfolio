@@ -1,54 +1,54 @@
 services:
-  #  service-web:
-  #    healthcheck:
-  #      test: curl -f http://${DC_SERVICE_WEB_HOSTNAME}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
-  #      interval: 1s
-  #      timeout: 1s
-  #      retries: 3
-  #      start_period: 0s
-  #      start_interval: 0s
-  #    depends_on:
-  #      service-api:
-  #        condition: service_healthy
-  #        restart: true
-  #        required: true
-  #    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
-  #    container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web
-  #    restart: no
-  #    environment:
-  #      - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
-  #      - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
-  #    build:
-  #      platforms:
-  #        - linux/arm64/v8
-  #        - linux/amd64
-  #      context: ../../../service/web
-  #      dockerfile: Dockerfile
-  #      target: stage-${DC_PROJECT_STAGE}
-  #    ports:
-  #      - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
-  #    networks:
-  #      - network
-  #    develop:
-  #      watch:
-  #        - action: sync
-  #          path: ../../../service/web
-  #          target: /usr/src/service/web
-  #          ignore:
-  #            - ../../../service/web/node_modules
-  #            - ../../../service/web/.next
-  #        - action: rebuild
-  #          path: ../../../service/web/package.json
-  #        - action: rebuild
-  #          path: ../../../service/web/package-lock.json
-  #        - action: rebuild
-  #          path: ../../../service/web/tsconfig.json
-  #        - action: rebuild
-  #          path: ../../../service/web/next.config.mjs
-  #        - action: rebuild
-  #          path: ../../../service/web/postcss.config.mjs
-  #        - action: rebuild
-  #          path: ../../../service/web/tailwind.config.ts
+  service-web:
+    healthcheck:
+      test: curl -f http://${DC_SERVICE_WEB_HOSTNAME}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
+      start_interval: 0s
+    depends_on:
+      service-api:
+        condition: service_healthy
+        restart: true
+        required: true
+    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
+    container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web
+    restart: no
+    environment:
+      - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
+      - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
+    build:
+      platforms:
+        - linux/arm64/v8
+        - linux/amd64
+      context: ../../../service/web
+      dockerfile: Dockerfile
+      target: stage-${DC_PROJECT_STAGE}
+    ports:
+      - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
+    networks:
+      - network
+    develop:
+      watch:
+        - action: sync
+          path: ../../../service/web
+          target: /usr/src/service/web
+          ignore:
+            - ../../../service/web/node_modules
+            - ../../../service/web/.next
+        - action: rebuild
+          path: ../../../service/web/package.json
+        - action: rebuild
+          path: ../../../service/web/package-lock.json
+        - action: rebuild
+          path: ../../../service/web/tsconfig.json
+        - action: rebuild
+          path: ../../../service/web/next.config.mjs
+        - action: rebuild
+          path: ../../../service/web/postcss.config.mjs
+        - action: rebuild
+          path: ../../../service/web/tailwind.config.ts
   service-api:
     healthcheck:
       test: curl -f http://${DC_SERVICE_API_HOSTNAME}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
