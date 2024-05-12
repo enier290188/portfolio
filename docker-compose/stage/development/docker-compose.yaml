@@ -1,0 +1,152 @@
+services:
+  service-web:
+    healthcheck:
+      test: curl -f http://${DC_SERVICE_WEB_HOSTNAME}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
+      start_interval: 0s
+    depends_on:
+      service-api:
+        condition: service_healthy
+        restart: true
+        required: true
+    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
+    container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web
+    restart: no
+    environment:
+      - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
+      - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
+    build:
+      platforms:
+        - linux/arm64/v8
+        - linux/amd64
+      context: ../../../service/web
+      dockerfile: Dockerfile
+      target: stage-${DC_PROJECT_STAGE}
+    ports:
+      - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
+    networks:
+      - network
+    develop:
+      watch:
+        - action: sync
+          path: ../../../service/web
+          target: /usr/src/service/web
+          ignore:
+            - ../../../service/web/node_modules
+            - ../../../service/web/.next
+        - action: rebuild
+          path: ../../../service/web/package.json
+        - action: rebuild
+          path: ../../../service/web/package-lock.json
+        - action: rebuild
+          path: ../../../service/web/tsconfig.json
+        - action: rebuild
+          path: ../../../service/web/next.config.mjs
+        - action: rebuild
+          path: ../../../service/web/postcss.config.mjs
+        - action: rebuild
+          path: ../../../service/web/tailwind.config.ts
+  service-api:
+    healthcheck:
+      test: curl -f http://${DC_SERVICE_API_HOSTNAME}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
+      start_interval: 0s
+    depends_on:
+      service-db:
+        condition: service_healthy
+        restart: true
+        required: true
+    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api:0.1.0
+    container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api
+    restart: no
+    environment:
+      - SERVICE_API_HOSTNAME=${DC_SERVICE_API_HOSTNAME}
+      - SERVICE_API_PORT=${DC_SERVICE_API_PORT_INTERNAL}
+      - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
+      - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
+      - SERVICE_DB_SERVER=service-db
+      - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
+      - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
+      - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
+    build:
+      platforms:
+        - linux/arm64/v8
+        - linux/amd64
+      context: ../../../service/api
+      dockerfile: Dockerfile
+      target: stage-${DC_PROJECT_STAGE}
+    ports:
+      - ${DC_SERVICE_API_PORT_EXTERNAL}:${DC_SERVICE_API_PORT_INTERNAL}
+    secrets:
+      - source: service_api_auth_jwt_key
+        target: SERVICE_API_AUTH_JWT_KEY_FILE
+      - source: service_api_auth_jwt_algorithm
+        target: SERVICE_API_AUTH_JWT_ALGORITHM_FILE
+      - source: service_api_user_root_password
+        target: SERVICE_API_USER_ROOT_PASSWORD_FILE
+      - source: service_db_password
+        target: SERVICE_DB_PASSWORD_FILE
+    networks:
+      - network
+    volumes:
+      - ../../../service/api/migration/versions:/usr/src/service/api/migration/versions:rw
+    develop:
+      watch:
+        - action: sync
+          path: ../../../service/api
+          target: /usr/src/service/api
+          ignore:
+            - ../../../service/api/.venv
+            - ../../../service/api/migration/versions
+        - action: rebuild
+          path: ../../../service/api/Pipfile
+        - action: rebuild
+          path: ../../../service/api/Pipfile.lock
+  service-db:
+    healthcheck:
+      test: pg_isready -q -d ${DC_SERVICE_DB_DATABASE} -U ${DC_SERVICE_DB_USER}
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
+      start_interval: 0s
+    image: postgres:16.2-alpine
+    container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+    restart: no
+    environment:
+      - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}
+      - POSTGRES_DB=${DC_SERVICE_DB_DATABASE}
+      - POSTGRES_USER=${DC_SERVICE_DB_USER}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/service_db_password
+    ports:
+      - ${DC_SERVICE_DB_PORT_EXTERNAL}:${DC_SERVICE_DB_PORT_INTERNAL}
+    secrets:
+      - service_db_password
+    networks:
+      - network
+    volumes:
+      - volume-db:/var/lib/postgresql/data:rw
+
+secrets:
+  service_api_auth_jwt_key:
+    file: ./secret/.secret.SERVICE_API_AUTH_JWT_KEY
+  service_api_auth_jwt_algorithm:
+    file: ./secret/.secret.SERVICE_API_AUTH_JWT_ALGORITHM
+  service_api_user_root_password:
+    file: ./secret/.secret.SERVICE_API_USER_ROOT_PASSWORD
+  service_db_password:
+    file: ./secret/.secret.SERVICE_DB_PASSWORD
+
+networks:
+  network:
+    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
+
+volumes:
+  volume-db:
+    name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
