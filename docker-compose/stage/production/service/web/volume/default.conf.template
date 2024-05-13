@@ -4,7 +4,7 @@ server {
     client_max_body_size 4G;
 
     location / {
-        root /usr/share/nginx/html;
+        root /usr/src/service/web;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
