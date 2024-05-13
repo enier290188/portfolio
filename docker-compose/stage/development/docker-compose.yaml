@@ -36,7 +36,7 @@ services:
           target: /usr/src/service/web
           ignore:
             - ../../../service/web/node_modules
-            - ../../../service/web/.next
+            - ../../../service/web/dist
         - action: rebuild
           path: ../../../service/web/package.json
         - action: rebuild
@@ -44,11 +44,9 @@ services:
         - action: rebuild
           path: ../../../service/web/tsconfig.json
         - action: rebuild
-          path: ../../../service/web/next.config.mjs
+          path: ../../../service/web/tsconfig.node.json
         - action: rebuild
-          path: ../../../service/web/postcss.config.mjs
-        - action: rebuild
-          path: ../../../service/web/tailwind.config.ts
+          path: ../../../service/web/vite.config.ts
   service-api:
     healthcheck:
       test: curl -f http://${DC_SERVICE_API_HOSTNAME}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1

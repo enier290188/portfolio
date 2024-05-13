@@ -69,6 +69,8 @@ services:
     networks:
       - network-web-load-balancer-and-web
       - network-web-and-api-load-balancer
+    volumes:
+      - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
   service-api-load-balancer:
     deploy:
       mode: replicated

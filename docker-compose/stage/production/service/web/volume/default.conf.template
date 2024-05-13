@@ -1,0 +1,11 @@
+server {
+    server_name ${NGINX_HOSTNAME};
+    listen ${NGINX_PORT};
+    client_max_body_size 4G;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
