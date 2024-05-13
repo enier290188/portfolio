@@ -1,0 +1,18 @@
+# editor directories and files
+.idea/
+.vscode/
+
+# env files
+.env*
+
+# secret files
+.secret*
+
+# misc
+.DS_Store
+
+# dependencies
+node_modules/
+
+# vite
+dist/
