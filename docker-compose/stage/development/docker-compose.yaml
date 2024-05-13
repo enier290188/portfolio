@@ -15,9 +15,6 @@ services:
     image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
     container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web
     restart: no
-    environment:
-      - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
-      - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
     build:
       platforms:
         - linux/arm64/v8
@@ -25,6 +22,9 @@ services:
       context: ../../../service/web
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
+      args:
+        - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
+        - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
     ports:
       - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
     networks:
@@ -63,15 +63,6 @@ services:
     image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api:0.1.0
     container_name: container-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api
     restart: no
-    environment:
-      - SERVICE_API_HOSTNAME=${DC_SERVICE_API_HOSTNAME}
-      - SERVICE_API_PORT=${DC_SERVICE_API_PORT_INTERNAL}
-      - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
-      - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
-      - SERVICE_DB_SERVER=service-db
-      - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
-      - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
-      - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
     build:
       platforms:
         - linux/arm64/v8
@@ -79,6 +70,15 @@ services:
       context: ../../../service/api
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
+      args:
+        - SERVICE_API_HOSTNAME=${DC_SERVICE_API_HOSTNAME}
+        - SERVICE_API_PORT=${DC_SERVICE_API_PORT_INTERNAL}
+        - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
+        - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
+        - SERVICE_DB_SERVER=service-db
+        - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
+        - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
+        - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
     ports:
       - ${DC_SERVICE_API_PORT_EXTERNAL}:${DC_SERVICE_API_PORT_INTERNAL}
     secrets:
