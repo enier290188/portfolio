@@ -28,5 +28,3 @@ README.md
 Dockerfile*
 docker-compose*
 .dockerignore*
-
-**/__pycache__
