@@ -1,5 +1,3 @@
 export default function App() {
-    return (
-        <h1>Portfolio app</h1>
-    )
+    return <h1>Portfolio app</h1>
 }

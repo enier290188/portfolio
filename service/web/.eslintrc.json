@@ -4,20 +4,10 @@
         "browser": true,
         "es2023": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react-hooks/recommended",
-        "prettier"
-    ],
-    "ignorePatterns": [
-        "dist",
-        ".eslintrc.json"
-    ],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
+    "ignorePatterns": ["dist", ".eslintrc.json"],
     "parser": "@typescript-eslint/parser",
-    "plugins": [
-        "react-refresh"
-    ],
+    "plugins": ["react-refresh"],
     "rules": {
         "react-refresh/only-export-components": [
             "warn",
