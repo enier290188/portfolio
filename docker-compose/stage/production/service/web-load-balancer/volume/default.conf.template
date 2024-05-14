@@ -1,6 +1,8 @@
 server {
     server_name ${NGINX_HOSTNAME};
-    listen ${NGINX_PORT};
+    listen ${NGINX_PORT} ssl;
+    ssl_certificate /etc/nginx/ssl/.ssl.crt;
+    ssl_certificate_key /etc/nginx/ssl/.ssl.key;
     client_max_body_size 4G;
 
     location / {
@@ -12,6 +14,10 @@ server {
         proxy_redirect off;
         proxy_buffering off;
         proxy_pass http://server-replicas;
+    }
+
+    if ($scheme != "https") {
+        return 301 https://$http_host:${NGINX_PORT}$request_uri;
     }
 }
 

@@ -6,7 +6,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: curl -f http://${DC_SERVICE_WEB_LOAD_BALANCER_HOSTNAME}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} || exit 1
+      test: curl -f https://${DC_SERVICE_WEB_LOAD_BALANCER_HOSTNAME}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
       interval: 1s
       timeout: 1s
       retries: 3
@@ -34,6 +34,9 @@ services:
       - network-web-load-balancer-and-web
     volumes:
       - ./service/web-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.local"
+      - ./service/web-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
+      - ./service/web-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
   service-web:
     deploy:
       mode: replicated
@@ -78,7 +81,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: curl -f http://${DC_SERVICE_API_LOAD_BALANCER_HOSTNAME}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} || exit 1
+      test: curl -f https://${DC_SERVICE_API_LOAD_BALANCER_HOSTNAME}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
       interval: 1s
       timeout: 1s
       retries: 3
@@ -106,6 +109,9 @@ services:
       - network-api-load-balancer-and-api
     volumes:
       - ./service/api-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.local"
+      - ./service/api-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
+      - ./service/api-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
   service-api:
     deploy:
       mode: replicated

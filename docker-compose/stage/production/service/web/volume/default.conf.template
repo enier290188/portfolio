@@ -1,7 +1,6 @@
 server {
     server_name ${NGINX_HOSTNAME};
     listen ${NGINX_PORT};
-    client_max_body_size 4G;
 
     location / {
         root /usr/src/service/web;
