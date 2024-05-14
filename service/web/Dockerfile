@@ -45,7 +45,7 @@ FROM stage-production-base AS stage-production-builder
 COPY --from=stage-production-dependencies /usr/src/service/web/node_modules ./node_modules
 COPY ./ ./
 RUN <<EOF
-    npx vite build --outDir dist --assetsDir assets --assetsInlineLimit 4096
+    npx vite build --outDir dist --assetsDir asset --assetsInlineLimit 4096
 EOF
 
 FROM nginx:1.26.0-alpine AS stage-production

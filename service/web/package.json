@@ -21,7 +21,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite dev --host localhost --port 3000 --cors --strictPort --force --debug",
-        "build": "tsc && vite build --outDir dist --assetsDir assets --assetsInlineLimit 4096",
+        "build": "tsc && vite build --outDir dist --assetsDir asset --assetsInlineLimit 4096",
         "preview": "vite preview --host localhost --port 8080 --strictPort --cors",
         "eslint:check": "eslint ..src --ext ts,tsx --quiet --report-unused-disable-directives --max-warnings 10",
         "prettier:check": "prettier src --check"
