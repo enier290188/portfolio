@@ -18,7 +18,7 @@ RUN <<EOF
 EOF
 COPY ./ ./
 EXPOSE $SERVICE_WEB_PORT
-CMD npx vite dev --host $SERVICE_WEB_HOSTNAME --port $SERVICE_WEB_PORT --strictPort --cors
+CMD npx vite dev --host $SERVICE_WEB_HOSTNAME --port $SERVICE_WEB_PORT --cors --strictPort --force --debug
 
 
 
@@ -45,7 +45,7 @@ FROM stage-production-base AS stage-production-builder
 COPY --from=stage-production-dependencies /usr/src/service/web/node_modules ./node_modules
 COPY ./ ./
 RUN <<EOF
-    npx vite build --outDir dist --assetsDir assets --emptyOutDir true
+    npx vite build --outDir dist --assetsDir assets --assetsInlineLimit 4096
 EOF
 
 FROM nginx:1.26.0-alpine AS stage-production
