@@ -2,7 +2,7 @@
     "root": true,
     "env": {
         "browser": true,
-        "es2023": true
+        "es2022": true
     },
     "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "prettier"],
     "ignorePatterns": ["dist", ".eslintrc.json"],

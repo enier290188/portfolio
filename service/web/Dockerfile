@@ -45,6 +45,7 @@ FROM stage-production-base AS stage-production-builder
 COPY --from=stage-production-dependencies /usr/src/service/web/node_modules ./node_modules
 COPY ./ ./
 RUN <<EOF
+    npm run tsc
     npx vite build --outDir dist --assetsDir asset --assetsInlineLimit 4096
 EOF
 
