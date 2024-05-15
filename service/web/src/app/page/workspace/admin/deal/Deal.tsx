@@ -1,5 +1,4 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
@@ -9,6 +8,15 @@ import React from 'react'
 const RouteCreate = React.lazy(() => import('./create'))
 const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
+
+type TypeDeal = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 const ViewList = React.memo(() => {
     const contextI18n = React.useContext(app.context.i18n.Context)
@@ -21,7 +29,7 @@ const ViewList = React.memo(() => {
 
     const queryDealList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/deal/list/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.deal.list(),
+        queryFn: () => [],
         initialData: [],
     })
 
@@ -29,7 +37,7 @@ const ViewList = React.memo(() => {
         await queryDealList.refetch()
     }, [queryDealList])
 
-    const tableColumns = React.useMemo<tableType.ColumnDef<awsAmplifyApiType.Deal>[]>(
+    const tableColumns = React.useMemo<tableType.ColumnDef<TypeDeal>[]>(
         () => [
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
@@ -120,7 +128,7 @@ const ViewList = React.memo(() => {
         [i18n],
     )
 
-    const tableData: awsAmplifyApiType.Deal[] = queryDealList.data.slice()
+    const tableData: TypeDeal[] = queryDealList.data.slice()
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'lg'}>

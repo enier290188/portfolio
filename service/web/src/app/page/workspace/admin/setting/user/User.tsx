@@ -1,5 +1,4 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
@@ -10,6 +9,16 @@ const RouteCreate = React.lazy(() => import('./create'))
 const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdResetPassword = React.lazy(() => import('./id/reset-password'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
+
+type TypeUser = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    groupList: []
+    createdAt: string
+    updatedAt: string
+}
 
 const ViewList = React.memo(() => {
     const contextI18n = React.useContext(app.context.i18n.Context)
@@ -22,7 +31,7 @@ const ViewList = React.memo(() => {
 
     const queryUserList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.setting.user.list(),
+        queryFn: () => [],
         initialData: [],
     })
 
@@ -30,7 +39,7 @@ const ViewList = React.memo(() => {
         await queryUserList.refetch()
     }, [queryUserList])
 
-    const tableColumns = React.useMemo<tableType.ColumnDef<awsAmplifyApiType.User>[]>(
+    const tableColumns = React.useMemo<tableType.ColumnDef<TypeUser>[]>(
         () => [
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
@@ -108,17 +117,6 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'cognitoStatus',
-                header: i18n.getText('field.cognito-status.label'),
-                enableSorting: true,
-                enableColumnFilter: true,
-                sortingFn: 'alphanumericCaseSensitive',
-                filterFn: 'includesString',
-                meta: {
-                    type: 'text',
-                },
-            },
-            {
                 accessorKey: 'createdAt',
                 header: i18n.getText('field.created-at.label'),
                 enableSorting: true,
@@ -146,7 +144,7 @@ const ViewList = React.memo(() => {
         [i18n, userId],
     )
 
-    const tableData: awsAmplifyApiType.User[] = queryUserList.data.slice()
+    const tableData: TypeUser[] = queryUserList.data.slice()
 
     return (
         <>
