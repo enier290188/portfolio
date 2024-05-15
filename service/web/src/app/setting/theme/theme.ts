@@ -1,4 +1,4 @@
-import { mui } from '@./package/material-ui'
+import { mui, muiType } from '@./package/material-ui'
 
 // Material UI is designed to use the Roboto font by default.
 // Fontsource can be configured to load specific subsets, weights and styles.
@@ -8,7 +8,7 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
-export const theme = mui.style.createTheme({
+export const theme: muiType.Theme = mui.style.createTheme({
     components: {
         MuiButton: {
             styleOverrides: {
