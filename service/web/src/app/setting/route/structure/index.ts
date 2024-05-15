@@ -1,4 +1,4 @@
-import { KEY_PATH, KEY_TO, TypeRoute } from './route.type.ts'
+import { KEY_PATH, KEY_TO, TypeRoute } from '../route.type.ts'
 
 export const structure: TypeRoute = {
     app: {
