@@ -1,0 +1,7 @@
+{
+    "title": "Cerrar Sesión",
+    "question.alert": "¿Quieres cerrar tu sesión?",
+    "action.submit": "Cerrar Sesión",
+    "action.submit.alert.success": "El usuario \"{name}\" ha cerrado sesión",
+    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado"
+}

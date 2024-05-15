@@ -1,0 +1,7 @@
+{
+    "table.head.column.filter.textfield.placeholder": "Buscar... ({value})",
+    "table.pagination.total-rows": "{value} filas",
+    "table.pagination.rows-per-page": "Filas por página",
+    "table.pagination.page": "Página",
+    "table.pagination.of": "de {value}"
+}

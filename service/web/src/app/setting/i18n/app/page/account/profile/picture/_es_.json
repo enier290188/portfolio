@@ -1,0 +1,10 @@
+{
+    "title": "Imagen",
+    "field.picture.label": "Fichero",
+    "field.picture.validate.max-size": "- Esta nueva imagen recortada tiene {currentSize} KB y debe tener no más de {maxSize} KB.",
+    "action.refresh": "Actualizar",
+    "action.submit": "Guardar",
+    "action.submit.alert.success": "Guardado con éxito",
+    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.reset": "Reinicializar"
+}

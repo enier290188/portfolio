@@ -1,0 +1,7 @@
+{
+    "title": "Log Out",
+    "question.alert": "Do you want to close your session?",
+    "action.submit": "Log Out",
+    "action.submit.alert.success": "The user \"{name}\" has logged out",
+    "action.submit.alert.error": "Sorry, an unexpected error has occurred"
+}

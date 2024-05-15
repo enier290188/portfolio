@@ -1,0 +1,19 @@
+{
+    "title": "Modificar Iniciativa",
+    "field.name.label": "Nombre",
+    "field.name.validate.required": "- Es requerido.",
+    "field.name.validate.max-length": "- Debe tener menos de {value} caracteres.",
+    "field.email.label": "Correo",
+    "field.email.validate.required": "- Es requerido.",
+    "field.email.validate.max-length": "- Debe tener menos de {value} caracteres.",
+    "field.email.validate.pattern": "- El formato no es válido.",
+    "field.phone.label": "Teléfono",
+    "field.phone.validate.required": "- Es requerido.",
+    "field.phone.validate.max-length": "- Debe tener menos de {value} caracteres.",
+    "field.phone.validate.pattern": "- El formato no es válido.",
+    "action.refresh": "Actualizar",
+    "action.submit": "Guardar",
+    "action.submit.alert.success": "Guardado con éxito",
+    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.reset": "Reinicializar"
+}

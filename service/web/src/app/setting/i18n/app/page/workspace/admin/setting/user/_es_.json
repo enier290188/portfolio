@@ -1,0 +1,11 @@
+{
+    "title": "Usuarios",
+    "action.refresh": "Actualizar",
+    "field.name.label": "Nombre",
+    "field.email.label": "Correo",
+    "field.phone.label": "Teléfono",
+    "field.group-list.label": "Grupos",
+    "field.cognito-status.label": "Estado",
+    "field.created-at.label": "Creado",
+    "field.updated-at.label": "Modificado"
+}
