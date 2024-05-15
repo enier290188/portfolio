@@ -6,5 +6,5 @@ export type DividerProps = {
     component?: ElementType
     orientation?: muiType.DividerProps['orientation']
     dividerProps?: muiType.DividerProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
 }

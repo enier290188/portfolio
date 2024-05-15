@@ -32,7 +32,7 @@ export const Link = ({ children, to }: { children: appType.TypeChildrenProps; to
     )
 
     const handleOnClick = React.useCallback(
-        (e: appType.MouseEvent<HTMLElement>) => {
+        (e: appType.TypeMouseEvent<HTMLElement>) => {
             if (isActive) {
                 e.preventDefault()
             }

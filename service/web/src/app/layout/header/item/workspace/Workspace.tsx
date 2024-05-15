@@ -18,7 +18,7 @@ export const Workspace = () => {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
-    const handleMenuOnOpen = React.useCallback((e: appType.MouseEvent<HTMLElement>) => {
+    const handleMenuOnOpen = React.useCallback((e: appType.TypeMouseEvent<HTMLElement>) => {
         setAnchorEl(e.currentTarget)
     }, [])
 

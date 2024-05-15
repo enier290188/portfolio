@@ -7,5 +7,5 @@ export type AlertProps = {
     severity?: muiType.AlertProps['severity']
     onClose?: muiType.AlertProps['onClose']
     alertProps?: muiType.AlertProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
 }

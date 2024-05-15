@@ -8,5 +8,5 @@ export type TypographyProps = {
     variant?: muiType.TypographyProps['variant']
     noWrap?: muiType.TypographyProps['noWrap']
     typographyProps?: muiType.TypographyProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
 }

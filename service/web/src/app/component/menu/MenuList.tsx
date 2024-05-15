@@ -2,7 +2,7 @@ import { app, appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React, { ElementType } from 'react'
 
-export const MenuList = ({ children, component = 'div', space = 0 }: { children: appType.TypeChildrenProps; component?: ElementType; space?: appType.ComponentSpace }) => {
+export const MenuList = ({ children, component = 'div', space = 0 }: { children: appType.TypeChildrenProps; component?: ElementType; space?: appType.TypeSettingThemeComponentSpace }) => {
     const [spaceTop, spaceRight, spaceBottom, spaceLeft] = app.hook.useComponentSpace(space)
 
     const sxContent = React.useCallback(

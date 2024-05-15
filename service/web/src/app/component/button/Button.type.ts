@@ -12,7 +12,7 @@ export type ButtonProps = {
     disabled?: muiType.ButtonProps['disabled']
     onClick?: muiType.ButtonProps['onClick']
     buttonProps?: muiType.ButtonProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
     underline?: true | false
     match?: true | false
     matchDisable?: true | false

@@ -8,14 +8,14 @@ export type ImageCropProps = {
     id: string
     value: string
     variant?: muiType.AvatarProps['variant']
-    defaultIcon?: appType.FunctionComponent
+    defaultIcon?: appType.TypeFunctionComponent
     label?: muiType.TextFieldProps['label']
     error?: muiType.TextFieldProps['error']
     helperText?: muiType.TextFieldProps['helperText']
     required?: muiType.TextFieldProps['required']
     disabled?: muiType.TextFieldProps['disabled']
     isSubmitting?: boolean
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
     onActionReset: () => void
     onActionDelete: () => void
     onActionCropComplete: (value: string) => void

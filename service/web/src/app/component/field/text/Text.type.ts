@@ -16,6 +16,6 @@ export type TextProps = {
     disabled?: muiType.TextFieldProps['disabled']
     autoFocus?: muiType.TextFieldProps['autoFocus']
     textFieldProps?: muiType.TextFieldProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
     field: object
 }

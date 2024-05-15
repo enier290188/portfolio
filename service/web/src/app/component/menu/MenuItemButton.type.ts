@@ -8,7 +8,7 @@ export type MenuItemButtonProps = {
     disabled?: muiType.ButtonProps['disabled']
     onClick?: muiType.MenuItemProps['onClick']
     menuItemProps?: muiType.MenuItemProps
-    space?: appType.ComponentSpace
+    space?: appType.TypeSettingThemeComponentSpace
     underline?: true | false
     match?: true | false
     matchDisable?: true | false

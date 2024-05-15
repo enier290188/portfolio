@@ -31,9 +31,9 @@ const LayoutTableHeadColumnSort = <TData extends tanstackReactTableType.RowData>
     const sxIcon = React.useCallback(
         (theme: muiType.Theme) => ({
             marginLeft: `${theme.spacing(2)} !important`,
-            cursor: 'pointer'
+            cursor: 'pointer',
         }),
-        []
+        [],
     )
 
     const onClick = React.useCallback(() => {
@@ -46,7 +46,7 @@ const LayoutTableHeadColumnSort = <TData extends tanstackReactTableType.RowData>
         <>
             {{
                 asc: <mui.icon.ArrowCircleDown color={'primary'} sx={sxIcon} onClick={onClick} />,
-                desc: <mui.icon.ArrowCircleUp color={'primary'} sx={sxIcon} onClick={onClick} />
+                desc: <mui.icon.ArrowCircleUp color={'primary'} sx={sxIcon} onClick={onClick} />,
             }[column.getIsSorted() as string] ?? <mui.icon.Sort color={'primary'} sx={sxIcon} onClick={onClick} />}
         </>
     )
@@ -62,9 +62,9 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
             width: '100%',
             minWidth: '200px',
             maxWidth: '200px',
-            '& input::-webkit-calendar-picker-indicator': { opacity: 0 }
+            '& input::-webkit-calendar-picker-indicator': { opacity: 0 },
         }),
-        []
+        [],
     )
     const sxTextField = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -81,11 +81,11 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                 padding: theme.spacing(0),
                 '& .MuiOutlinedInput-input': {
                     margin: theme.spacing(0),
-                    padding: theme.spacing(1, 1, 1, 0)
-                }
-            }
+                    padding: theme.spacing(1, 1, 1, 0),
+                },
+            },
         }),
-        []
+        [],
     )
     const sxTextFieldInputPropsStartAdornment = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -96,9 +96,9 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
             justifyContent: 'center',
             alignItems: 'center',
             margin: theme.spacing(0),
-            padding: theme.spacing(1)
+            padding: theme.spacing(1),
         }),
-        []
+        [],
     )
 
     const columnFilterValue = column.getFilterValue()
@@ -139,7 +139,7 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                                 headerColumnsData[headerColumnId] = {
                                     id: headerColumnId,
                                     index: headerColumnFilterIndex,
-                                    value: headerColumnFilterValue ? `${headerColumnFilterValue ?? ''}` : ''
+                                    value: headerColumnFilterValue ? `${headerColumnFilterValue ?? ''}` : '',
                                 }
                                 ++headerColumnsDataCount
                             }
@@ -155,7 +155,7 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                             headerColumnsData[columnId] = {
                                 id: columnId,
                                 index: columnFilterIndex,
-                                value: columnFilterValue
+                                value: columnFilterValue,
                             }
                         } else {
                             delete headerColumnsData[columnId]
@@ -169,7 +169,7 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                         headerColumnsData[columnId] = {
                             id: columnId,
                             index: headerColumnsDataCount,
-                            value: columnFilterValue
+                            value: columnFilterValue,
                         }
                     }
 
@@ -177,7 +177,7 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                     for (const columnsDataKey in headerColumnsData) {
                         headerColumnList.push({
                             id: headerColumnsData[columnsDataKey].id,
-                            value: headerColumnsData[columnsDataKey].value
+                            value: headerColumnsData[columnsDataKey].value,
                         })
                     }
 
@@ -186,14 +186,14 @@ const LayoutTableHeadColumnFilter = <TData extends tanstackReactTableType.RowDat
                 }}
                 placeholder={i18n.getText('table.head.column.filter.textfield.placeholder', { value: facetedUniqueValues.length })}
                 inputProps={{
-                    list: column.id + 'list'
+                    list: column.id + 'list',
                 }}
                 InputProps={{
                     startAdornment: (
                         <mui.component.Box component={'div'} sx={sxTextFieldInputPropsStartAdornment}>
                             <mui.icon.Search />
                         </mui.component.Box>
-                    )
+                    ),
                 }}
                 sx={sxTextField}
             />
@@ -207,9 +207,9 @@ const LayoutTableHead = <TData extends tanstackReactTableType.RowData>({ tableKe
             margin: theme.spacing(0),
             padding: theme.spacing(1, 2),
             verticalAlign: 'top',
-            borderBottom: 0
+            borderBottom: 0,
         }),
-        []
+        [],
     )
     const sxTableCellContent = React.useCallback(
         () => ({
@@ -218,9 +218,9 @@ const LayoutTableHead = <TData extends tanstackReactTableType.RowData>({ tableKe
             flexWrap: 'nowrap',
             alignContent: 'flex-start',
             justifyContent: 'flex-start',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
         }),
-        []
+        [],
     )
 
     return (
@@ -261,37 +261,37 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
             margin: theme.spacing(0),
             padding: theme.spacing(1, 2),
             verticalAlign: 'top',
-            border: 0
+            border: 0,
         }),
-        []
+        [],
     )
     const sxTableCellForRowDefault = React.useCallback(
         (theme: muiType.Theme) => ({
             ...sxTableCell(theme),
-            borderTop: `1px solid ${theme.palette.divider}`
+            borderTop: `1px solid ${theme.palette.divider}`,
         }),
-        [sxTableCell]
+        [sxTableCell],
     )
     const sxTableCellForRowDefaultLastRow = React.useCallback(
         (theme: muiType.Theme) => ({
             ...sxTableCellForRowDefault(theme),
-            borderBottom: `1px solid ${theme.palette.divider}`
+            borderBottom: `1px solid ${theme.palette.divider}`,
         }),
-        [sxTableCellForRowDefault]
+        [sxTableCellForRowDefault],
     )
     const sxTableCellForRowExpanded = React.useCallback(
         (theme: muiType.Theme) => ({
             ...sxTableCell(theme),
-            padding: theme.spacing(1, 2, 2, 2)
+            padding: theme.spacing(1, 2, 2, 2),
         }),
-        [sxTableCell]
+        [sxTableCell],
     )
     const sxTableCellForRowExpandedTableCellForRowDefault = React.useCallback(
         (theme: muiType.Theme) => ({
             ...sxTableCell(theme),
-            border: `1px solid ${theme.palette.divider}`
+            border: `1px solid ${theme.palette.divider}`,
         }),
-        [sxTableCell]
+        [sxTableCell],
     )
     const sxTableCellContent = React.useCallback(
         () => ({
@@ -300,9 +300,9 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'center'
+            alignItems: 'center',
         }),
-        []
+        [],
     )
 
     const rowsLength = table.getRowModel().rows.length
@@ -310,7 +310,7 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
     const rowCellsData: {
         [key: string]: {
             id: string
-            header: appType.FunctionComponent
+            header: appType.TypeFunctionComponent
             type: string
             width: string | number
             expander: boolean
@@ -336,7 +336,7 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
             header: header,
             type: type,
             width: width,
-            expander: expander
+            expander: expander,
         }
     })
 
@@ -403,7 +403,7 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
 
                     return {
                         id: id,
-                        value: value
+                        value: value,
                     }
                 })
 
@@ -483,9 +483,9 @@ const LayoutTablePagination = <TData extends tanstackReactTableType.RowData>({ t
             flexWrap: 'wrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'center'
+            alignItems: 'center',
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         () => ({
@@ -494,17 +494,17 @@ const LayoutTablePagination = <TData extends tanstackReactTableType.RowData>({ t
             flexWrap: 'wrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'center'
+            alignItems: 'center',
         }),
-        []
+        [],
     )
     const sxContentBox = React.useCallback(
         () => ({
             m: 0,
             px: 3,
-            py: 1
+            py: 1,
         }),
-        []
+        [],
     )
     const sxContentBoxSelectField = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -514,10 +514,10 @@ const LayoutTablePagination = <TData extends tanstackReactTableType.RowData>({ t
             '& .MuiSelect-select': {
                 width: theme.spacing(16),
                 m: 0,
-                p: `${theme.spacing(0, 0, 0, 2)} !important`
-            }
+                p: `${theme.spacing(0, 0, 0, 2)} !important`,
+            },
         }),
-        []
+        [],
     )
     const sxContentBoxTextField = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -537,29 +537,29 @@ const LayoutTablePagination = <TData extends tanstackReactTableType.RowData>({ t
                 '& .MuiOutlinedInput-input': {
                     m: 0,
                     p: 0,
-                    pl: 2
-                }
-            }
+                    pl: 2,
+                },
+            },
         }),
-        []
+        [],
     )
     const sxContentBoxPagination = React.useCallback(
         (theme: muiType.Theme) => ({
             '& button': {
                 border: `1px solid ${theme.palette.primary.light} !important`,
-                color: `${theme.palette.primary.main} !important`
+                color: `${theme.palette.primary.main} !important`,
             },
             '& button:hover': {
                 border: `1px solid ${theme.palette.primary.dark} !important`,
-                color: `${theme.palette.primary.main} !important`
+                color: `${theme.palette.primary.main} !important`,
             },
             '& button.Mui-selected': {
                 border: `1px solid ${theme.palette.primary.main} !important`,
                 backgroundColor: `${theme.palette.primary.main} !important`,
-                color: `${theme.palette.common.white} !important`
-            }
+                color: `${theme.palette.common.white} !important`,
+            },
         }),
-        []
+        [],
     )
 
     const tableRowsTotal = table.getPrePaginationRowModel().rows.length
@@ -728,7 +728,7 @@ export const Table = <TData extends tanstackReactTableType.RowData & { id: strin
             pagination,
             expanded,
             sorting,
-            columnFilters
+            columnFilters,
         },
         // Event
         onPaginationChange: setPagination,
@@ -750,7 +750,7 @@ export const Table = <TData extends tanstackReactTableType.RowData & { id: strin
         debugTable: false,
         debugHeaders: false,
         debugColumns: false,
-        debugRows: false
+        debugRows: false,
     })
 
     const tablePaginationPageSizeOptions = options?.pagination?.pageSizeOptions ?? PAGINATION_PAGE_SIZE_OPTIONS
