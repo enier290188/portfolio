@@ -1,5 +1,6 @@
 import { TypeI18nLanguage } from './i18n.type.ts'
 import { app } from './app'
+import { value } from './i18n.value.ts'
 
 const _getNode = (node: object, language: TypeI18nLanguage = 'en'): { getText: (textKey: string, args?: object) => string } => {
     for (const [key, value] of Object.entries(node)) {
@@ -25,4 +26,5 @@ const _getNode = (node: object, language: TypeI18nLanguage = 'en'): { getText: (
 export const i18n = {
     ...app,
     getNode: _getNode,
+    value: value,
 }
