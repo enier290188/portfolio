@@ -6,7 +6,7 @@ type TypeTo = Array<object | string>
 
 type TypeId = string
 
-export type TypeRoute = {
+export type TypeRouteStructure = {
     app: {
         [value.PATH]: TypePath
         [value.TO]: () => TypeTo

@@ -1,7 +1,7 @@
-import { TypeRoute } from '../route.type.ts'
+import { TypeRouteStructure } from '../route.type.ts'
 import { value } from '../route.value.ts'
 
-export const structure: TypeRoute = {
+export const structure: TypeRouteStructure = {
     app: {
         [value.PATH]: 'app',
         [value.TO]: () => [structure.app[value.PATH]],
