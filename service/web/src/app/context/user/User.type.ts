@@ -1,6 +1,6 @@
 import { appType } from '@./app'
 
-export type TypeWrapperUser = appType.ContextUser
+export type TypeWrapperUser = appType.TypeSettingUser
 
 export type TypeContext = {
     login: (user: Omit<NonNullable<TypeWrapperUser>, 'workspace'>) => void

@@ -1,6 +1,6 @@
 import { appType } from '@./app'
 
-export type TypeWrapperStatus = appType.ContextOnlineStatus
+export type TypeWrapperStatus = appType.TypeSettingOnlineStatus
 
 export type TypeContext = {
     getStatus: () => TypeWrapperStatus

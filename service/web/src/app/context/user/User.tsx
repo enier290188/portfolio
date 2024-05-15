@@ -9,15 +9,15 @@ export const Context = React.createContext<TypeContext>({
     login: () => null,
     logout: () => null,
     getUser: () => LOCAL_STORAGE_VALUE_DEFAULT,
-    updateUser: () => null
+    updateUser: () => null,
 })
 
-export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
+export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
     let localStorageValue = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}')
     const hasUserAttributesRequired = (): boolean => {
         if (localStorageValue?.id && typeof localStorageValue.id === 'string' && localStorageValue?.groupList && typeof localStorageValue.groupList === 'object' && Object.hasOwn(localStorageValue.groupList, 'length') && localStorageValue?.workspace && typeof localStorageValue.workspace === 'string') {
             for (const group of localStorageValue.groupList) {
-                if (!app.setting.value.USER_GROUP_LIST.includes(group)) {
+                if (!app.setting.user.value.USER_GROUP_LIST.includes(group)) {
                     return false
                 }
             }
@@ -60,7 +60,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
                 logout()
             }
         },
-        [logout]
+        [logout],
     )
 
     const login = React.useCallback(
@@ -76,7 +76,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
                 logout()
             }
         },
-        [updateUser, logout]
+        [updateUser, logout],
     )
 
     const getUser = React.useCallback((): TypeWrapperUser => {
@@ -88,7 +88,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
                 phone: user.phone,
                 picture: user.picture,
                 groupList: user.groupList,
-                workspace: user.workspace
+                workspace: user.workspace,
             }
         } else {
             return LOCAL_STORAGE_VALUE_DEFAULT
@@ -101,7 +101,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
                 login: login,
                 logout: logout,
                 getUser: getUser,
-                updateUser: updateUser
+                updateUser: updateUser,
             }}
         >
             {children}

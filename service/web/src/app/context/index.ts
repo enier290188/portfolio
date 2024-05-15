@@ -7,5 +7,5 @@ export const context = {
     alert,
     i18n,
     online,
-    user
+    user,
 }

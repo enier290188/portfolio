@@ -5,10 +5,10 @@ import { TypeContext, TypeWrapperStatus } from './Online.type.ts'
 const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperStatus = true
 
 export const Context = React.createContext<TypeContext>({
-    getStatus: () => LOCAL_STORAGE_VALUE_DEFAULT
+    getStatus: () => LOCAL_STORAGE_VALUE_DEFAULT,
 })
 
-export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
+export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
     const status = app.hook.useNavigatorOnline()
 
     const getStatus = React.useCallback((): TypeWrapperStatus => {
@@ -18,7 +18,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
     return (
         <Context.Provider
             value={{
-                getStatus: getStatus
+                getStatus: getStatus,
             }}
         >
             {children}
