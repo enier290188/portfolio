@@ -2,7 +2,7 @@ import { appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const Page = ({ children, maxWidth = 'false', boxProps }: { children: appType.ChildrenProps; maxWidth?: muiType.BoxProps['maxWidth']; boxProps?: muiType.BoxProps }) => {
+export const Page = ({ children, maxWidth = 'false', boxProps }: { children: appType.TypeChildrenProps; maxWidth?: muiType.BoxProps['maxWidth']; boxProps?: muiType.BoxProps }) => {
     const sxPage = React.useCallback(
         () => ({
             display: 'flex',
@@ -10,9 +10,9 @@ export const Page = ({ children, maxWidth = 'false', boxProps }: { children: app
             flexWrap: 'nowrap',
             alignContent: 'flex-start',
             justifyContent: 'center',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -29,11 +29,11 @@ export const Page = ({ children, maxWidth = 'false', boxProps }: { children: app
             borderRadius: 1,
             boxShadow: {
                 xs: 'none',
-                md: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}, 1px 0px 4px 0px ${theme.palette.divider}, -1px 0px 4px 0px ${theme.palette.divider}`
+                md: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}, 1px 0px 4px 0px ${theme.palette.divider}, -1px 0px 4px 0px ${theme.palette.divider}`,
             },
-            overflow: 'hidden hidden'
+            overflow: 'hidden hidden',
         }),
-        []
+        [],
     )
 
     const boxPropsRest: muiType.BoxProps = boxProps ? { ...boxProps } : {}

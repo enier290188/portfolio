@@ -2,7 +2,7 @@ import { appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const Content = ({ children, alignItems = 'stretch' }: { children: appType.ChildrenProps; alignItems?: 'stretch' | 'center' }) => {
+export const Content = ({ children, alignItems = 'stretch' }: { children: appType.TypeChildrenProps; alignItems?: 'stretch' | 'center' }) => {
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
             display: 'flex',
@@ -12,9 +12,9 @@ export const Content = ({ children, alignItems = 'stretch' }: { children: appTyp
             justifyContent: 'flex-start',
             alignItems: alignItems,
             margin: theme.spacing(0),
-            padding: theme.spacing(1)
+            padding: theme.spacing(1),
         }),
-        [alignItems]
+        [alignItems],
     )
 
     return (

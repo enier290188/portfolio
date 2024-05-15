@@ -2,7 +2,7 @@ import { appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import React from 'react'
 
-export const Mobile = ({ children }: { children: appType.ChildrenProps }) => {
+export const Mobile = ({ children }: { children: appType.TypeChildrenProps }) => {
     const sxContent = React.useCallback(
         () => ({
             display: { xs: 'flex', md: 'none' },
@@ -10,9 +10,9 @@ export const Mobile = ({ children }: { children: appType.ChildrenProps }) => {
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'stretch'
+            alignItems: 'stretch',
         }),
-        []
+        [],
     )
 
     return (

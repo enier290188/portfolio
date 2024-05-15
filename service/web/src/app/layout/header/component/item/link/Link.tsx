@@ -3,7 +3,7 @@ import { muiType } from '@./package/material-ui'
 import { router, routerType } from '@./package/react-router'
 import React from 'react'
 
-export const Link = ({ children, to }: { children: appType.ChildrenProps; to: routerType.NavLinkProps['to'] }) => {
+export const Link = ({ children, to }: { children: appType.TypeChildrenProps; to: routerType.NavLinkProps['to'] }) => {
     const resolvedPath = router.hook.useResolvedPath(to)
     const match = router.hook.useMatch({ path: resolvedPath.pathname, end: false })
     const isActive = !!match
@@ -25,10 +25,10 @@ export const Link = ({ children, to }: { children: appType.ChildrenProps; to: ro
             whiteSpace: 'nowrap',
             '&:hover': {
                 textDecoration: isActive ? 'underline' : 'none',
-                cursor: isActive ? 'default' : 'pointer'
-            }
+                cursor: isActive ? 'default' : 'pointer',
+            },
         }),
-        [isActive]
+        [isActive],
     )
 
     const handleOnClick = React.useCallback(
@@ -37,7 +37,7 @@ export const Link = ({ children, to }: { children: appType.ChildrenProps; to: ro
                 e.preventDefault()
             }
         },
-        [isActive]
+        [isActive],
     )
 
     return (

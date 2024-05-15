@@ -1,6 +1,6 @@
 import { app, appType } from '@./app'
 
-export const Title = ({ children, level }: { children: appType.ChildrenProps; level: 1 | 2 | 3 }) => {
+export const Title = ({ children, level }: { children: appType.TypeChildrenProps; level: 1 | 2 | 3 }) => {
     let variant: 'h5' | 'h6' | 'body1' | 'body2'
     switch (level) {
         case 1:

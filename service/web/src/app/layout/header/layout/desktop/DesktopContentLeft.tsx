@@ -2,7 +2,7 @@ import { appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const DesktopContentLeft = ({ children }: { children: appType.ChildrenProps }) => {
+export const DesktopContentLeft = ({ children }: { children: appType.TypeChildrenProps }) => {
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
             display: 'flex',
@@ -12,9 +12,9 @@ export const DesktopContentLeft = ({ children }: { children: appType.ChildrenPro
             justifyContent: 'flex-start',
             alignItems: 'center',
             margin: theme.spacing(0),
-            padding: theme.spacing(0.5)
+            padding: theme.spacing(0.5),
         }),
-        []
+        [],
     )
 
     return (

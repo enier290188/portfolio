@@ -2,7 +2,7 @@ import { app, appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const BodyLeft = ({ children }: { children: appType.ChildrenProps }) => {
+export const BodyLeft = ({ children }: { children: appType.TypeChildrenProps }) => {
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
             display: 'flex',
@@ -12,9 +12,9 @@ export const BodyLeft = ({ children }: { children: appType.ChildrenProps }) => {
             justifyContent: 'flex-start',
             alignItems: 'stretch',
             margin: theme.spacing(0),
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        []
+        [],
     )
 
     return (
@@ -30,7 +30,7 @@ export const BodyLeft = ({ children }: { children: appType.ChildrenProps }) => {
                     flexWrap: 'nowrap',
                     alignContent: 'flex-start',
                     justifyContent: 'center',
-                    alignItems: 'stretch'
+                    alignItems: 'stretch',
                 }}
             >
                 <app.component.divider.Divider orientation={'vertical'} />
@@ -43,7 +43,7 @@ export const BodyLeft = ({ children }: { children: appType.ChildrenProps }) => {
                     flexWrap: 'nowrap',
                     alignContent: 'center',
                     justifyContent: 'flex-start',
-                    alignItems: 'stretch'
+                    alignItems: 'stretch',
                 }}
             >
                 <app.component.divider.Divider orientation={'horizontal'} />

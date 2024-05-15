@@ -3,7 +3,7 @@ import { muiType } from '@./package/material-ui'
 import { router, routerType } from '@./package/react-router'
 import React from 'react'
 
-export const MenuButton = ({ children, toList = [], disabled, onClick }: { children: appType.ChildrenProps; toList?: routerType.NavLinkProps['to'][]; disabled?: muiType.ButtonProps['disabled']; onClick?: muiType.ButtonProps['onClick'] }) => {
+export const MenuButton = ({ children, toList = [], disabled, onClick }: { children: appType.TypeChildrenProps; toList?: routerType.NavLinkProps['to'][]; disabled?: muiType.ButtonProps['disabled']; onClick?: muiType.ButtonProps['onClick'] }) => {
     let isActive = false
     for (const to of toList) {
         const resolvedPath = router.hook.useResolvedPath(to)
@@ -29,10 +29,10 @@ export const MenuButton = ({ children, toList = [], disabled, onClick }: { child
             textTransform: 'none',
             whiteSpace: 'nowrap',
             '&:hover': {
-                textDecoration: isActive ? 'underline' : 'none'
-            }
+                textDecoration: isActive ? 'underline' : 'none',
+            },
         }),
-        [isActive]
+        [isActive],
     )
 
     return (

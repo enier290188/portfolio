@@ -2,23 +2,23 @@ import { appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const Main = ({ children, maxWidth = false }: { children: appType.ChildrenProps; maxWidth?: muiType.ContainerProps['maxWidth'] }) => {
+export const Main = ({ children, maxWidth = false }: { children: appType.TypeChildrenProps; maxWidth?: muiType.ContainerProps['maxWidth'] }) => {
     const sxMain = React.useCallback(
         (theme: muiType.Theme) => ({
             flexGrow: 1,
             margin: theme.spacing(0),
             padding: {
                 xs: theme.spacing(0),
-                md: theme.spacing(2)
+                md: theme.spacing(2),
             },
             backgroundColor: {
                 xs: theme.palette.common.white,
-                md: theme.palette.grey['100']
+                md: theme.palette.grey['100'],
             },
             color: theme.palette.text.primary,
-            overflow: 'hidden auto'
+            overflow: 'hidden auto',
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         () => ({
@@ -27,9 +27,9 @@ export const Main = ({ children, maxWidth = false }: { children: appType.Childre
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'stretch'
+            alignItems: 'stretch',
         }),
-        []
+        [],
     )
 
     return (
