@@ -3,7 +3,7 @@ import { muiType } from '@./package/material-ui'
 import { ElementType } from 'react'
 
 export type ButtonProps = {
-    children?: appType.ChildrenProps
+    children?: appType.TypeChildrenProps
     component?: ElementType
     type?: muiType.ButtonProps['type']
     variant?: muiType.ButtonProps['variant']

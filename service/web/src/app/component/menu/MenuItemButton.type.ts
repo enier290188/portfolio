@@ -3,7 +3,7 @@ import { muiType } from '@./package/material-ui'
 import { ElementType } from 'react'
 
 export type MenuItemButtonProps = {
-    children?: appType.ChildrenProps
+    children?: appType.TypeChildrenProps
     component?: ElementType
     disabled?: muiType.ButtonProps['disabled']
     onClick?: muiType.MenuItemProps['onClick']

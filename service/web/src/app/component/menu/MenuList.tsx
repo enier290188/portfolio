@@ -2,7 +2,7 @@ import { app, appType } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React, { ElementType } from 'react'
 
-export const MenuList = ({ children, component = 'div', space = 0 }: { children: appType.ChildrenProps; component?: ElementType; space?: appType.ComponentSpace }) => {
+export const MenuList = ({ children, component = 'div', space = 0 }: { children: appType.TypeChildrenProps; component?: ElementType; space?: appType.ComponentSpace }) => {
     const [spaceTop, spaceRight, spaceBottom, spaceLeft] = app.hook.useComponentSpace(space)
 
     const sxContent = React.useCallback(
@@ -14,9 +14,9 @@ export const MenuList = ({ children, component = 'div', space = 0 }: { children:
             justifyContent: 'flex-start',
             alignItems: 'stretch',
             margin: theme.spacing(spaceTop, spaceRight, spaceBottom, spaceLeft),
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft],
     )
 
     return (

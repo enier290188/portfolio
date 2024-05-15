@@ -2,7 +2,7 @@ import { appType } from '@./app'
 import { muiType } from '@./package/material-ui'
 
 export type AlertProps = {
-    children: appType.ChildrenProps
+    children: appType.TypeChildrenProps
     variant?: muiType.AlertProps['variant']
     severity?: muiType.AlertProps['severity']
     onClose?: muiType.AlertProps['onClose']
