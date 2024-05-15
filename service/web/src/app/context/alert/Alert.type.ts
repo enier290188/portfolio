@@ -1,6 +1,6 @@
 import { appType } from '@./app'
 
-export type TypeWrapperAlert = appType.ContextAlert
+export type TypeWrapperAlert = appType.TypeSettingAlert
 
 export type TypeContext = {
     getAlertList: () => TypeWrapperAlert[]

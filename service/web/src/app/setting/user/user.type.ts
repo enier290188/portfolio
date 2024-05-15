@@ -1,4 +1,4 @@
-import { value } from './auth.value.ts'
+import { value } from './user.value.ts'
 
 const USER_GROUP_LIST: readonly ['Root', 'Admin', 'Sale', 'Project'] = value.USER_GROUP_LIST
 export type TypeUser = null | {

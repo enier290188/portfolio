@@ -8,10 +8,10 @@ const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperAlert[] = []
 export const Context = React.createContext<TypeContext>({
     getAlertList: () => LOCAL_STORAGE_VALUE_DEFAULT,
     addAlert: () => null,
-    deleteAlert: () => null
+    deleteAlert: () => null,
 })
 
-export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
+export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
     let localStorageValue = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}')
     if (!(typeof localStorageValue === 'object' && Object.hasOwn(localStorageValue, 'length'))) {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
@@ -74,7 +74,7 @@ export const Wrapper = ({ children }: { children: appType.ChildrenProps }) => {
             value={{
                 getAlertList: getAlertList,
                 addAlert: addAlert,
-                deleteAlert: deleteAlert
+                deleteAlert: deleteAlert,
             }}
         >
             {children}
