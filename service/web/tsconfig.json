@@ -9,6 +9,8 @@
             "@./app/page/workspace": ["./src/app/page/workspace"],
             "@./package/material-ui": ["./src/package/material-ui"],
             "@./package/react-error-boundary": ["./src/package/react-error-boundary"],
+            "@./package/react-hook-form": ["./src/package/react-hook-form"],
+            "@./package/react-image-crop": ["./src/package/react-image-crop"],
             "@./package/react-router": ["./src/package/react-router"],
             "@./package/tanstack-react-query": ["./src/package/tanstack-react-query"],
             "@./package/tanstack-react-query-devtools": ["./src/package/tanstack-react-query-devtools"],

@@ -18,6 +18,8 @@ export default defineConfig({
             '@./app/page/workspace': path.resolve(__dirname, './src/app/page/workspace'),
             '@./package/material-ui': path.resolve(__dirname, './src/package/material-ui'),
             '@./package/react-error-boundary': path.resolve(__dirname, './src/package/react-error-boundary'),
+            '@./package/react-hook-form': path.resolve(__dirname, './src/package/react-hook-form'),
+            '@./package/react-image-crop': path.resolve(__dirname, './src/package/react-image-crop'),
             '@./package/react-router': path.resolve(__dirname, './src/package/react-router'),
             '@./package/tanstack-react-query': path.resolve(__dirname, './src/package/tanstack-react-query'),
             '@./package/tanstack-react-query-devtools': path.resolve(__dirname, './src/package/tanstack-react-query-devtools'),
