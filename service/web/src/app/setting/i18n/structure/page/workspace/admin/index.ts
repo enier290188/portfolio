@@ -1,8 +1,8 @@
 import _en_ from './_en_.json'
 import _es_ from './_es_.json'
 import { dashboard } from './dashboard'
-import { lead } from './lead'
 import { deal } from './deal'
+import { lead } from './lead'
 import { setting } from './setting'
 
 export const admin = {
