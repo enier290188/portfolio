@@ -1,6 +1,6 @@
-import { appType } from '@./app'
+import { themeType } from '../setting/theme'
 
-export const useComponentSpace = (space: appType.ComponentSpace): number[] => {
+export const useComponentSpace = (space: themeType.ComponentSpace): number[] => {
     let spaceTop = 0
     let spaceRight = 0
     let spaceBottom = 0
