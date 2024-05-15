@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -15,13 +15,13 @@ type TypeForm = {
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
-    phone: ''
+    phone: '',
 }
 
 enum EFFECT_STEP {
     FETCHING = 'FETCHING',
     FILLING = 'FILLING',
-    DEFAULT = 'DEFAULT'
+    DEFAULT = 'DEFAULT',
 }
 
 const View = () => {
@@ -38,11 +38,11 @@ const View = () => {
     const queryDealGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/deal/${paramDealId}/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.workspace.admin.deal.get({ id: paramDealId }),
-        initialData: null
+        initialData: null,
     })
     const mutationDealRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/deal/${paramDealId}/remove/`, 'mutation', 'db'],
-        mutationFn: (deal: awsAmplifyApiType.DeleteDealInput) => awsAmplifyApi.page.workspace.admin.deal.delete({ deal: deal })
+        mutationFn: (deal: awsAmplifyApiType.DeleteDealInput) => awsAmplifyApi.page.workspace.admin.deal.delete({ deal: deal }),
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -56,7 +56,7 @@ const View = () => {
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(async () => {
         mutationDealRemove.mutate(
             {
-                id: paramDealId
+                id: paramDealId,
             },
             {
                 onSuccess: (dealRemoved: awsAmplifyApiType.Deal | null) => {
@@ -70,8 +70,8 @@ const View = () => {
                 },
                 onError: () => {
                     contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                }
-            }
+                },
+            },
         )
     }, [i18n, contextAlert, paramDealId, queryClient, mutationDealRemove])
 
@@ -157,7 +157,7 @@ const View = () => {
                                             top: 2,
                                             right: 1,
                                             bottom: 2,
-                                            left: 1
+                                            left: 1,
                                         }}
                                         variant={'standard'}
                                         severity={'warning'}
@@ -178,7 +178,7 @@ const View = () => {
                                                         <mui.component.InputAdornment position={'start'}>
                                                             <mui.icon.Description />
                                                         </mui.component.InputAdornment>
-                                                    )
+                                                    ),
                                                 }}
                                                 label={i18n.getText('field.name.label')}
                                                 error={false}
@@ -189,7 +189,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />
@@ -210,7 +210,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />
@@ -231,7 +231,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />

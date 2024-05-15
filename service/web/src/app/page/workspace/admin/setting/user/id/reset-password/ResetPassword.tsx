@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -15,13 +15,13 @@ type TypeForm = {
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
-    phone: ''
+    phone: '',
 }
 
 enum EFFECT_STEP {
     FETCHING = 'FETCHING',
     FILLING = 'FILLING',
-    DEFAULT = 'DEFAULT'
+    DEFAULT = 'DEFAULT',
 }
 
 const View = () => {
@@ -42,11 +42,11 @@ const View = () => {
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.workspace.admin.setting.user.get({ id: paramUserId }),
-        initialData: null
+        initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/reset-password/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.workspace.admin.setting.user.resetPassword({ user: user })
+        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.workspace.admin.setting.user.resetPassword({ user: user }),
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -60,7 +60,7 @@ const View = () => {
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(async () => {
         mutationUserUpdate.mutate(
             {
-                id: paramUserId
+                id: paramUserId,
             },
             {
                 onSuccess: (userUpdated: awsAmplifyApiType.User | null) => {
@@ -74,8 +74,8 @@ const View = () => {
                 },
                 onError: () => {
                     contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                }
-            }
+                },
+            },
         )
     }, [i18n, contextAlert, paramUserId, queryClient, mutationUserUpdate])
 
@@ -165,7 +165,7 @@ const View = () => {
                                             top: 2,
                                             right: 1,
                                             bottom: 2,
-                                            left: 1
+                                            left: 1,
                                         }}
                                         variant={'standard'}
                                         severity={'warning'}
@@ -186,7 +186,7 @@ const View = () => {
                                                         <mui.component.InputAdornment position={'start'}>
                                                             <mui.icon.Description />
                                                         </mui.component.InputAdornment>
-                                                    )
+                                                    ),
                                                 }}
                                                 label={i18n.getText('field.name.label')}
                                                 error={false}
@@ -197,7 +197,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />
@@ -218,7 +218,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />
@@ -239,7 +239,7 @@ const View = () => {
                                                     top: 2,
                                                     right: 1,
                                                     bottom: 1,
-                                                    left: 1
+                                                    left: 1,
                                                 }}
                                                 field={field}
                                             />

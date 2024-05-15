@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
@@ -22,7 +22,7 @@ const ViewList = React.memo(() => {
     const queryLeadList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/lead/list/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.workspace.admin.lead.list(),
-        initialData: []
+        initialData: [],
     })
 
     const handleActionRefresh = React.useCallback(async () => {
@@ -56,8 +56,8 @@ const ViewList = React.memo(() => {
                 enableSorting: false,
                 enableColumnFilter: false,
                 meta: {
-                    width: 184
-                }
+                    width: 184,
+                },
             },
             {
                 accessorKey: 'name',
@@ -67,8 +67,8 @@ const ViewList = React.memo(() => {
                 sortingFn: 'alphanumericCaseSensitive',
                 filterFn: 'includesString',
                 meta: {
-                    type: 'text'
-                }
+                    type: 'text',
+                },
             },
             {
                 accessorKey: 'email',
@@ -78,8 +78,8 @@ const ViewList = React.memo(() => {
                 sortingFn: 'alphanumericCaseSensitive',
                 filterFn: 'includesString',
                 meta: {
-                    type: 'email'
-                }
+                    type: 'email',
+                },
             },
             {
                 accessorKey: 'phone',
@@ -89,8 +89,8 @@ const ViewList = React.memo(() => {
                 sortingFn: 'alphanumericCaseSensitive',
                 filterFn: 'includesString',
                 meta: {
-                    type: 'phone'
-                }
+                    type: 'phone',
+                },
             },
             {
                 accessorKey: 'createdAt',
@@ -101,8 +101,8 @@ const ViewList = React.memo(() => {
                 meta: {
                     type: 'datetime',
                     width: 180,
-                    expander: true
-                }
+                    expander: true,
+                },
             },
             {
                 accessorKey: 'updatedAt',
@@ -113,11 +113,11 @@ const ViewList = React.memo(() => {
                 meta: {
                     type: 'datetime',
                     width: 180,
-                    expander: true
-                }
-            }
+                    expander: true,
+                },
+            },
         ],
-        [i18n]
+        [i18n],
     )
 
     const tableData: awsAmplifyApiType.Lead[] = queryLeadList.data.slice()

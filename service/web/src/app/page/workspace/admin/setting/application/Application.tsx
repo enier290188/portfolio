@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import React from 'react'
@@ -68,7 +68,7 @@ const View = () => {
                                 top: 2,
                                 right: 1,
                                 bottom: 2,
-                                left: 1
+                                left: 1,
                             }}
                             variant={'standard'}
                             severity={'info'}
