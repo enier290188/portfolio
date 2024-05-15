@@ -1,6 +1,3 @@
-export const KEY_PATH = 'PATH'
-export const KEY_TO = 'TO'
-
 type TypePath = string
 
 type TypeTo = Array<object | string>

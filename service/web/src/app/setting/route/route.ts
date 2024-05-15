@@ -1,5 +1,5 @@
 import { KEY_PATH, KEY_TO } from './route.type.ts'
-import { structure } from './route.structure.ts'
+import { structure } from './structure'
 
 const _getNode = (node: object): { getPath: () => string; getTo(args?: object): string } => {
     const nodeResponse = { getPath: () => '', getTo: () => '' }
