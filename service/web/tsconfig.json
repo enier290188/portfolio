@@ -4,7 +4,15 @@
         "baseUrl": ".",
         "paths": {
             "@./app": ["./src/app"],
-            "@./package/material-ui": ["./src/package/material-ui"]
+            "@./app/page/account": ["./src/app/page/account"],
+            "@./app/page/error": ["./src/app/page/error"],
+            "@./app/page/workspace": ["./src/app/page/workspace"],
+            "@./package/material-ui": ["./src/package/material-ui"],
+            "@./package/react-error-boundary": ["./src/package/react-error-boundary"],
+            "@./package/react-router": ["./src/package/react-router"],
+            "@./package/tanstack-react-query": ["./src/package/tanstack-react-query"],
+            "@./package/tanstack-react-query-devtools": ["./src/package/tanstack-react-query-devtools"],
+            "@./package/tanstack-react-table": ["./src/package/tanstack-react-table"]
         },
         /* Vite Default */
         "target": "ES2022",
