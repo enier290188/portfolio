@@ -1,4 +1,23 @@
 import { app } from '@./app'
 
-const I18N_LANGUAGE_LIST: readonly ['en', 'es'] = app.setting.value.I18N_LANGUAGE_LIST
-export type ContextI18nLanguage = (typeof I18N_LANGUAGE_LIST)[number]
+const ONLINE_STATUS_LIST: readonly [true, false] = app.setting.value.ONLINE_STATUS_LIST
+export type ContextOnlineStatus = (typeof ONLINE_STATUS_LIST)[number]
+
+const ALERT_TYPE_LIST: readonly ['success', 'info', 'warning', 'error'] = app.setting.value.ALERT_TYPE_LIST
+export type ContextAlert = {
+    id: ReturnType<typeof Date.now>
+    type: (typeof ALERT_TYPE_LIST)[number]
+    message: string
+    duration?: number
+}
+
+const USER_GROUP_LIST: readonly ['Admin', 'Sale', 'Project'] = app.setting.value.USER_GROUP_LIST
+export type ContextUser = null | {
+    id: string
+    name: string
+    email: string
+    phone: string
+    picture: string
+    groupList: (typeof USER_GROUP_LIST)[number][]
+    workspace: (typeof USER_GROUP_LIST)[number]
+}

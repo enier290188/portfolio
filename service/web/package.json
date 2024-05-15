@@ -23,7 +23,7 @@
         "dev": "vite dev --host localhost --port 3000 --cors --strictPort --force --debug",
         "build": "tsc && vite build --outDir dist --assetsDir asset --assetsInlineLimit 4096",
         "preview": "vite preview --host localhost --port 8080 --strictPort --outDir dist",
-        "eslint:check": "tsc && npx eslint ./ --ext js,jsx,ts,tsx --quiet --report-unused-disable-directives --max-warnings 10",
+        "eslint:check": "tsc && npx eslint ./src --ext js,jsx,ts,tsx --quiet --report-unused-disable-directives --max-warnings 10",
         "eslint:fix": "npm run eslint:check -- --fix",
         "prettier:check": "tsc && npx prettier ./ --check",
         "prettier:fix": "npm run prettier:check -- --write"
