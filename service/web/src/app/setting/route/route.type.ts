@@ -1,3 +1,5 @@
+import { value } from './route.value.ts'
+
 type TypePath = string
 
 type TypeTo = Array<object | string>
@@ -6,156 +8,156 @@ type TypeId = string
 
 export type TypeRoute = {
     app: {
-        [KEY_PATH]: TypePath
-        [KEY_TO]: () => TypeTo
+        [value.PATH]: TypePath
+        [value.TO]: () => TypeTo
         account: {
-            [KEY_PATH]: TypePath
-            [KEY_TO]: () => TypeTo
+            [value.PATH]: TypePath
+            [value.TO]: () => TypeTo
             forgot: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
             login: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
             logout: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
             profile: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
                 info: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
                 password: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
                 picture: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
             }
         }
         workspace: {
-            [KEY_PATH]: TypePath
-            [KEY_TO]: () => TypeTo
+            [value.PATH]: TypePath
+            [value.TO]: () => TypeTo
             admin: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
                 dashboard: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
                 lead: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                     create: {
-                        [KEY_PATH]: TypePath
-                        [KEY_TO]: () => TypeTo
+                        [value.PATH]: TypePath
+                        [value.TO]: () => TypeTo
                     }
                     ':id': {
                         update: {
-                            [KEY_PATH]: TypePath
-                            [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                            [value.PATH]: TypePath
+                            [value.TO]: (args: { id: TypeId }) => TypeTo
                         }
                         remove: {
-                            [KEY_PATH]: TypePath
-                            [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                            [value.PATH]: TypePath
+                            [value.TO]: (args: { id: TypeId }) => TypeTo
                         }
                     }
                 }
                 deal: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                     create: {
-                        [KEY_PATH]: TypePath
-                        [KEY_TO]: () => TypeTo
+                        [value.PATH]: TypePath
+                        [value.TO]: () => TypeTo
                     }
                     ':id': {
                         update: {
-                            [KEY_PATH]: TypePath
-                            [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                            [value.PATH]: TypePath
+                            [value.TO]: (args: { id: TypeId }) => TypeTo
                         }
                         remove: {
-                            [KEY_PATH]: TypePath
-                            [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                            [value.PATH]: TypePath
+                            [value.TO]: (args: { id: TypeId }) => TypeTo
                         }
                     }
                 }
                 setting: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                     application: {
-                        [KEY_PATH]: TypePath
-                        [KEY_TO]: () => TypeTo
+                        [value.PATH]: TypePath
+                        [value.TO]: () => TypeTo
                     }
                     user: {
-                        [KEY_PATH]: TypePath
-                        [KEY_TO]: () => TypeTo
+                        [value.PATH]: TypePath
+                        [value.TO]: () => TypeTo
                         create: {
-                            [KEY_PATH]: TypePath
-                            [KEY_TO]: () => TypeTo
+                            [value.PATH]: TypePath
+                            [value.TO]: () => TypeTo
                         }
                         ':id': {
                             update: {
-                                [KEY_PATH]: TypePath
-                                [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                                [value.PATH]: TypePath
+                                [value.TO]: (args: { id: TypeId }) => TypeTo
                             }
                             resetPassword: {
-                                [KEY_PATH]: TypePath
-                                [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                                [value.PATH]: TypePath
+                                [value.TO]: (args: { id: TypeId }) => TypeTo
                             }
                             remove: {
-                                [KEY_PATH]: TypePath
-                                [KEY_TO]: (args: { id: TypeId }) => TypeTo
+                                [value.PATH]: TypePath
+                                [value.TO]: (args: { id: TypeId }) => TypeTo
                             }
                         }
                     }
                 }
             }
             sale: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
                 dashboard: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
                 lead: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
             }
             project: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
                 dashboard: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
                 deal: {
-                    [KEY_PATH]: TypePath
-                    [KEY_TO]: () => TypeTo
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
                 }
             }
         }
         error: {
-            [KEY_PATH]: TypePath
-            [KEY_TO]: () => TypeTo
+            [value.PATH]: TypePath
+            [value.TO]: () => TypeTo
             boundary: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
             forbidden: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
             notFound: {
-                [KEY_PATH]: TypePath
-                [KEY_TO]: () => TypeTo
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
             }
         }
     }

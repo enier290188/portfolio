@@ -1,157 +1,158 @@
-import { KEY_PATH, KEY_TO, TypeRoute } from '../route.type.ts'
+import { TypeRoute } from '../route.type.ts'
+import { value } from '../route.value.ts'
 
 export const structure: TypeRoute = {
     app: {
-        [KEY_PATH]: 'app',
-        [KEY_TO]: () => [structure.app[KEY_PATH]],
+        [value.PATH]: 'app',
+        [value.TO]: () => [structure.app[value.PATH]],
         account: {
-            [KEY_PATH]: 'account',
-            [KEY_TO]: () => [...structure.app[KEY_TO](), structure.app.account[KEY_PATH]],
+            [value.PATH]: 'account',
+            [value.TO]: () => [...structure.app[value.TO](), structure.app.account[value.PATH]],
             forgot: {
-                [KEY_PATH]: 'forgot',
-                [KEY_TO]: () => [...structure.app.account[KEY_TO](), structure.app.account.forgot[KEY_PATH]],
+                [value.PATH]: 'forgot',
+                [value.TO]: () => [...structure.app.account[value.TO](), structure.app.account.forgot[value.PATH]],
             },
             login: {
-                [KEY_PATH]: 'login',
-                [KEY_TO]: () => [...structure.app.account[KEY_TO](), structure.app.account.login[KEY_PATH]],
+                [value.PATH]: 'login',
+                [value.TO]: () => [...structure.app.account[value.TO](), structure.app.account.login[value.PATH]],
             },
             logout: {
-                [KEY_PATH]: 'logout',
-                [KEY_TO]: () => [...structure.app.account[KEY_TO](), structure.app.account.logout[KEY_PATH]],
+                [value.PATH]: 'logout',
+                [value.TO]: () => [...structure.app.account[value.TO](), structure.app.account.logout[value.PATH]],
             },
             profile: {
-                [KEY_PATH]: 'profile',
-                [KEY_TO]: () => [...structure.app.account[KEY_TO](), structure.app.account.profile[KEY_PATH]],
+                [value.PATH]: 'profile',
+                [value.TO]: () => [...structure.app.account[value.TO](), structure.app.account.profile[value.PATH]],
                 info: {
-                    [KEY_PATH]: 'info',
-                    [KEY_TO]: () => [...structure.app.account.profile[KEY_TO](), structure.app.account.profile.info[KEY_PATH]],
+                    [value.PATH]: 'info',
+                    [value.TO]: () => [...structure.app.account.profile[value.TO](), structure.app.account.profile.info[value.PATH]],
                 },
                 password: {
-                    [KEY_PATH]: 'password',
-                    [KEY_TO]: () => [...structure.app.account.profile[KEY_TO](), structure.app.account.profile.password[KEY_PATH]],
+                    [value.PATH]: 'password',
+                    [value.TO]: () => [...structure.app.account.profile[value.TO](), structure.app.account.profile.password[value.PATH]],
                 },
                 picture: {
-                    [KEY_PATH]: 'picture',
-                    [KEY_TO]: () => [...structure.app.account.profile[KEY_TO](), structure.app.account.profile.picture[KEY_PATH]],
+                    [value.PATH]: 'picture',
+                    [value.TO]: () => [...structure.app.account.profile[value.TO](), structure.app.account.profile.picture[value.PATH]],
                 },
             },
         },
         workspace: {
-            [KEY_PATH]: 'workspace',
-            [KEY_TO]: () => [...structure.app[KEY_TO](), structure.app.workspace[KEY_PATH]],
+            [value.PATH]: 'workspace',
+            [value.TO]: () => [...structure.app[value.TO](), structure.app.workspace[value.PATH]],
             admin: {
-                [KEY_PATH]: 'admin',
-                [KEY_TO]: () => [...structure.app.workspace[KEY_TO](), structure.app.workspace.admin[KEY_PATH]],
+                [value.PATH]: 'admin',
+                [value.TO]: () => [...structure.app.workspace[value.TO](), structure.app.workspace.admin[value.PATH]],
                 dashboard: {
-                    [KEY_PATH]: 'dashboard',
-                    [KEY_TO]: () => [...structure.app.workspace.admin[KEY_TO](), structure.app.workspace.admin.dashboard[KEY_PATH]],
+                    [value.PATH]: 'dashboard',
+                    [value.TO]: () => [...structure.app.workspace.admin[value.TO](), structure.app.workspace.admin.dashboard[value.PATH]],
                 },
                 lead: {
-                    [KEY_PATH]: 'lead',
-                    [KEY_TO]: () => [...structure.app.workspace.admin[KEY_TO](), structure.app.workspace.admin.lead[KEY_PATH]],
+                    [value.PATH]: 'lead',
+                    [value.TO]: () => [...structure.app.workspace.admin[value.TO](), structure.app.workspace.admin.lead[value.PATH]],
                     create: {
-                        [KEY_PATH]: 'create',
-                        [KEY_TO]: () => [...structure.app.workspace.admin.lead[KEY_TO](), structure.app.workspace.admin.lead.create[KEY_PATH]],
+                        [value.PATH]: 'create',
+                        [value.TO]: () => [...structure.app.workspace.admin.lead[value.TO](), structure.app.workspace.admin.lead.create[value.PATH]],
                     },
                     ':id': {
                         update: {
-                            [KEY_PATH]: 'update',
-                            [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.lead[KEY_TO](), id, structure.app.workspace.admin.lead[':id'].update[KEY_PATH]],
+                            [value.PATH]: 'update',
+                            [value.TO]: ({ id }) => [...structure.app.workspace.admin.lead[value.TO](), id, structure.app.workspace.admin.lead[':id'].update[value.PATH]],
                         },
                         remove: {
-                            [KEY_PATH]: 'remove',
-                            [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.lead[KEY_TO](), id, structure.app.workspace.admin.lead[':id'].remove[KEY_PATH]],
+                            [value.PATH]: 'remove',
+                            [value.TO]: ({ id }) => [...structure.app.workspace.admin.lead[value.TO](), id, structure.app.workspace.admin.lead[':id'].remove[value.PATH]],
                         },
                     },
                 },
                 deal: {
-                    [KEY_PATH]: 'deal',
-                    [KEY_TO]: () => [...structure.app.workspace.admin[KEY_TO](), structure.app.workspace.admin.deal[KEY_PATH]],
+                    [value.PATH]: 'deal',
+                    [value.TO]: () => [...structure.app.workspace.admin[value.TO](), structure.app.workspace.admin.deal[value.PATH]],
                     create: {
-                        [KEY_PATH]: 'create',
-                        [KEY_TO]: () => [...structure.app.workspace.admin.deal[KEY_TO](), structure.app.workspace.admin.deal.create[KEY_PATH]],
+                        [value.PATH]: 'create',
+                        [value.TO]: () => [...structure.app.workspace.admin.deal[value.TO](), structure.app.workspace.admin.deal.create[value.PATH]],
                     },
                     ':id': {
                         update: {
-                            [KEY_PATH]: 'update',
-                            [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.deal[KEY_TO](), id, structure.app.workspace.admin.deal[':id'].update[KEY_PATH]],
+                            [value.PATH]: 'update',
+                            [value.TO]: ({ id }) => [...structure.app.workspace.admin.deal[value.TO](), id, structure.app.workspace.admin.deal[':id'].update[value.PATH]],
                         },
                         remove: {
-                            [KEY_PATH]: 'remove',
-                            [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.deal[KEY_TO](), id, structure.app.workspace.admin.deal[':id'].remove[KEY_PATH]],
+                            [value.PATH]: 'remove',
+                            [value.TO]: ({ id }) => [...structure.app.workspace.admin.deal[value.TO](), id, structure.app.workspace.admin.deal[':id'].remove[value.PATH]],
                         },
                     },
                 },
                 setting: {
-                    [KEY_PATH]: 'setting',
-                    [KEY_TO]: () => [...structure.app.workspace.admin[KEY_TO](), structure.app.workspace.admin.setting[KEY_PATH]],
+                    [value.PATH]: 'setting',
+                    [value.TO]: () => [...structure.app.workspace.admin[value.TO](), structure.app.workspace.admin.setting[value.PATH]],
                     application: {
-                        [KEY_PATH]: 'application',
-                        [KEY_TO]: () => [...structure.app.workspace.admin.setting[KEY_TO](), structure.app.workspace.admin.setting.application[KEY_PATH]],
+                        [value.PATH]: 'application',
+                        [value.TO]: () => [...structure.app.workspace.admin.setting[value.TO](), structure.app.workspace.admin.setting.application[value.PATH]],
                     },
                     user: {
-                        [KEY_PATH]: 'users',
-                        [KEY_TO]: () => [...structure.app.workspace.admin.setting[KEY_TO](), structure.app.workspace.admin.setting.user[KEY_PATH]],
+                        [value.PATH]: 'users',
+                        [value.TO]: () => [...structure.app.workspace.admin.setting[value.TO](), structure.app.workspace.admin.setting.user[value.PATH]],
                         create: {
-                            [KEY_PATH]: 'create',
-                            [KEY_TO]: () => [...structure.app.workspace.admin.setting.user[KEY_TO](), structure.app.workspace.admin.setting.user.create[KEY_PATH]],
+                            [value.PATH]: 'create',
+                            [value.TO]: () => [...structure.app.workspace.admin.setting.user[value.TO](), structure.app.workspace.admin.setting.user.create[value.PATH]],
                         },
                         ':id': {
                             update: {
-                                [KEY_PATH]: 'update',
-                                [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[KEY_TO](), id, structure.app.workspace.admin.setting.user[':id'].update[KEY_PATH]],
+                                [value.PATH]: 'update',
+                                [value.TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[value.TO](), id, structure.app.workspace.admin.setting.user[':id'].update[value.PATH]],
                             },
                             resetPassword: {
-                                [KEY_PATH]: 'reset-password',
-                                [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[KEY_TO](), id, structure.app.workspace.admin.setting.user[':id'].resetPassword[KEY_PATH]],
+                                [value.PATH]: 'reset-password',
+                                [value.TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[value.TO](), id, structure.app.workspace.admin.setting.user[':id'].resetPassword[value.PATH]],
                             },
                             remove: {
-                                [KEY_PATH]: 'remove',
-                                [KEY_TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[KEY_TO](), id, structure.app.workspace.admin.setting.user[':id'].remove[KEY_PATH]],
+                                [value.PATH]: 'remove',
+                                [value.TO]: ({ id }) => [...structure.app.workspace.admin.setting.user[value.TO](), id, structure.app.workspace.admin.setting.user[':id'].remove[value.PATH]],
                             },
                         },
                     },
                 },
             },
             sale: {
-                [KEY_PATH]: 'sale',
-                [KEY_TO]: () => [...structure.app.workspace[KEY_TO](), structure.app.workspace.sale[KEY_PATH]],
+                [value.PATH]: 'sale',
+                [value.TO]: () => [...structure.app.workspace[value.TO](), structure.app.workspace.sale[value.PATH]],
                 dashboard: {
-                    [KEY_PATH]: 'dashboard',
-                    [KEY_TO]: () => [...structure.app.workspace.sale[KEY_TO](), structure.app.workspace.sale.dashboard[KEY_PATH]],
+                    [value.PATH]: 'dashboard',
+                    [value.TO]: () => [...structure.app.workspace.sale[value.TO](), structure.app.workspace.sale.dashboard[value.PATH]],
                 },
                 lead: {
-                    [KEY_PATH]: 'lead',
-                    [KEY_TO]: () => [...structure.app.workspace.sale[KEY_TO](), structure.app.workspace.sale.lead[KEY_PATH]],
+                    [value.PATH]: 'lead',
+                    [value.TO]: () => [...structure.app.workspace.sale[value.TO](), structure.app.workspace.sale.lead[value.PATH]],
                 },
             },
             project: {
-                [KEY_PATH]: 'project',
-                [KEY_TO]: () => [...structure.app.workspace[KEY_TO](), structure.app.workspace.project[KEY_PATH]],
+                [value.PATH]: 'project',
+                [value.TO]: () => [...structure.app.workspace[value.TO](), structure.app.workspace.project[value.PATH]],
                 dashboard: {
-                    [KEY_PATH]: 'dashboard',
-                    [KEY_TO]: () => [...structure.app.workspace.project[KEY_TO](), structure.app.workspace.project.dashboard[KEY_PATH]],
+                    [value.PATH]: 'dashboard',
+                    [value.TO]: () => [...structure.app.workspace.project[value.TO](), structure.app.workspace.project.dashboard[value.PATH]],
                 },
                 deal: {
-                    [KEY_PATH]: 'deal',
-                    [KEY_TO]: () => [...structure.app.workspace.project[KEY_TO](), structure.app.workspace.project.deal[KEY_PATH]],
+                    [value.PATH]: 'deal',
+                    [value.TO]: () => [...structure.app.workspace.project[value.TO](), structure.app.workspace.project.deal[value.PATH]],
                 },
             },
         },
         error: {
-            [KEY_PATH]: 'error',
-            [KEY_TO]: () => [...structure.app[KEY_TO](), structure.app.error[KEY_PATH]],
+            [value.PATH]: 'error',
+            [value.TO]: () => [...structure.app[value.TO](), structure.app.error[value.PATH]],
             boundary: {
-                [KEY_PATH]: 'boundary',
-                [KEY_TO]: () => [...structure.app.error[KEY_TO](), structure.app.error.boundary[KEY_PATH]],
+                [value.PATH]: 'boundary',
+                [value.TO]: () => [...structure.app.error[value.TO](), structure.app.error.boundary[value.PATH]],
             },
             forbidden: {
-                [KEY_PATH]: 'forbidden',
-                [KEY_TO]: () => [...structure.app.error[KEY_TO](), structure.app.error.forbidden[KEY_PATH]],
+                [value.PATH]: 'forbidden',
+                [value.TO]: () => [...structure.app.error[value.TO](), structure.app.error.forbidden[value.PATH]],
             },
             notFound: {
-                [KEY_PATH]: 'not-found',
-                [KEY_TO]: () => [...structure.app.error[KEY_TO](), structure.app.error.notFound[KEY_PATH]],
+                [value.PATH]: 'not-found',
+                [value.TO]: () => [...structure.app.error[value.TO](), structure.app.error.notFound[value.PATH]],
             },
         },
     },
