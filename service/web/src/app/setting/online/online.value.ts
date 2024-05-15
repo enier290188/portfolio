@@ -1,5 +1,5 @@
-const ONLINE_LIST = [true, false] as const
+const ONLINE_STATUS_LIST = [true, false] as const
 
 export const value = {
-    ONLINE_LIST,
+    ONLINE_STATUS_LIST,
 }
