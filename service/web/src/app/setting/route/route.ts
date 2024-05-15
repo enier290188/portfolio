@@ -1,5 +1,5 @@
 import { KEY_PATH, KEY_TO } from './route.type.ts'
-import { STRUCTURE } from './route.structure.ts'
+import { structure } from './route.structure.ts'
 
 const _getNode = (node: object): { getPath: () => string; getTo(args?: object): string } => {
     const nodeResponse = { getPath: () => '', getTo: () => '' }
@@ -24,6 +24,6 @@ const _getNode = (node: object): { getPath: () => string; getTo(args?: object): 
 }
 
 export const route = {
-    ...STRUCTURE,
+    ...structure,
     getNode: _getNode,
 }
