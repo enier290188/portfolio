@@ -1,6 +1,6 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
-import { awsAmplifyStorage } from '@./package/aws-amplify-storage'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyStorage } from '@./package/aws-amplify-storage'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -12,13 +12,13 @@ type TypeForm = {
 }
 
 const DEFAULT_VALUES: TypeForm = {
-    picture: ''
+    picture: '',
 }
 
 enum EFFECT_STEP {
     FETCHING = 'FETCHING',
     FILLING = 'FILLING',
-    DEFAULT = 'DEFAULT'
+    DEFAULT = 'DEFAULT',
 }
 
 const View = () => {
@@ -39,16 +39,16 @@ const View = () => {
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/${userId}/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.account.profile.user.get({ id: userId }),
-        initialData: null
+        initialData: null,
     })
     const queryUserPictureGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/${userId}/`, 'query', 'storage', storageUserPictureFileKey],
         queryFn: () => awsAmplifyStorage.storage.get(storageUserPictureFileKey),
-        initialData: null
+        initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/${userId}/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.account.profile.user.picture.update({ user: user })
+        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.account.profile.user.picture.update({ user: user }),
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -65,7 +65,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleActionResetFieldPicture = React.useCallback(async () => {
@@ -83,7 +83,7 @@ const View = () => {
             formUpdate.setValue('picture', value)
             await formUpdate.trigger()
         },
-        [formUpdate]
+        [formUpdate],
     )
 
     const handleActionRefresh = React.useCallback(async () => {
@@ -108,21 +108,21 @@ const View = () => {
             mutationUserUpdate.mutate(
                 {
                     id: userId,
-                    picture: picture ? storageUserPictureFileKey : null
+                    picture: picture ? storageUserPictureFileKey : null,
                 },
                 {
                     onSuccess: (userUpdated: awsAmplifyApiType.User | null) => {
                         if (user && userUpdated) {
                             userActionUpdate({
                                 ...user,
-                                picture: picture
+                                picture: picture,
                             })
                             queryClient.setQueryData([`/app/page/account/profile/${userId}/`, 'query', 'db'], userUpdated)
                             queryClient.setQueryData([`/app/page/account/profile/${userId}/`, 'query', 'storage', storageUserPictureFileKey], picture ? picture : null)
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
-                                picture: picture
+                                picture: picture,
                             }))
                         } else {
                             contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
@@ -130,11 +130,11 @@ const View = () => {
                     },
                     onError: () => {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                    }
-                }
+                    },
+                },
             )
         },
-        [i18n, contextAlert, user, userId, userActionUpdate, storageUserPictureFileKey, queryClient, mutationUserUpdate]
+        [i18n, contextAlert, user, userId, userActionUpdate, storageUserPictureFileKey, queryClient, mutationUserUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -147,7 +147,7 @@ const View = () => {
         const picture = queryUserPictureGet.data ?? DEFAULT_VALUES.picture
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
-            picture: picture
+            picture: picture,
         }))
         formUpdate.setValue('picture', picture)
         await formUpdate.trigger()
@@ -211,8 +211,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldPicture
-                                        }
+                                            handleValidateFieldPicture,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.image.ImageCrop
@@ -223,7 +223,7 @@ const View = () => {
                                                 <mui.icon.AccountCircle
                                                     sx={{
                                                         width: '100%',
-                                                        height: '100%'
+                                                        height: '100%',
                                                     }}
                                                 />
                                             }
@@ -237,7 +237,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             onActionReset={handleActionResetFieldPicture}
                                             onActionDelete={handleActionDeleteFieldPicture}

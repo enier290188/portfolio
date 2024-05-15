@@ -1,6 +1,6 @@
 import { app } from '@./app'
-import { awsAmplifyApi } from '@./package/aws-amplify-api'
-import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
+// import { awsAmplifyApi } from '@./package/aws-amplify-api'
+// import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -16,13 +16,13 @@ type TypeForm = {
 const DEFAULT_VALUES: TypeForm = {
     passwordCurrent: '',
     passwordNew: '',
-    passwordConfirm: ''
+    passwordConfirm: '',
 }
 
 enum EFFECT_STEP {
     FETCHING = 'FETCHING',
     FILLING = 'FILLING',
-    DEFAULT = 'DEFAULT'
+    DEFAULT = 'DEFAULT',
 }
 
 const View = () => {
@@ -39,7 +39,7 @@ const View = () => {
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/${userId}/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.account.profile.user.get({ id: userId }),
-        initialData: null
+        initialData: null,
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -75,7 +75,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleValidateFieldPasswordNew = React.useCallback(
@@ -104,7 +104,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleValidateFieldPasswordConfirm = React.useCallback(
@@ -118,7 +118,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleActionRefresh = React.useCallback(async () => {
@@ -153,7 +153,7 @@ const View = () => {
                 }
             }
         },
-        [i18n, contextAlert]
+        [i18n, contextAlert],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -170,7 +170,7 @@ const View = () => {
             ...oldState,
             passwordCurrent: passwordCurrent,
             passwordNew: passwordNew,
-            passwordConfirm: passwordConfirm
+            passwordConfirm: passwordConfirm,
         }))
         formUpdate.setValue('passwordCurrent', passwordCurrent)
         formUpdate.setValue('passwordNew', passwordNew)
@@ -249,8 +249,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldPasswordCurrent
-                                        }
+                                            handleValidateFieldPasswordCurrent,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.TextPassword
@@ -264,7 +264,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />
@@ -275,8 +275,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldPasswordNew
-                                        }
+                                            handleValidateFieldPasswordNew,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.TextPassword
@@ -290,7 +290,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />
@@ -301,8 +301,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldPasswordConfirm
-                                        }
+                                            handleValidateFieldPasswordConfirm,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.TextPassword
@@ -316,7 +316,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />

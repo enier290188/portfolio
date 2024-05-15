@@ -1,9 +1,9 @@
-import { app, appType } from '@./app'
-import { awsAmplifyApi } from '@./package/aws-amplify-api'
-import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
-import { awsAmplifyStorage } from '@./package/aws-amplify-storage'
+import { app } from '@./app'
+// import { awsAmplifyApi } from '@./package/aws-amplify-api'
+// import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
+// import { awsAmplifyStorage } from '@./package/aws-amplify-storage'
 import { mui } from '@./package/material-ui'
-import { form, formType } from '@./package/react-hook-form'
+import { form } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import React from 'react'
 
@@ -33,18 +33,18 @@ const View = () => {
     const formLogin = form.hook.useForm<TypeFormLogin>({
         defaultValues: {
             email: '',
-            password: ''
+            password: '',
         },
-        mode: 'onChange'
+        mode: 'onChange',
     })
     const formLoginWatchEmail = formLogin.watch('email')
 
     const formNewPassword = form.hook.useForm<TypeFormNewPassword>({
         defaultValues: {
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
         },
-        mode: 'onChange'
+        mode: 'onChange',
     })
     const formNewPasswordWatchPassword = formNewPassword.watch('password')
     const formNewPasswordWatchConfirmPassword = formNewPassword.watch('confirmPassword')
@@ -64,7 +64,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleFormLoginValidatePassword = React.useCallback(
@@ -93,10 +93,10 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
-    const handleFormLoginSubmit: formType.SubmitHandler<TypeFormLogin> = React.useCallback(
+    /*const handleFormLoginSubmit: formType.SubmitHandler<TypeFormLogin> = React.useCallback(
         async (data) => {
             const { email, password } = data
             const awsAmplifyAuthLoginResult = await awsAmplifyAuth.login(email, password)
@@ -107,13 +107,13 @@ const View = () => {
                     } else {
                         if (awsAmplifyAuthLoginResult.data?.userCognito) {
                             const userCognito = awsAmplifyAuthLoginResult.data.userCognito
-                            const userCognitoGroupList: NonNullable<appType.ContextUser>['groupList'] = userCognito.groupList
+                            const userCognitoGroupList: NonNullable<appType.TypeSettingUser>['groupList'] = userCognito.groupList
                             const userCognitoUsername = userCognito.username
                             if (0 < userCognitoGroupList.length) {
                                 const userModelList = await awsAmplifyApi.page.account.login.user.list({
                                     email: email,
                                     groupList: userCognitoGroupList,
-                                    cognitoUsername: userCognitoUsername
+                                    cognitoUsername: userCognitoUsername,
                                 })
                                 if (1 === userModelList.length) {
                                     const userModel = userModelList[0]
@@ -125,7 +125,7 @@ const View = () => {
                                         email: userModel?.email ?? '',
                                         phone: userModel?.phone ?? '',
                                         picture: picture ?? '',
-                                        groupList: userCognitoGroupList ?? []
+                                        groupList: userCognitoGroupList ?? [],
                                     })
                                 } else {
                                     if (0 === userModelList.length) {
@@ -157,8 +157,8 @@ const View = () => {
                 }
             }
         },
-        [i18n, contextAlert, contextUser]
-    )
+        [i18n, contextAlert, contextUser],
+    )*/
 
     const handleFormNewPasswordValidatePassword = React.useCallback(
         (value: TypeFormNewPassword['password']) => {
@@ -186,7 +186,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleFormNewPasswordValidateConfirmPassword = React.useCallback(
@@ -200,10 +200,10 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n, formNewPasswordWatchPassword]
+        [i18n, formNewPasswordWatchPassword],
     )
 
-    const handleFormNewPasswordSubmit: formType.SubmitHandler<TypeFormNewPassword> = React.useCallback(
+    /*const handleFormNewPasswordSubmit: formType.SubmitHandler<TypeFormNewPassword> = React.useCallback(
         async (data) => {
             if (userCognitoNewPasswordRequired) {
                 const { password } = data
@@ -212,13 +212,13 @@ const View = () => {
                     if (awsAmplifyAuthLoginNewPasswordRequiredResult?.data) {
                         if (awsAmplifyAuthLoginNewPasswordRequiredResult.data?.userCognito) {
                             const userCognito = awsAmplifyAuthLoginNewPasswordRequiredResult.data.userCognito
-                            const userCognitoGroupList: NonNullable<appType.ContextUser>['groupList'] = userCognito.groupList
+                            const userCognitoGroupList: NonNullable<appType.TypeSettingUser>['groupList'] = userCognito.groupList
                             const userCognitoUsername = userCognito.username
                             if (0 < userCognitoGroupList.length) {
                                 const userModelList = await awsAmplifyApi.page.account.login.user.list({
                                     email: formLoginWatchEmail,
                                     groupList: userCognitoGroupList,
-                                    cognitoUsername: userCognitoUsername
+                                    cognitoUsername: userCognitoUsername,
                                 })
                                 if (1 === userModelList.length) {
                                     const userModel = userModelList[0]
@@ -230,7 +230,7 @@ const View = () => {
                                         email: userModel?.email ?? '',
                                         phone: userModel?.phone ?? '',
                                         picture: picture ?? '',
-                                        groupList: userCognitoGroupList ?? []
+                                        groupList: userCognitoGroupList ?? [],
                                     })
                                 } else {
                                     if (0 === userModelList.length) {
@@ -260,8 +260,8 @@ const View = () => {
                 }
             }
         },
-        [i18n, contextAlert, contextUser, userCognitoNewPasswordRequired, formLoginWatchEmail]
-    )
+        [i18n, contextAlert, contextUser, userCognitoNewPasswordRequired, formLoginWatchEmail],
+    )*/
 
     React.useEffect(() => {
         if (userCognitoNewPasswordRequired) {
@@ -296,8 +296,8 @@ const View = () => {
                             control={formLogin.control}
                             rules={{
                                 validate: {
-                                    handleFormLoginValidateEmail
-                                }
+                                    handleFormLoginValidateEmail,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextEmail
@@ -312,7 +312,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -323,8 +323,8 @@ const View = () => {
                             control={formLogin.control}
                             rules={{
                                 validate: {
-                                    handleFormLoginValidatePassword
-                                }
+                                    handleFormLoginValidatePassword,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextPassword
@@ -338,7 +338,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -347,7 +347,8 @@ const View = () => {
                     </app.layout.main.component.structure.box.content.Content>
                     {formLogin.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                     <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={formLogin.formState.isSubmitting || formLogin.formState.isValidating || !formLogin.formState.isValid} onClick={formLogin.handleSubmit(handleFormLoginSubmit)}>
+                        {/*<app.component.button.ButtonSubmit space={1} disabled={formLogin.formState.isSubmitting || formLogin.formState.isValidating || !formLogin.formState.isValid} onClick={formLogin.handleSubmit(handleFormLoginSubmit)}>*/}
+                        <app.component.button.ButtonSubmit space={1} disabled={formLogin.formState.isSubmitting || formLogin.formState.isValidating || !formLogin.formState.isValid}>
                             {formLogin.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Login />}
                             {i18n.getText('login.action.submit')}
                         </app.component.button.ButtonSubmit>
@@ -373,8 +374,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidatePassword
-                                }
+                                    handleFormNewPasswordValidatePassword,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextPassword
@@ -387,7 +388,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -398,8 +399,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidateConfirmPassword
-                                }
+                                    handleFormNewPasswordValidateConfirmPassword,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextPassword
@@ -412,7 +413,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -421,7 +422,8 @@ const View = () => {
                     </app.layout.main.component.structure.box.content.Content>
                     {formNewPassword.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                     <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid} onClick={formNewPassword.handleSubmit(handleFormNewPasswordSubmit)}>
+                        {/*<app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid} onClick={formNewPassword.handleSubmit(handleFormNewPasswordSubmit)}>*/}
+                        <app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid}>
                             {formNewPassword.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
                             {i18n.getText('new-password.action.submit')}
                         </app.component.button.ButtonSubmit>

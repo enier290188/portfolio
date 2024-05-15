@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -15,13 +15,13 @@ type TypeForm = {
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
-    phone: ''
+    phone: '',
 }
 
 enum EFFECT_STEP {
     FETCHING = 'FETCHING',
     FILLING = 'FILLING',
-    DEFAULT = 'DEFAULT'
+    DEFAULT = 'DEFAULT',
 }
 
 const View = () => {
@@ -40,11 +40,11 @@ const View = () => {
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/${userId}/`, 'query', 'db'],
         queryFn: () => awsAmplifyApi.page.account.profile.user.get({ id: userId }),
-        initialData: null
+        initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/${userId}/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.account.profile.user.info.update({ user: user })
+        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.account.profile.user.info.update({ user: user }),
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -62,7 +62,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleValidateFieldEmail = React.useCallback(
@@ -79,7 +79,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleValidateFieldPhone = React.useCallback(
@@ -96,7 +96,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleActionRefresh = React.useCallback(async () => {
@@ -120,7 +120,7 @@ const View = () => {
                     id: userId,
                     name: name,
                     email: email,
-                    phone: phone
+                    phone: phone,
                 },
                 {
                     onSuccess: (userUpdated: awsAmplifyApiType.User | null) => {
@@ -129,7 +129,7 @@ const View = () => {
                                 ...user,
                                 name: name,
                                 email: email,
-                                phone: phone
+                                phone: phone,
                             })
                             queryClient.setQueryData([`/app/page/account/profile/${userId}/`, 'query', 'db'], userUpdated)
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
@@ -137,7 +137,7 @@ const View = () => {
                                 ...oldState,
                                 name: name,
                                 email: email,
-                                phone: phone
+                                phone: phone,
                             }))
                         } else {
                             contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
@@ -145,11 +145,11 @@ const View = () => {
                     },
                     onError: () => {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                    }
-                }
+                    },
+                },
             )
         },
-        [i18n, contextAlert, user, userId, userActionUpdate, queryClient, mutationUserUpdate]
+        [i18n, contextAlert, user, userId, userActionUpdate, queryClient, mutationUserUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -166,7 +166,7 @@ const View = () => {
             ...oldState,
             name: name,
             email: email,
-            phone: phone
+            phone: phone,
         }))
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
@@ -232,8 +232,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldName
-                                        }
+                                            handleValidateFieldName,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.Text
@@ -244,7 +244,7 @@ const View = () => {
                                                     <mui.component.InputAdornment position={'start'}>
                                                         <mui.icon.Description />
                                                     </mui.component.InputAdornment>
-                                                )
+                                                ),
                                             }}
                                             label={i18n.getText('field.name.label')}
                                             error={!!formUpdate.formState.errors.name}
@@ -255,7 +255,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />
@@ -266,8 +266,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldEmail
-                                        }
+                                            handleValidateFieldEmail,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.TextEmail
@@ -281,7 +281,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />
@@ -292,8 +292,8 @@ const View = () => {
                                     control={formUpdate.control}
                                     rules={{
                                         validate: {
-                                            handleValidateFieldPhone
-                                        }
+                                            handleValidateFieldPhone,
+                                        },
                                     }}
                                     render={({ field }) => (
                                         <app.component.field.text.TextPhone
@@ -307,7 +307,7 @@ const View = () => {
                                                 top: 2,
                                                 right: 1,
                                                 bottom: 1,
-                                                left: 1
+                                                left: 1,
                                             }}
                                             field={field}
                                         />

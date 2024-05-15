@@ -1,7 +1,7 @@
 import { app } from '@./app'
-import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
+// import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
 import { mui } from '@./package/material-ui'
-import { form, formType } from '@./package/react-hook-form'
+import { form } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import React from 'react'
 
@@ -32,9 +32,9 @@ const View = () => {
 
     const formSendCode = form.hook.useForm<TypeFormSendCode>({
         defaultValues: {
-            email: ''
+            email: '',
         },
-        mode: 'onChange'
+        mode: 'onChange',
     })
 
     const formNewPassword = form.hook.useForm<TypeFormNewPassword>({
@@ -42,9 +42,9 @@ const View = () => {
             email: searchParamEmail ?? '',
             code: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
         },
-        mode: 'onChange'
+        mode: 'onChange',
     })
     const formNewPasswordWatchPassword = formNewPassword.watch('password')
     const formNewPasswordWatchConfirmPassword = formNewPassword.watch('confirmPassword')
@@ -65,10 +65,10 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
-    const handleFormSendCodeSubmit: formType.SubmitHandler<TypeFormSendCode> = React.useCallback(
+    /*const handleFormSendCodeSubmit: formType.SubmitHandler<TypeFormSendCode> = React.useCallback(
         async (data) => {
             const { email } = data
             const amplifyAuthForgotSendCodeResult = await awsAmplifyAuth.forgotSendCode(email)
@@ -87,7 +87,7 @@ const View = () => {
             }
         },
         [i18n, contextAlert, formNewPasswordSetValue]
-    )
+    )*/
 
     const handleFormNewPasswordValidateEmail = React.useCallback(
         (value: TypeFormSendCode['email']) => {
@@ -103,7 +103,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleFormNewPasswordValidateCode = React.useCallback(
@@ -114,7 +114,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleFormNewPasswordValidatePassword = React.useCallback(
@@ -143,7 +143,7 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n]
+        [i18n],
     )
 
     const handleFormNewPasswordValidateConfirmPassword = React.useCallback(
@@ -157,10 +157,10 @@ const View = () => {
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
-        [i18n, formNewPasswordWatchPassword]
+        [i18n, formNewPasswordWatchPassword],
     )
 
-    const handleFormNewPasswordSubmit: formType.SubmitHandler<TypeFormNewPassword> = React.useCallback(
+    /*const handleFormNewPasswordSubmit: formType.SubmitHandler<TypeFormNewPassword> = React.useCallback(
         async (data) => {
             if (hasCodeBeenSent) {
                 const { email, code, password } = data
@@ -187,8 +187,8 @@ const View = () => {
                 }
             }
         },
-        [i18n, contextAlert, hasCodeBeenSent]
-    )
+        [i18n, contextAlert, hasCodeBeenSent],
+    )*/
 
     React.useEffect(() => {
         if (hasCodeBeenSent) {
@@ -222,8 +222,8 @@ const View = () => {
                             control={formSendCode.control}
                             rules={{
                                 validate: {
-                                    handleFormSendCodeValidateEmail
-                                }
+                                    handleFormSendCodeValidateEmail,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextEmail
@@ -237,7 +237,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -246,7 +246,8 @@ const View = () => {
                     </app.layout.main.component.structure.box.content.Content>
                     {formSendCode.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                     <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={formSendCode.formState.isSubmitting || formSendCode.formState.isValidating || !formSendCode.formState.isValid} onClick={formSendCode.handleSubmit(handleFormSendCodeSubmit)}>
+                        {/*<app.component.button.ButtonSubmit space={1} disabled={formSendCode.formState.isSubmitting || formSendCode.formState.isValidating || !formSendCode.formState.isValid} onClick={formSendCode.handleSubmit(handleFormSendCodeSubmit)}>*/}
+                        <app.component.button.ButtonSubmit space={1} disabled={formSendCode.formState.isSubmitting || formSendCode.formState.isValidating || !formSendCode.formState.isValid}>
                             {formSendCode.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Send />}
                             {i18n.getText('send-code.action.submit')}
                         </app.component.button.ButtonSubmit>
@@ -272,8 +273,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidateEmail
-                                }
+                                    handleFormNewPasswordValidateEmail,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextEmail
@@ -286,7 +287,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -297,8 +298,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidateCode
-                                }
+                                    handleFormNewPasswordValidateCode,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.Text
@@ -309,7 +310,7 @@ const View = () => {
                                             <mui.component.InputAdornment position={'start'}>
                                                 <mui.icon.Key />
                                             </mui.component.InputAdornment>
-                                        )
+                                        ),
                                     }}
                                     label={i18n.getText('new-password.field.code.label')}
                                     error={!!formNewPassword.formState.errors.code}
@@ -320,7 +321,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -331,8 +332,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidatePassword
-                                }
+                                    handleFormNewPasswordValidatePassword,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextPassword
@@ -345,7 +346,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -356,8 +357,8 @@ const View = () => {
                             control={formNewPassword.control}
                             rules={{
                                 validate: {
-                                    handleFormNewPasswordValidateConfirmPassword
-                                }
+                                    handleFormNewPasswordValidateConfirmPassword,
+                                },
                             }}
                             render={({ field }) => (
                                 <app.component.field.text.TextPassword
@@ -370,7 +371,7 @@ const View = () => {
                                         top: 2,
                                         right: 1,
                                         bottom: 1,
-                                        left: 1
+                                        left: 1,
                                     }}
                                     field={field}
                                 />
@@ -379,7 +380,8 @@ const View = () => {
                     </app.layout.main.component.structure.box.content.Content>
                     {formNewPassword.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                     <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid} onClick={formNewPassword.handleSubmit(handleFormNewPasswordSubmit)}>
+                        {/*<app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid} onClick={formNewPassword.handleSubmit(handleFormNewPasswordSubmit)}>*/}
+                        <app.component.button.ButtonSubmit space={1} disabled={formNewPassword.formState.isSubmitting || formNewPassword.formState.isValidating || !formNewPassword.formState.isValid}>
                             {formNewPassword.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
                             {i18n.getText('new-password.action.submit')}
                         </app.component.button.ButtonSubmit>

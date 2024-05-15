@@ -1,5 +1,5 @@
 import { app } from '@./app'
-import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
+// import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
 import { mui } from '@./package/material-ui'
 import { form } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -20,7 +20,7 @@ const View = () => {
 
     const formLogout = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
 
-    const handleActionSubmit = React.useCallback(async () => {
+    /*const handleActionSubmit = React.useCallback(async () => {
         const amplifyAuthLogoutResult = await awsAmplifyAuth.logout()
         if (!amplifyAuthLogoutResult.error) {
             const user = contextUser.getUser()
@@ -32,7 +32,7 @@ const View = () => {
             contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
             contextUser.logout()
         }
-    }, [i18n, contextAlert, contextUser])
+    }, [i18n, contextAlert, contextUser])*/
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'375px'}>
@@ -46,7 +46,8 @@ const View = () => {
                     </app.layout.main.component.structure.box.content.Content>
                     {formLogout.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                     <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={formLogout.formState.isSubmitting} onClick={formLogout.handleSubmit(handleActionSubmit)}>
+                        {/*<app.component.button.ButtonSubmit space={1} disabled={formLogout.formState.isSubmitting} onClick={formLogout.handleSubmit(handleActionSubmit)}>*/}
+                        <app.component.button.ButtonSubmit space={1} disabled={formLogout.formState.isSubmitting}>
                             {formLogout.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Logout />}
                             {i18n.getText('action.submit')}
                         </app.component.button.ButtonSubmit>
