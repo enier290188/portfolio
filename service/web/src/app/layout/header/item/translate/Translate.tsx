@@ -27,7 +27,7 @@ export const Translate = () => {
                 {contextI18nLanguage.toUpperCase()}
             </component.item.menu.MenuButton>
             <component.item.menu.MenuContent anchorEl={anchorEl} onClick={handleMenuOnClose}>
-                {app.setting.value.I18N_LANGUAGE_LIST.map((language) => (
+                {app.setting.i18n.value.I18N_LANGUAGE_LIST.map((language) => (
                     <component.item.menu.MenuContentItemButton
                         key={language}
                         match={contextI18nLanguage === language}

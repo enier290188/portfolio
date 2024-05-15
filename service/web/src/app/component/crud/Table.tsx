@@ -379,7 +379,7 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                                 value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`-`}</app.component.typography.Typography>
 
                                 if (cellValue instanceof Array) {
-                                    const userGroupList = app.setting.value.USER_GROUP_LIST
+                                    const userGroupList = app.setting.user.value.USER_GROUP_LIST
                                     for (const userGroup of userGroupList) {
                                         if (cellValue.includes(userGroup)) {
                                             value = (
