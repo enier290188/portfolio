@@ -1,4 +1,4 @@
-export type ComponentSpace =
+export type TypeComponentSpace =
     | 0
     | 1
     | 2
