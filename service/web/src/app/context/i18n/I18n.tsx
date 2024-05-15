@@ -12,7 +12,7 @@ export const Context = React.createContext<TypeContext>({
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
     let localStorageValue = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}')
-    if (!(typeof localStorageValue === 'string' && Array<string>(...app.setting.i18n.value.I18N_LIST).includes(localStorageValue))) {
+    if (!(typeof localStorageValue === 'string' && Array<string>(...app.setting.i18n.value.I18N_LANGUAGE_LIST).includes(localStorageValue))) {
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
         localStorageValue = LOCAL_STORAGE_VALUE_DEFAULT
     }

@@ -1,6 +1,6 @@
 import { appType } from '@./app'
 
-export type TypeWrapperLanguage = appType.TypeSettingI18n
+export type TypeWrapperLanguage = appType.TypeSettingI18nLanguage
 
 export type TypeContext = {
     getLanguage: () => TypeWrapperLanguage
