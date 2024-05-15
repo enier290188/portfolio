@@ -4,6 +4,6 @@ import _es_ from './_es_.json'
 export const crud = {
     crud: {
         _en_: { ..._en_ },
-        _es_: { ..._es_ }
-    }
+        _es_: { ..._es_ },
+    },
 }

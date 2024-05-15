@@ -12,36 +12,36 @@ export const theme = mui.style.createTheme({
     components: {
         MuiButton: {
             styleOverrides: {
-                root: {}
-            }
+                root: {},
+            },
         },
         MuiContainer: {
             styleOverrides: {
-                root: {}
-            }
-        }
+                root: {},
+            },
+        },
     },
     palette: {
         common: {
             black: '#000000',
-            white: '#ffffff'
+            white: '#ffffff',
         },
         primary: {
             dark: '#2e7031',
             main: '#43a047',
             light: '#68b36b',
-            contrastText: '#ffffff'
+            contrastText: '#ffffff',
         },
         secondary: {
             dark: '#124116',
             main: '#1b5e20',
             light: '#487e4c',
-            contrastText: '#ffffff'
-        }
+            contrastText: '#ffffff',
+        },
     },
     spacing: 4,
     shape: {
-        borderRadius: 4
+        borderRadius: 4,
     },
     typography: {
         htmlFontSize: 16,
@@ -49,6 +49,6 @@ export const theme = mui.style.createTheme({
         fontWeightLight: 300,
         fontWeightRegular: 400,
         fontWeightMedium: 500,
-        fontWeightBold: 700
-    }
+        fontWeightBold: 700,
+    },
 })

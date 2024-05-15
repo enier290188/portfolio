@@ -3,7 +3,8 @@
         /* App */
         "baseUrl": ".",
         "paths": {
-            "@./app": ["./src/app"]
+            "@./app": ["./src/app"],
+            "@./package/material-ui": ["./src/package/material-ui"]
         },
         /* Vite Default */
         "target": "ES2022",

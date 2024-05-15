@@ -10,6 +10,6 @@ export const app = {
         _es_: { ..._es_ },
         ...component,
         ...layout,
-        ...page
-    }
+        ...page,
+    },
 }

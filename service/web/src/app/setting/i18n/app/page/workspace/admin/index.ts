@@ -12,6 +12,6 @@ export const admin = {
         ...dashboard,
         ...lead,
         ...deal,
-        ...setting
-    }
+        ...setting,
+    },
 }

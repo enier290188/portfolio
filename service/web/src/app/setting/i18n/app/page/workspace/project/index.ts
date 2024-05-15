@@ -8,6 +8,6 @@ export const project = {
         _en_: { ..._en_ },
         _es_: { ..._es_ },
         ...dashboard,
-        ...deal
-    }
+        ...deal,
+    },
 }

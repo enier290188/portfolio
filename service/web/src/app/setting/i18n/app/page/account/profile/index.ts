@@ -10,6 +10,6 @@ export const profile = {
         _es_: { ..._es_ },
         ...info,
         ...password,
-        ...picture
-    }
+        ...picture,
+    },
 }

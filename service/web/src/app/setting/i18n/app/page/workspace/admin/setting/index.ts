@@ -8,6 +8,6 @@ export const setting = {
         _en_: { ..._en_ },
         _es_: { ..._es_ },
         ...application,
-        ...user
-    }
+        ...user,
+    },
 }

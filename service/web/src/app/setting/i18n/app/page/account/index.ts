@@ -12,6 +12,6 @@ export const account = {
         ...forgot,
         ...login,
         ...logout,
-        ...profile
-    }
+        ...profile,
+    },
 }

@@ -5,5 +5,5 @@ import Vite from './vite.svg'
 export const svg = {
     Brand,
     React,
-    Vite
+    Vite,
 }

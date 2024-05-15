@@ -25,7 +25,7 @@
         "preview": "vite preview --host localhost --port 8080 --strictPort --outDir dist",
         "eslint:check": "tsc && npx eslint ./ --ext js,jsx,ts,tsx --quiet --report-unused-disable-directives --max-warnings 10",
         "eslint:fix": "npm run eslint:check -- --fix",
-        "prettier:check": "tsc && npx prettier ./**/*.{js,jsx,ts,tsx,html,css,json} --check",
+        "prettier:check": "tsc && npx prettier ./ --check",
         "prettier:fix": "npm run prettier:check -- --write"
     },
     "dependencies": {

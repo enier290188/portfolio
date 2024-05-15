@@ -10,6 +10,6 @@ export const page = {
         _es_: { ..._es_ },
         ...account,
         ...error,
-        ...workspace
-    }
+        ...workspace,
+    },
 }

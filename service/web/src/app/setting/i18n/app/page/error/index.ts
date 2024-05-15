@@ -10,6 +10,6 @@ export const error = {
         _es_: { ..._es_ },
         ...boundary,
         ...forbidden,
-        ...notFound
-    }
+        ...notFound,
+    },
 }

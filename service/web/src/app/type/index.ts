@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
+import { app } from '@./app'
 
-export type FunctionComponent = ReactNode
-
-export type ChildrenProps = FunctionComponent | FunctionComponent[]
+const I18N_LANGUAGE_LIST: readonly ['en', 'es'] = app.setting.value.I18N_LANGUAGE_LIST
+export type ContextI18nLanguage = (typeof I18N_LANGUAGE_LIST)[number]

@@ -10,6 +10,6 @@ export const workspace = {
         _es_: { ..._es_ },
         ...admin,
         ...project,
-        ...sale
-    }
+        ...sale,
+    },
 }

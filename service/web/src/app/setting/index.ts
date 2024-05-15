@@ -9,5 +9,5 @@ export const setting = {
     route,
     storage,
     theme,
-    value
+    value,
 }

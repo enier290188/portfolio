@@ -10,6 +10,6 @@ export const layout = {
         _es_: { ..._es_ },
         ...footer,
         ...header,
-        ...online
-    }
+        ...online,
+    },
 }

@@ -4,6 +4,6 @@ import _es_ from './_es_.json'
 export const online = {
     online: {
         _en_: { ..._en_ },
-        _es_: { ..._es_ }
-    }
+        _es_: { ..._es_ },
+    },
 }

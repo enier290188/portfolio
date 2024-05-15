@@ -10,6 +10,6 @@ export const component = {
         _es_: { ..._es_ },
         ...crud,
         ...loading,
-        ...underConstruction
-    }
+        ...underConstruction,
+    },
 }

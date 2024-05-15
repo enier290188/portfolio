@@ -10,6 +10,6 @@ export const id = {
         _es_: { ..._es_ },
         ...update,
         ...remove,
-        ...resetPassword
-    }
+        ...resetPassword,
+    },
 }

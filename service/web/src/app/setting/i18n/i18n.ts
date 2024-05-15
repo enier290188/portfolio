@@ -24,5 +24,5 @@ const _getNode = (node: object, language: appType.ContextI18nLanguage = 'en'): {
 
 export const i18n = {
     ...app,
-    getNode: _getNode
+    getNode: _getNode,
 }
