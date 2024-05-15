@@ -4,7 +4,7 @@ import { component } from './component'
 import { layout } from './layout'
 import { page } from './page'
 
-export const app = {
+export const structure = {
     app: {
         _en_: { ..._en_ },
         _es_: { ..._es_ },

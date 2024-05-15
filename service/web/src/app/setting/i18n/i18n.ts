@@ -1,8 +1,8 @@
-import { TypeI18nLanguage } from './i18n.type.ts'
-import { app } from './app'
+import { TypeI18n } from './i18n.type.ts'
 import { value } from './i18n.value.ts'
+import { structure } from './structure'
 
-const _getNode = (node: object, language: TypeI18nLanguage = 'en'): { getText: (textKey: string, args?: object) => string } => {
+const _getNode = (node: object, language: TypeI18n = 'en'): { getText: (textKey: string, args?: object) => string } => {
     for (const [key, value] of Object.entries(node)) {
         if (key === `_${language}_` && typeof value === 'object') {
             const getText = (textKey: string, args: object = {}): string => {
@@ -24,7 +24,7 @@ const _getNode = (node: object, language: TypeI18nLanguage = 'en'): { getText: (
 }
 
 export const i18n = {
-    ...app,
+    ...structure,
     getNode: _getNode,
     value: value,
 }
