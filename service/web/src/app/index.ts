@@ -5,6 +5,7 @@ import { component } from './component'
 import { context } from './context'
 import { hook } from './hook'
 import { layout } from './layout'
+import { service } from './service'
 import { setting } from './setting'
 import * as appType from './type'
 
@@ -14,6 +15,7 @@ export const app = {
     context,
     hook,
     layout,
+    service,
     setting,
 }
 
