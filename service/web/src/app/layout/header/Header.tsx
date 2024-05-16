@@ -13,9 +13,9 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
             margin: theme.spacing(0),
             padding: theme.spacing(0),
             backgroundColor: theme.palette.primary.main,
-            color: theme.palette.common.white
+            color: theme.palette.common.white,
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         () => ({
@@ -24,9 +24,9 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'stretch'
+            alignItems: 'stretch',
         }),
-        []
+        [],
     )
 
     return (

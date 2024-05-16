@@ -6,5 +6,5 @@ export const component = {
     NavLink,
     Outlet,
     Routes,
-    Route
+    Route,
 }

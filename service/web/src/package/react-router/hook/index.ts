@@ -6,5 +6,5 @@ export const hook = {
     useNavigate,
     useParams,
     useResolvedPath,
-    useSearchParams
+    useSearchParams,
 }

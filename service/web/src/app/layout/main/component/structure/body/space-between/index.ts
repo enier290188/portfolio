@@ -5,5 +5,5 @@ import { BodyRight } from './BodyRight.tsx'
 export const spaceBetween = {
     Body,
     BodyLeft,
-    BodyRight
+    BodyRight,
 }

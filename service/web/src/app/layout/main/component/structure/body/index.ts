@@ -3,5 +3,5 @@ import { spaceBetween } from './space-between'
 
 export const body = {
     Body,
-    spaceBetween
+    spaceBetween,
 }

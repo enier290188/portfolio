@@ -3,5 +3,5 @@ import { menu } from './menu'
 
 export const item = {
     link,
-    menu
+    menu,
 }

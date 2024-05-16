@@ -10,9 +10,9 @@ export const Suspense = ({ justifyContent = 'center' }: { justifyContent?: 'flex
             flexWrap: 'nowrap',
             alignContent: 'flex-start',
             justifyContent: justifyContent,
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
         }),
-        [justifyContent]
+        [justifyContent],
     )
 
     return (

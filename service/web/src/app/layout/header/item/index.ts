@@ -19,5 +19,5 @@ export const item = {
     workspace,
     user,
     notification,
-    translate
+    translate,
 }

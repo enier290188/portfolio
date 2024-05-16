@@ -21,7 +21,7 @@ export const TextPassword = ({ required, autoComplete, label, variant, color, si
                     <mui.component.InputAdornment position={'end'} sx={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)} onMouseLeave={() => setShowPassword(false)}>
                         {showPassword ? <mui.icon.VisibilityOff /> : <mui.icon.Visibility />}
                     </mui.component.InputAdornment>
-                )
+                ),
             }}
             label={label}
             variant={variant}

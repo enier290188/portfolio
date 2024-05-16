@@ -13,7 +13,7 @@ export const TextEmail = ({ required, autoComplete, label, variant, color, size,
                     <mui.component.InputAdornment position={'start'}>
                         <mui.icon.Email />
                     </mui.component.InputAdornment>
-                )
+                ),
             }}
             label={label}
             variant={variant}

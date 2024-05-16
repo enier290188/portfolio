@@ -9,5 +9,5 @@ export const menu = {
     MenuButton,
     MenuContent,
     MenuContentItemButton,
-    MenuContentItemButtonLink
+    MenuContentItemButtonLink,
 }

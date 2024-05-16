@@ -5,5 +5,5 @@ import { DesktopContentRight } from './DesktopContentRight.tsx'
 export const desktop = {
     Desktop,
     DesktopContentLeft,
-    DesktopContentRight
+    DesktopContentRight,
 }

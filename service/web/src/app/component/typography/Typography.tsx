@@ -51,20 +51,20 @@ export const Typography = ({ children, component = 'div', variant = 'body1', noW
             padding: theme.spacing(0),
             '& > svg': {
                 margin: theme.spacing(0, 1, 0, 0),
-                fontSize: theme.typography[svgFontSize].fontSize
+                fontSize: theme.typography[svgFontSize].fontSize,
             },
             '& > .MuiAvatar-root': {
                 // width: `${theme.typography[svgFontSize].fontSize} !important`,
                 // height: `${theme.typography[svgFontSize].fontSize} !important`,
-                margin: theme.spacing(0, 1, 0, 0)
+                margin: theme.spacing(0, 1, 0, 0),
             },
             '& > .MuiCircularProgress-root': {
                 width: `${theme.typography[svgFontSize].fontSize} !important`,
                 height: `${theme.typography[svgFontSize].fontSize} !important`,
-                margin: theme.spacing(0, 1, 0, 0)
-            }
+                margin: theme.spacing(0, 1, 0, 0),
+            },
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft, svgFontSize]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft, svgFontSize],
     )
 
     const typographyPropsRest: muiType.TypographyProps = typographyProps ? { ...typographyProps } : {}

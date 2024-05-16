@@ -23,10 +23,10 @@ export const MenuItemButton = ({ children, component = 'div', disabled = false, 
             whiteSpace: 'nowrap',
             '&:hover': {
                 textDecoration: underline || match ? 'underline' : 'none',
-                cursor: match ? 'default' : 'pointer'
-            }
+                cursor: match ? 'default' : 'pointer',
+            },
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft, underline, match]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft, underline, match],
     )
 
     const menuItemPropsRest: muiType.MenuItemProps = menuItemProps ? { ...menuItemProps } : {}

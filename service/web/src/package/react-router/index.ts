@@ -4,7 +4,7 @@ import * as routerType from './type'
 
 export const router = {
     component,
-    hook
+    hook,
 }
 
 export type { routerType }

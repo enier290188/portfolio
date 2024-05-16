@@ -21,9 +21,9 @@ export const Online = () => {
             top: 0,
             right: 0,
             left: 0,
-            zIndex: theme.zIndex.drawer + 4
+            zIndex: theme.zIndex.drawer + 4,
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -36,11 +36,11 @@ export const Online = () => {
             position: 'absolute',
             margin: {
                 xs: theme.spacing(2, 2, 0, 2),
-                md: theme.spacing(4, 0, 0, 0)
+                md: theme.spacing(4, 0, 0, 0),
             },
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        []
+        [],
     )
 
     return !status ? (

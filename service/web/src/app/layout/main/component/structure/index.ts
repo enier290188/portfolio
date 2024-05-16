@@ -7,5 +7,5 @@ export const structure = {
     body,
     box,
     head,
-    page
+    page,
 }

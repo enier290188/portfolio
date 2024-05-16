@@ -5,5 +5,5 @@ import { MobileContentTop } from './MobileContentTop.tsx'
 export const mobile = {
     Mobile,
     MobileContentBottom,
-    MobileContentTop
+    MobileContentTop,
 }

@@ -21,5 +21,5 @@ export const component = {
     menu,
     navigate,
     typography,
-    underConstruction
+    underConstruction,
 }

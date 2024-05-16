@@ -4,7 +4,7 @@ import * as reactImageCropType from './type'
 
 export const reactImageCrop = {
     component,
-    fn
+    fn,
 }
 
 export type { reactImageCropType }

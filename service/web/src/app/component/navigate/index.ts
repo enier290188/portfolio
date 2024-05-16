@@ -11,5 +11,5 @@ export const navigate = {
     ToAppErrorBoundary,
     ToAppErrorForbidden,
     ToAppErrorNotFound,
-    ToAppWorkspace
+    ToAppWorkspace,
 }

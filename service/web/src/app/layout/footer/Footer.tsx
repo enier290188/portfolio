@@ -12,9 +12,9 @@ export const Footer = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
             margin: theme.spacing(0),
             padding: theme.spacing(0),
             backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.common.white
+            color: theme.palette.common.white,
         }),
-        []
+        [],
     )
     const sxContent = React.useCallback(
         () => ({
@@ -23,9 +23,9 @@ export const Footer = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'stretch'
+            alignItems: 'stretch',
         }),
-        []
+        [],
     )
     const sxContentCenter = React.useCallback(
         () => ({
@@ -34,9 +34,9 @@ export const Footer = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
             flexWrap: 'nowrap',
             alignContent: 'flex-start',
             justifyContent: 'center',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
         }),
-        []
+        [],
     )
 
     const date = new Date()

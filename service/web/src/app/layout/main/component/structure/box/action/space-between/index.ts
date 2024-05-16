@@ -5,5 +5,5 @@ import { ActionRight } from './ActionRight.tsx'
 export const spaceBetween = {
     Action,
     ActionLeft,
-    ActionRight
+    ActionRight,
 }

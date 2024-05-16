@@ -5,5 +5,5 @@ import { HeadRight } from './HeadRight.tsx'
 export const spaceBetween = {
     Head,
     HeadLeft,
-    HeadRight
+    HeadRight,
 }

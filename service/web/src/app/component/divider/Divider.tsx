@@ -10,9 +10,9 @@ export const Divider = ({ component = 'div', orientation = 'horizontal', divider
         (theme: muiType.Theme) => ({
             margin: theme.spacing(spaceTop, spaceRight, spaceBottom, spaceLeft),
             padding: theme.spacing(0),
-            boxShadow: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}`
+            boxShadow: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}`,
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft],
     )
 
     const dividerPropsRest: muiType.DividerProps = dividerProps ? { ...dividerProps } : {}

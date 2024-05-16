@@ -7,5 +7,5 @@ export const fn = {
     getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
-    getSortedRowModel
+    getSortedRowModel,
 }

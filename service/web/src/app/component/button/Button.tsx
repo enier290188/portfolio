@@ -22,10 +22,10 @@ export const Button = ({ children, component = 'div', type = 'button', variant =
             whiteSpace: 'nowrap',
             '&:hover': {
                 textDecoration: underline || match ? 'underline' : 'none',
-                cursor: match && matchDisable ? 'default' : 'pointer'
-            }
+                cursor: match && matchDisable ? 'default' : 'pointer',
+            },
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft, underline, match, matchDisable]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft, underline, match, matchDisable],
     )
 
     const buttonPropsRest: muiType.ButtonProps = buttonProps ? { ...buttonProps } : {}

@@ -20,9 +20,9 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
             margin: theme.spacing(spaceTop, spaceRight, spaceBottom, spaceLeft),
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft],
     )
     const sxHead = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -33,9 +33,9 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
             justifyContent: 'space-between',
             alignItems: 'center',
             margin: theme.spacing(0),
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        []
+        [],
     )
     const sxHeadLeft = React.useCallback(
         () => ({
@@ -44,9 +44,9 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            alignItems: 'center'
+            alignItems: 'center',
         }),
-        []
+        [],
     )
     const sxHeadRight = React.useCallback(
         () => ({
@@ -55,9 +55,9 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
             flexWrap: 'nowrap',
             alignContent: 'center',
             justifyContent: 'flex-end',
-            alignItems: 'center'
+            alignItems: 'center',
         }),
-        []
+        [],
     )
     const sxBody = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -68,9 +68,9 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
             justifyContent: 'flex-start',
             alignItems: 'center',
             margin: theme.spacing(0),
-            padding: theme.spacing(2, 0)
+            padding: theme.spacing(2, 0),
         }),
-        []
+        [],
     )
 
     const handleRevokeObjectURL = React.useCallback(() => {
@@ -90,19 +90,19 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
                             {
                                 unit: '%',
                                 width: 50,
-                                height: 50
+                                height: 50,
                             },
                             aspect,
                             width,
-                            height
+                            height,
                         ),
                         width,
-                        height
-                    )
+                        height,
+                    ),
                 )
             }
         },
-        [aspect, handleRevokeObjectURL]
+        [aspect, handleRevokeObjectURL],
     )
 
     const handleActionSelectNewFile = React.useCallback(
@@ -115,7 +115,7 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
                 fileReader.readAsDataURL(e.target.files[0])
             }
         },
-        [handleRevokeObjectURL]
+        [handleRevokeObjectURL],
     )
 
     const handleActionReset = React.useCallback(() => {
@@ -146,7 +146,7 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
             handleRevokeObjectURL()
             setCrop(percentCrop)
         },
-        [handleRevokeObjectURL]
+        [handleRevokeObjectURL],
     )
 
     const handleActionCropComplete = React.useCallback(
@@ -207,11 +207,11 @@ export const ImageCrop = ({ aspect = ASPECT, scale = SCALE, rotate = ROTATE, id,
                         }
                     },
                     'image/png',
-                    1
+                    1,
                 )
             }
         },
-        [scale, rotate, handleRevokeObjectURL, onActionCropComplete]
+        [scale, rotate, handleRevokeObjectURL, onActionCropComplete],
     )
 
     React.useEffect(() => {

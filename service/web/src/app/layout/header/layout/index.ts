@@ -3,5 +3,5 @@ import { mobile } from './mobile'
 
 export const layout = {
     desktop,
-    mobile
+    mobile,
 }

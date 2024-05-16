@@ -17,9 +17,9 @@ export const Dialog = ({ children, dialogProps }: DialogProps) => {
             '& .MuiDialog-container': {
                 margin: {
                     xs: theme.spacing(0, 0, 0, 0),
-                    md: theme.spacing(4, 2, 2, 2)
+                    md: theme.spacing(4, 2, 2, 2),
                 },
-                padding: theme.spacing(0)
+                padding: theme.spacing(0),
             },
             '& .MuiDialog-paper': {
                 margin: theme.spacing(0),
@@ -31,12 +31,12 @@ export const Dialog = ({ children, dialogProps }: DialogProps) => {
                     borderColor: theme.palette.common.white,
                     borderRadius: {
                         xs: 0,
-                        md: 1
-                    }
-                }
-            }
+                        md: 1,
+                    },
+                },
+            },
         }),
-        []
+        [],
     )
 
     const dialogPropsRest: muiType.DialogProps = dialogProps ? { ...dialogProps } : { open: true }

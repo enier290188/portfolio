@@ -9,5 +9,5 @@ export const layout = {
     footer,
     header,
     main,
-    online
+    online,
 }

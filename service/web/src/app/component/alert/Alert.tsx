@@ -10,9 +10,9 @@ export const Alert = ({ children, variant = 'standard', severity = 'info', onClo
         (theme: muiType.Theme) => ({
             margin: theme.spacing(spaceTop, spaceRight, spaceBottom, spaceLeft),
             padding: theme.spacing(2, 4),
-            boxShadow: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}, 1px 0px 4px 0px ${theme.palette.divider}, -1px 0px 4px 0px ${theme.palette.divider}`
+            boxShadow: `0px 1px 4px 0px ${theme.palette.divider}, 0px -1px 4px 0px ${theme.palette.divider}, 1px 0px 4px 0px ${theme.palette.divider}, -1px 0px 4px 0px ${theme.palette.divider}`,
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft],
     )
 
     const alertPropsRest: muiType.AlertProps = alertProps ? { ...alertProps } : {}

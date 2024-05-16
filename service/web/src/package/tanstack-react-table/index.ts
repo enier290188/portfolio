@@ -6,7 +6,7 @@ import * as tableType from './type'
 export const table = {
     fn,
     hook,
-    render
+    render,
 }
 
 export type { tableType }

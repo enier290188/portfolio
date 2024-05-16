@@ -5,5 +5,5 @@ import { ListItemButtonLink } from './ListItemButtonLink.tsx'
 export const list = {
     List,
     ListItemButton,
-    ListItemButtonLink
+    ListItemButtonLink,
 }

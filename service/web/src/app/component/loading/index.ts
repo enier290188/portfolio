@@ -9,5 +9,5 @@ export const loading = {
     ProgressCircular,
     ProgressLinear,
     Suspense,
-    Text
+    Text,
 }

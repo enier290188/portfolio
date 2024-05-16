@@ -9,9 +9,9 @@ export const Text = ({ type = 'text', required = true, autoComplete = 'off', Inp
     const sxContent = React.useCallback(
         (theme: muiType.Theme) => ({
             margin: theme.spacing(spaceTop, spaceRight, spaceBottom, spaceLeft),
-            padding: theme.spacing(0)
+            padding: theme.spacing(0),
         }),
-        [spaceTop, spaceRight, spaceBottom, spaceLeft]
+        [spaceTop, spaceRight, spaceBottom, spaceLeft],
     )
 
     const textFieldPropsRest: muiType.TextFieldProps = textFieldProps ? { ...textFieldProps } : {}

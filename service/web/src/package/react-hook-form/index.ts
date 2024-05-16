@@ -4,7 +4,7 @@ import * as formType from './type'
 
 export const form = {
     component,
-    hook
+    hook,
 }
 
 export type { formType }

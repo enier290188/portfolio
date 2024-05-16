@@ -7,5 +7,5 @@ export const text = {
     Text,
     TextEmail,
     TextPassword,
-    TextPhone
+    TextPhone,
 }

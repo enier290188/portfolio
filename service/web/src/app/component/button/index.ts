@@ -5,5 +5,5 @@ import { ButtonSubmit } from './ButtonSubmit.tsx'
 export const button = {
     Button,
     ButtonLink,
-    ButtonSubmit
+    ButtonSubmit,
 }

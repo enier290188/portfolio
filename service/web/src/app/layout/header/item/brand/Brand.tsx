@@ -21,9 +21,9 @@ export const Brand = () => {
             color: theme.palette.common.white,
             textDecoration: 'none',
             textTransform: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
         }),
-        []
+        [],
     )
 
     return (

@@ -7,5 +7,5 @@ export const box = {
     action,
     content,
     list,
-    title
+    title,
 }
