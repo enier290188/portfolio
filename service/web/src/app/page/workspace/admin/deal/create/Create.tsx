@@ -1,10 +1,23 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeDealCreate = {
+    name: string
+    email: string
+    phone: string
+}
+type TypeDeal = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -43,7 +56,16 @@ const View = () => {
     })
     const mutationDealCreate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/deal/create/`, 'mutation', 'db'],
-        mutationFn: (deal: awsAmplifyApiType.CreateDealInput) => awsAmplifyApi.page.workspace.admin.deal.create({ deal: deal }),
+        mutationFn: async (deal: TypeDealCreate) => {
+            return {
+                id: '1',
+                name: deal.name,
+                email: deal.email,
+                phone: deal.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formCreate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -120,10 +142,10 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (dealCreated: awsAmplifyApiType.Deal | null) => {
+                    onSuccess: (dealCreated: TypeDeal | null) => {
                         if (dealCreated) {
                             queryClient.setQueryData([`/app/page/workspace/admin/deal/${dealCreated.id}/`, 'query', 'db'], dealCreated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: awsAmplifyApiType.Deal[] | undefined) => (dealList ? [...dealList, dealCreated] : [dealCreated]))
+                            queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: TypeDeal[] | undefined) => (dealList ? [...dealList, dealCreated] : [dealCreated]))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,

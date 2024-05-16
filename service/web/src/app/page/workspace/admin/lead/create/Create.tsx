@@ -1,10 +1,23 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeLeadCreate = {
+    name: string
+    email: string
+    phone: string
+}
+type TypeLead = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -43,7 +56,16 @@ const View = () => {
     })
     const mutationLeadCreate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/lead/create/`, 'mutation', 'db'],
-        mutationFn: (lead: awsAmplifyApiType.CreateLeadInput) => awsAmplifyApi.page.workspace.admin.lead.create({ lead: lead }),
+        mutationFn: async (lead: TypeLeadCreate) => {
+            return {
+                id: '1',
+                name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formCreate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -120,10 +142,10 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (leadCreated: awsAmplifyApiType.Lead | null) => {
+                    onSuccess: (leadCreated: TypeLead | null) => {
                         if (leadCreated) {
                             queryClient.setQueryData([`/app/page/workspace/admin/lead/${leadCreated.id}/`, 'query', 'db'], leadCreated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: awsAmplifyApiType.Lead[] | undefined) => (leadList ? [...leadList, leadCreated] : [leadCreated]))
+                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? [...leadList, leadCreated] : [leadCreated]))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,

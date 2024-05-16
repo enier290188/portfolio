@@ -1,10 +1,21 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeDealRemove = {
+    id: string
+}
+type TypeDeal = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -37,12 +48,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryDealGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/deal/${paramDealId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.deal.get({ id: paramDealId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationDealRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/deal/${paramDealId}/remove/`, 'mutation', 'db'],
-        mutationFn: (deal: awsAmplifyApiType.DeleteDealInput) => awsAmplifyApi.page.workspace.admin.deal.delete({ deal: deal }),
+        mutationFn: async (deal: TypeDealRemove) => {
+            return {
+                id: deal.id,
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -59,10 +86,10 @@ const View = () => {
                 id: paramDealId,
             },
             {
-                onSuccess: (dealRemoved: awsAmplifyApiType.Deal | null) => {
+                onSuccess: (dealRemoved: TypeDeal | null) => {
                     if (dealRemoved) {
                         queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/deal/${paramDealId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: awsAmplifyApiType.Deal[] | undefined) => (dealList ? dealList.filter((dealFilter: awsAmplifyApiType.Deal) => dealFilter.id !== paramDealId) : []))
+                        queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: TypeDeal[] | undefined) => (dealList ? dealList.filter((dealFilter: TypeDeal) => dealFilter.id !== paramDealId) : []))
                         contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     } else {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })

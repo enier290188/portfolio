@@ -6,6 +6,21 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
+type TypeDealUpdate = {
+    id: string
+    name: string
+    email: string
+    phone: string
+}
+type TypeDeal = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
+
 type TypeForm = {
     name: string
     email: string
@@ -37,12 +52,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryDealGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/deal/${paramDealId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.deal.get({ id: paramDealId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationDealUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/deal/${paramDealId}/update/`, 'mutation', 'db'],
-        mutationFn: (deal: awsAmplifyApiType.UpdateDealInput) => awsAmplifyApi.page.workspace.admin.deal.update({ deal: deal }),
+        mutationFn: async (deal: TypeDealUpdate) => {
+            return {
+                id: '1',
+                name: deal.name,
+                email: deal.email,
+                phone: deal.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -120,10 +151,10 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (dealUpdated: awsAmplifyApiType.Deal | null) => {
+                    onSuccess: (dealUpdated: TypeDeal | null) => {
                         if (dealUpdated) {
                             queryClient.setQueryData([`/app/page/workspace/admin/deal/${paramDealId}/`, 'query', 'db'], dealUpdated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: awsAmplifyApiType.Deal[] | undefined) => (dealList ? dealList.map((dealMap: awsAmplifyApiType.Deal) => (dealMap.id === paramDealId ? dealUpdated : dealMap)) : []))
+                            queryClient.setQueryData([`/app/page/workspace/admin/deal/list/`, 'query', 'db'], (dealList: TypeDeal[] | undefined) => (dealList ? dealList.map((dealMap: TypeDeal) => (dealMap.id === paramDealId ? dealUpdated : dealMap)) : []))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,

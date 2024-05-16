@@ -1,10 +1,21 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeUserRemove = {
+    id: string
+}
+type TypeUser = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -41,12 +52,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.setting.user.get({ id: paramUserId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationUserRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/remove/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.DeleteUserInput) => awsAmplifyApi.page.workspace.admin.setting.user.delete({ user: user }),
+        mutationFn: async (user: TypeUserRemove) => {
+            return {
+                id: user.id,
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -63,10 +90,10 @@ const View = () => {
                 id: paramUserId,
             },
             {
-                onSuccess: (userRemoved: awsAmplifyApiType.User | null) => {
+                onSuccess: (userRemoved: TypeUser | null) => {
                     if (userRemoved) {
                         queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: awsAmplifyApiType.User[] | undefined) => (userList ? userList.filter((userFilter: awsAmplifyApiType.User) => userFilter.id !== paramUserId) : []))
+                        queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: TypeUser[] | undefined) => (userList ? userList.filter((userFilter: TypeUser) => userFilter.id !== paramUserId) : []))
                         contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     } else {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })

@@ -1,10 +1,24 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeLeadUpdate = {
+    id: string
+    name: string
+    email: string
+    phone: string
+}
+type TypeLead = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -37,12 +51,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryLeadGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.lead.get({ id: paramLeadId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationLeadUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/lead/${paramLeadId}/update/`, 'mutation', 'db'],
-        mutationFn: (lead: awsAmplifyApiType.UpdateLeadInput) => awsAmplifyApi.page.workspace.admin.lead.update({ lead: lead }),
+        mutationFn: async (lead: TypeLeadUpdate) => {
+            return {
+                id: '1',
+                name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -120,10 +150,10 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (leadUpdated: awsAmplifyApiType.Lead | null) => {
+                    onSuccess: (leadUpdated: TypeLead | null) => {
                         if (leadUpdated) {
                             queryClient.setQueryData([`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'], leadUpdated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: awsAmplifyApiType.Lead[] | undefined) => (leadList ? leadList.map((leadMap: awsAmplifyApiType.Lead) => (leadMap.id === paramLeadId ? leadUpdated : leadMap)) : []))
+                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? leadList.map((leadMap: TypeLead) => (leadMap.id === paramLeadId ? leadUpdated : leadMap)) : []))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,

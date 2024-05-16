@@ -1,10 +1,21 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeLeadRemove = {
+    id: string
+}
+type TypeLead = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -37,12 +48,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryLeadGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.lead.get({ id: paramLeadId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationLeadRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/lead/${paramLeadId}/remove/`, 'mutation', 'db'],
-        mutationFn: (lead: awsAmplifyApiType.DeleteLeadInput) => awsAmplifyApi.page.workspace.admin.lead.delete({ lead: lead }),
+        mutationFn: async (lead: TypeLeadRemove) => {
+            return {
+                id: lead.id,
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -59,10 +86,10 @@ const View = () => {
                 id: paramLeadId,
             },
             {
-                onSuccess: (leadRemoved: awsAmplifyApiType.Lead | null) => {
+                onSuccess: (leadRemoved: TypeLead | null) => {
                     if (leadRemoved) {
                         queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: awsAmplifyApiType.Lead[] | undefined) => (leadList ? leadList.filter((leadFilter: awsAmplifyApiType.Lead) => leadFilter.id !== paramLeadId) : []))
+                        queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? leadList.filter((leadFilter: TypeLead) => leadFilter.id !== paramLeadId) : []))
                         contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     } else {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })

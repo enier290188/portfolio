@@ -1,10 +1,21 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeUserResetPassword = {
+    id: string
+}
+type TypeUser = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -41,12 +52,28 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.setting.user.get({ id: paramUserId }),
+        queryFn: async () => {
+            return {
+                id: '1',
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+            }
+        },
         initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/reset-password/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.UpdateUserInput) => awsAmplifyApi.page.workspace.admin.setting.user.resetPassword({ user: user }),
+        mutationFn: async (user: TypeUserResetPassword) => {
+            return {
+                id: user.id,
+                name: DEFAULT_VALUES.name,
+                email: DEFAULT_VALUES.email,
+                phone: DEFAULT_VALUES.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -63,10 +90,10 @@ const View = () => {
                 id: paramUserId,
             },
             {
-                onSuccess: (userUpdated: awsAmplifyApiType.User | null) => {
+                onSuccess: (userUpdated: TypeUser | null) => {
                     if (userUpdated) {
                         queryClient.setQueryData([`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'], userUpdated)
-                        queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: awsAmplifyApiType.User[] | undefined) => (userList ? userList.map((userMap: awsAmplifyApiType.User) => (userMap.id === paramUserId ? userUpdated : userMap)) : []))
+                        queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: TypeUser[] | undefined) => (userList ? userList.map((userMap: TypeUser) => (userMap.id === paramUserId ? userUpdated : userMap)) : []))
                         contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     } else {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })

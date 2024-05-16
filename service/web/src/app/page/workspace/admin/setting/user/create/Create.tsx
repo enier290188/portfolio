@@ -1,10 +1,24 @@
 import { app } from '@./app'
-// import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
+
+type TypeUserCreate = {
+    name: string
+    email: string
+    phone: string
+    groupList: string[]
+}
+type TypeUser = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    createdAt: string
+    updatedAt: string
+}
 
 type TypeForm = {
     name: string
@@ -43,7 +57,16 @@ const View = () => {
     })
     const mutationUserCreate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/setting/user/create/`, 'mutation', 'db'],
-        mutationFn: (user: awsAmplifyApiType.CreateUserInput) => awsAmplifyApi.page.workspace.admin.setting.user.create({ user: user }),
+        mutationFn: async (user: TypeUserCreate) => {
+            return {
+                id: '1',
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                createdAt: '',
+                updatedAt: '',
+            }
+        },
     })
 
     const formCreate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -121,10 +144,10 @@ const View = () => {
                     groupList: ['Admin', 'Sale', 'Project'],
                 },
                 {
-                    onSuccess: (userCreated: awsAmplifyApiType.User | null) => {
+                    onSuccess: (userCreated: TypeUser | null) => {
                         if (userCreated) {
                             queryClient.setQueryData([`/app/page/workspace/admin/setting/user/${userCreated.id}/`, 'query', 'db'], userCreated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: awsAmplifyApiType.User[] | undefined) => (userList ? [...userList, userCreated] : [userCreated]))
+                            queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: TypeUser[] | undefined) => (userList ? [...userList, userCreated] : [userCreated]))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
