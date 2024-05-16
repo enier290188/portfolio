@@ -10,6 +10,9 @@ type TypeFormLogin = {
 }
 
 const View = () => {
+    console.log(import.meta.env)
+    console.log(import.meta.env.VITE_SERVICE_WEB_SERVER_API)
+
     const contextI18n = React.useContext(app.context.i18n.Context)
     const contextI18nLanguage = contextI18n.getLanguage()
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.login, contextI18nLanguage), [contextI18nLanguage])
