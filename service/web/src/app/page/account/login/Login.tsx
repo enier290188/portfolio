@@ -1,4 +1,4 @@
-import { app, appType } from '@./app'
+import { app } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -75,59 +75,32 @@ const View = () => {
     const handleFormLoginSubmit: formType.SubmitHandler<TypeFormLogin> = React.useCallback(
         async (data) => {
             const { email, password } = data
-            const awsAmplifyAuthLoginResult = await awsAmplifyAuth.login(email, password)
+            const awsAmplifyAuthLoginResult = {
+                userModel: {
+                    id: '',
+                    name: `${email} ::: ${password}`,
+                    email: email,
+                    phone: '',
+                    picture: '',
+                    groupList: [],
+                },
+                error: {
+                    code: null,
+                },
+            }
             if (!awsAmplifyAuthLoginResult.error) {
-                if (awsAmplifyAuthLoginResult?.data) {
-                    if (awsAmplifyAuthLoginResult.data?.userCognitoNewPasswordRequired) {
-                        setUserCognitoNewPasswordRequired(awsAmplifyAuthLoginResult.data.userCognitoNewPasswordRequired)
-                    } else {
-                        if (awsAmplifyAuthLoginResult.data?.userCognito) {
-                            const userCognito = awsAmplifyAuthLoginResult.data.userCognito
-                            const userCognitoGroupList: NonNullable<appType.ContextUser>['groupList'] = userCognito.groupList
-                            const userCognitoUsername = userCognito.username
-                            if (0 < userCognitoGroupList.length) {
-                                const userModelList = await awsAmplifyApi.page.account.login.user.list({
-                                    email: email,
-                                    groupList: userCognitoGroupList,
-                                    cognitoUsername: userCognitoUsername,
-                                })
-                                if (1 === userModelList.length) {
-                                    const userModel = userModelList[0]
-                                    const picture = await awsAmplifyStorage.storage.get(`${app.setting.storage.APP_USER}${userModel.id}/picture.png`)
-                                    contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
-                                    contextUser.login({
-                                        id: userModel.id,
-                                        name: userModel?.name ?? '',
-                                        email: userModel?.email ?? '',
-                                        phone: userModel?.phone ?? '',
-                                        picture: picture ?? '',
-                                        groupList: userCognitoGroupList ?? [],
-                                    })
-                                } else {
-                                    if (0 === userModelList.length) {
-                                        contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.UserIsNotAuthorized') })
-                                    } else {
-                                        contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.UserIsDuplicated') })
-                                    }
-                                }
-                            } else {
-                                contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.UserWithoutGroup') })
-                            }
-                        }
-                    }
-                }
+                const userModel = awsAmplifyAuthLoginResult.userModel
+                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
+                contextUser.login({
+                    id: userModel.id,
+                    name: userModel?.name ?? '',
+                    email: userModel?.email ?? '',
+                    phone: userModel?.phone ?? '',
+                    picture: '',
+                    groupList: [],
+                })
             } else {
                 switch (awsAmplifyAuthLoginResult.error.code) {
-                    case 'NotAuthorizedException':
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.NotAuthorizedException') })
-                        break
-                    case 'PasswordResetRequiredException':
-                        contextAlert.addAlert({ type: 'warning', message: i18n.getText('login.action.submit.alert.error.PasswordResetRequiredException') })
-                        setUserPasswordResetRequiredException(true)
-                        break
-                    case 'LimitExceededException':
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.LimitExceededException') })
-                        break
                     default:
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error') })
                 }
