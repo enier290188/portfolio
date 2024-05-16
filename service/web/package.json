@@ -16,7 +16,7 @@
     "license": "MIT",
     "engines": {
         "node": "v20.11.0",
-        "npm": "10.7.0"
+        "npm": "10.8.0"
     },
     "type": "module",
     "scripts": {
