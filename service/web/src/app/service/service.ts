@@ -1,4 +1,4 @@
-import { TypeFetchCrudGetRequest, TypeFetchCrudPostRequest, TypeFetchCrudRequest, TypeFetchCrudResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
+import { TypeFetchCrudDeleteRequest, TypeFetchCrudGetRequest, TypeFetchCrudPatchRequest, TypeFetchCrudPostRequest, TypeFetchCrudRequest, TypeFetchCrudResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
 
 const SERVICE_WEB_SERVER_API = import.meta.env.VITE_SERVICE_WEB_SERVER_API
 
@@ -43,21 +43,7 @@ const __fetch__ = async (
     }
 }
 
-const __fetch_crud__ = async (request: TypeFetchCrudRequest): Promise<TypeFetchCrudResponse> => {
-    return await __fetch__({
-        resource: request.resource,
-        options: {
-            method: request.method,
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${request.accessToken}`,
-            },
-            body: JSON.stringify(request.body),
-        },
-    })
-}
-
-const login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResponse> => {
+const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResponse> => {
     const response = await __fetch__({
         resource: request.resource,
         options: {
@@ -81,26 +67,52 @@ const login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResp
     }
 }
 
-const get = async (request: TypeFetchCrudGetRequest) => {
-    return await __fetch_crud__({
+const fetch_crud = async (request: TypeFetchCrudRequest): Promise<TypeFetchCrudResponse> => {
+    return await __fetch__({
         resource: request.resource,
-        method: 'GET',
-        accessToken: request.accessToken,
-        body: request.body,
+        options: {
+            method: request.method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${request.accessToken}`,
+            },
+            body: JSON.stringify(request.body),
+        },
     })
 }
 
-const post = async (request: TypeFetchCrudPostRequest) => {
-    return await __fetch_crud__({
-        resource: request.resource,
+const fetch_crud_get = async (request: TypeFetchCrudGetRequest): Promise<TypeFetchCrudResponse> => {
+    return await fetch_crud({
+        ...request,
+        method: 'GET',
+    })
+}
+
+const fetch_crud_post = async (request: TypeFetchCrudPostRequest): Promise<TypeFetchCrudResponse> => {
+    return await fetch_crud({
+        ...request,
         method: 'POST',
-        accessToken: request.accessToken,
-        body: request.body,
+    })
+}
+
+const fetch_crud_patch = async (request: TypeFetchCrudPatchRequest): Promise<TypeFetchCrudResponse> => {
+    return await fetch_crud({
+        ...request,
+        method: 'PATCH',
+    })
+}
+
+const fetch_crud_delete = async (request: TypeFetchCrudDeleteRequest): Promise<TypeFetchCrudResponse> => {
+    return await fetch_crud({
+        ...request,
+        method: 'DELETE',
     })
 }
 
 export const service = {
-    login: login,
-    get: get,
-    post: post,
+    login: fetch_login,
+    get: fetch_crud_get,
+    post: fetch_crud_post,
+    patch: fetch_crud_patch,
+    delete: fetch_crud_delete,
 }
