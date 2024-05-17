@@ -4,9 +4,9 @@ from app.module.auth import (
 from pydantic.main import BaseModel
 
 
+class AuthResponse(auth_schema.AuthResponse):
+    pass
+
+
 class LoginResponse(BaseModel):
     access_token: str
-
-
-class ProfileResponse(auth_schema.AuthResponse):
-    pass
