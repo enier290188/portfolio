@@ -75,7 +75,22 @@ const View = () => {
     const handleFormLoginSubmit: formType.SubmitHandler<TypeFormLogin> = React.useCallback(
         async (data) => {
             const { email, password } = data
-            const awsAmplifyAuthLoginResult = {
+
+            const result = await app.service.account.login(email, password)
+            console.log('')
+            console.log(result)
+
+            contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: email }) })
+            contextUser.login({
+                id: '1',
+                name: '',
+                email: email,
+                phone: '',
+                picture: '',
+                groupList: [],
+            })
+
+            /*const awsAmplifyAuthLoginResult = {
                 userModel: {
                     id: '',
                     name: `${email} ::: ${password}`,
@@ -104,7 +119,7 @@ const View = () => {
                     default:
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error') })
                 }
-            }
+            }*/
         },
         [i18n, contextAlert, contextUser],
     )
