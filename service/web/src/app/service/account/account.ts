@@ -2,28 +2,28 @@ import { service } from '../service.ts'
 
 const login = async (email: string, password: string) => {
     try {
-        const responseLogin = await service.login(`/api/v1/auth/login/`, { username: email, password: password })
+        const responseLogin = await service.login({
+            resource: `/api/v1/auth/login/`,
+            body: {
+                username: email,
+                password: password,
+            },
+        })
+        console.log(responseLogin)
+
         switch (responseLogin.status) {
             case 200: {
-                const response = responseLogin.data
-                console.log(response)
-                const responseIndex = await fetch(`${import.meta.env.VITE_SERVICE_WEB_SERVER_API}/api/v1/auth/index/`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${response['access_token']}`,
-                    },
-                    redirect: 'follow',
-                    referrerPolicy: 'no-referrer',
-                    body: JSON.stringify({}),
+                const responseIndex = await service.post({
+                    resource: `/api/v1/auth/index/`,
+                    accessToken: responseLogin.data.access_token,
+                    body: null,
                 })
-                return await responseIndex.json()
+                console.log(responseIndex)
+
+                return responseIndex
             }
             case 401: {
-                return await responseLogin.data()
+                return responseLogin
             }
         }
     } catch (error) {
