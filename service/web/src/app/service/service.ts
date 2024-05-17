@@ -14,6 +14,10 @@ type TypeFetchRequest = {
         referrerPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'
     }
 }
+type TypeFetchResponse = {
+    status: number
+    data: object
+}
 
 const SERVICE_WEB_SERVER_API = import.meta.env.VITE_SERVICE_WEB_SERVER_API
 
@@ -34,7 +38,7 @@ const __fetch__ = async (
             referrerPolicy: 'no-referrer',
         },
     },
-) => {
+): Promise<TypeFetchResponse> => {
     const url = `${SERVICE_WEB_SERVER_API}${request.resource}`
 
     // Default options are marked with *
@@ -49,8 +53,8 @@ const __fetch__ = async (
         body: request.options.body, // body data type must match "Content-Type" header
     })
 
-    const status = response.status
-    const data = await response.json() // parses JSON response into native JavaScript objects
+    const status: number = response.status
+    const data: object = await response.json() // parses JSON response into native JavaScript objects
 
     return {
         status: status,
@@ -58,36 +62,58 @@ const __fetch__ = async (
     }
 }
 
-const login = async (resource: string, body: { username: string; password: string }) => {
+const login = async (request: { resource: string; body: { username: string; password: string } }) => {
     return await __fetch__({
-        resource: resource,
+        resource: request.resource,
         options: {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                username: body.username,
-                password: body.password,
+                username: request.body.username,
+                password: request.body.password,
             }),
         },
     })
 }
 
-const post = async (resource: string, body: object) => {
+const crud = async (request: { resource: string; method: TypeFetchRequest['options']['method']; accessToken: string; body: null | object }) => {
     return await __fetch__({
-        resource: resource,
+        resource: request.resource,
         options: {
-            method: 'POST',
+            method: request.method,
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${request.accessToken}`,
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify(request.body),
         },
+    })
+}
+
+const crud_get = async (request: { resource: string; accessToken: string; body: null | object }) => {
+    return await crud({
+        resource: request.resource,
+        method: 'GET',
+        accessToken: request.accessToken,
+        body: request.body,
+    })
+}
+
+const crud_post = async (request: { resource: string; accessToken: string; body: null | object }) => {
+    return await crud({
+        resource: request.resource,
+        method: 'POST',
+        accessToken: request.accessToken,
+        body: request.body,
     })
 }
 
 export const service = {
     login: login,
-    post: post,
+    crud: {
+        get: crud_get,
+        post: crud_post,
+    },
 }
