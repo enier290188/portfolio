@@ -1,5 +1,6 @@
 import { TypeFetchCrudDeleteRequest, TypeFetchCrudGetRequest, TypeFetchCrudPatchRequest, TypeFetchCrudPostRequest, TypeFetchCrudRequest, TypeFetchCrudResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
 
+const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
 const SERVICE_API_PORT_EXTERNAL = import.meta.env.VITE_SERVICE_API_PORT_EXTERNAL
 
@@ -21,7 +22,10 @@ const __fetch__ = async (
         },
     },
 ): Promise<TypeFetchResponse> => {
-    const url = `${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
+    const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
+
+    console.log('**********')
+    console.log(url)
 
     // Default options are marked with *
     const response = await fetch(url, {
@@ -30,7 +34,7 @@ const __fetch__ = async (
         cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
         credentials: request.options.credentials, // include, *same-origin, omit
         redirect: request.options.redirect, // manual, *follow, error
-        referrerPolicy: request.options.referrerPolicy, // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        referrerPolicy: request.options.referrerPolicy, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
         headers: request.options.headers,
         body: request.options.body, // body data type must match "Content-Type" header
     })
