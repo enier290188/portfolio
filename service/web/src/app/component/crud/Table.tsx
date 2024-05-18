@@ -374,7 +374,6 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                             }
                             case 'userGroupList': {
                                 const cellValue = cell.getValue()
-                                console.log(cellValue)
 
                                 value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`-`}</app.component.typography.Typography>
 
@@ -390,8 +389,6 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                                         }
                                     }
                                 }
-
-                                console.log('')
                                 break
                             }
                             default: {
