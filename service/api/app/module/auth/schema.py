@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import Annotated
 
+from pydantic.fields import Field
+from pydantic.main import BaseModel
+
 from app.module.user import (
     schema as user_schema,
 )
-from pydantic.fields import Field
-from pydantic.main import BaseModel
 
 
 class AuthUserResponse(user_schema.UserResponse):

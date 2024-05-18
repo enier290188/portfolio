@@ -1,3 +1,5 @@
+from sqlalchemy.sql import insert as _insert, select as _select
+
 from app.config import (
     setting,
 )
@@ -8,7 +10,6 @@ from app.module.user import (
     hashing as user_hashing,
     model as user_model,
 )
-from sqlalchemy.sql import insert as _insert, select as _select
 
 __setting = setting.get_setting()
 

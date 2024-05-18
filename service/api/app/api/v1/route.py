@@ -1,10 +1,11 @@
+from fastapi.routing import APIRouter
+
 from app.api.v1.auth import (
     route as auth_route,
 )
 from app.api.v1.workspace import (
     route as workspace_route,
 )
-from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/v1',

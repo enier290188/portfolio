@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta, timezone
 
+from jose import jwt
+from jose.exceptions import JWTError
+
 from app.config import (
     setting,
 )
 from app.module.auth import (
     exception as auth_exception,
 )
-from jose import jwt
-from jose.exceptions import JWTError
 
 __setting = setting.get_setting()
 

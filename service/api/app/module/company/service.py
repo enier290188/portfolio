@@ -1,11 +1,12 @@
 from typing import Sequence
 
-from app.module.company import (
-    model as company_model,
-)
 from pydantic.types import UUID4
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.sql import delete as _delete, insert as _insert, select as _select, update as _update
+
+from app.module.company import (
+    model as company_model,
+)
 
 
 async def fetch(db_async_session: AsyncSession, limit: int = 0, offset: int = 0) -> Sequence[company_model.Company]:

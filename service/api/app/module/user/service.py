@@ -1,12 +1,13 @@
 from typing import Sequence
 
-from app.module.user import (
-    model as user_model,
-)
 from pydantic.networks import EmailStr
 from pydantic.types import UUID4
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.sql import delete as _delete, insert as _insert, select as _select, update as _update
+
+from app.module.user import (
+    model as user_model,
+)
 
 
 async def fetch(db_async_session: AsyncSession, limit: int = 0, offset: int = 0) -> Sequence[user_model.User]:
