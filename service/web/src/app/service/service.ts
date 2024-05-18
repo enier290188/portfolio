@@ -1,6 +1,7 @@
 import { TypeFetchCrudDeleteRequest, TypeFetchCrudGetRequest, TypeFetchCrudPatchRequest, TypeFetchCrudPostRequest, TypeFetchCrudRequest, TypeFetchCrudResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
 
-const SERVICE_WEB_SERVER_API = import.meta.env.VITE_SERVICE_WEB_SERVER_API
+const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
+const SERVICE_API_PORT_EXTERNAL = import.meta.env.VITE_SERVICE_API_PORT_EXTERNAL
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 const __fetch__ = async (
@@ -20,7 +21,7 @@ const __fetch__ = async (
         },
     },
 ): Promise<TypeFetchResponse> => {
-    const url = `${SERVICE_WEB_SERVER_API}${request.resource}`
+    const url = `${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
 
     // Default options are marked with *
     const response = await fetch(url, {

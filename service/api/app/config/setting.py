@@ -20,8 +20,8 @@ class __Setting(BaseSettings):
     SERVICE_API_DOCS_URL: str | None = Field(default='/')
     SERVICE_API_REDOC_URL: str | None = Field(default=None)
     SERVICE_API_OPENAPI_URL: str | None = Field(default='/openapi.json')
-    SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS: Sequence[str] = Field(default=[])
-    SERVICE_API_MIDDLEWARE_CORS_ALLOW_METHODS: Sequence[str] = Field(default=['GET', 'POST', 'PUT', 'DELETE'])
+    SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS: Sequence[str] = Field(default=['*'])
+    SERVICE_API_MIDDLEWARE_CORS_ALLOW_METHODS: Sequence[str] = Field(default=['GET', 'POST', 'PATCH', 'DELETE'])
     SERVICE_API_MIDDLEWARE_CORS_ALLOW_HEADERS: Sequence[str] = Field(default=['Content-Type', 'Authorization'])
     SERVICE_API_MIDDLEWARE_CORS_ALLOW_CREDENTIALS: bool = Field(default=False)
     SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGIN_REGEX: str | None = Field(default=None)
@@ -40,7 +40,7 @@ class __Setting(BaseSettings):
     SERVICE_API_USER_ROOT_PASSWORD_FILE: str = Field(default='')
 
     # service-db
-    SERVICE_DB_SERVER: str = Field(default='')
+    SERVICE_DB_HOST: str = Field(default='')
     SERVICE_DB_PORT: str = Field(default='')
     SERVICE_DB_DATABASE: str = Field(default='')
     SERVICE_DB_USER: str = Field(default='')
@@ -53,7 +53,7 @@ class __Setting(BaseSettings):
     def SERVICE_API_SQLALCHEMY_DATABASE_URL(self) -> str:
         url: MultiHostUrl = PostgresDsn.build(
             scheme='postgresql+psycopg',
-            host=str(self.SERVICE_DB_SERVER),
+            host=str(self.SERVICE_DB_HOST),
             port=int(self.SERVICE_DB_PORT),
             path=str(self.SERVICE_DB_DATABASE),
             username=str(self.SERVICE_DB_USER),
