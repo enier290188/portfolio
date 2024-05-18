@@ -50,7 +50,7 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.post('/index', response_model=api_schema.AuthResponse)
+@router.post('/index/', response_model=api_schema.AuthResponse)
 async def index(auth_response: auth_dependency.DependAuth):
     return api_schema.AuthResponse(
         **dict(auth_response)
