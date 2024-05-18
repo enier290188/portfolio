@@ -25,13 +25,6 @@ router = APIRouter(
 )
 
 
-@router.post('/index', response_model=api_schema.AuthResponse)
-async def index(auth_response: auth_dependency.DependAuth):
-    return api_schema.AuthResponse(
-        **dict(auth_response)
-    )
-
-
 @router.post(path='/login/', status_code=status.HTTP_200_OK, response_model=api_schema.LoginResponse)
 async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm, Depends()], db_async_session: db_dependency.DependDBAsyncSession):
     username: str = request.username
@@ -54,4 +47,11 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
 
     return api_schema.LoginResponse(
         access_token=access_token,
+    )
+
+
+@router.post('/index', response_model=api_schema.AuthResponse)
+async def index(auth_response: auth_dependency.DependAuth):
+    return api_schema.AuthResponse(
+        **dict(auth_response)
     )
