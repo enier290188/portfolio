@@ -1,7 +1,7 @@
 services:
   service-web:
     healthcheck:
-      test: curl -f http://${DC_SERVICE_WEB_HOSTNAME}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
+      test: curl -f http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
       interval: 1s
       timeout: 1s
       retries: 3
@@ -23,9 +23,12 @@ services:
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
-        - SERVICE_WEB_HOSTNAME=${DC_SERVICE_WEB_HOSTNAME}
-        - SERVICE_WEB_PORT=${DC_SERVICE_WEB_PORT_INTERNAL}
-        - SERVICE_WEB_SERVER_API=${DC_SERVICE_WEB_SERVER_API}
+        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
+        - SERVICE_WEB_HOST=${DC_SERVICE_WEB_HOST}
+        - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
+        - SERVICE_WEB_PORT_INTERNAL=${DC_SERVICE_WEB_PORT_INTERNAL}
+        - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
+        - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_PORT_EXTERNAL}
     ports:
       - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
     networks:
@@ -50,7 +53,7 @@ services:
           path: ../../../service/web/vite.config.ts
   service-api:
     healthcheck:
-      test: curl -f http://${DC_SERVICE_API_HOSTNAME}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
+      test: curl -f http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
       interval: 1s
       timeout: 1s
       retries: 3
@@ -72,11 +75,15 @@ services:
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
-        - SERVICE_API_HOSTNAME=${DC_SERVICE_API_HOSTNAME}
-        - SERVICE_API_PORT=${DC_SERVICE_API_PORT_INTERNAL}
+        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
+        - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
+        - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
+        - SERVICE_API_HOST=${DC_SERVICE_API_HOST}
+        - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_PORT_EXTERNAL}
+        - SERVICE_API_PORT_INTERNAL=${DC_SERVICE_API_PORT_INTERNAL}
         - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
         - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
-        - SERVICE_DB_SERVER=service-db
+        - SERVICE_DB_HOST=service-db
         - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
         - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
         - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
