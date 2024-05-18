@@ -14,45 +14,48 @@ class __Setting(BaseSettings):
         secrets_dir='/run/secrets',
     )
 
-    #
-    #
+    ##################################################
+    ##################################################
     # fastapi
+    ##################################################
     SERVICE_API_TITLE: str = Field(default='FastAPI')
     SERVICE_API_VERSION: str = Field(default='0.1.0')
     SERVICE_API_DOCS_URL: str | None = Field(default='/')
     SERVICE_API_REDOC_URL: str | None = Field(default=None)
     SERVICE_API_OPENAPI_URL: str | None = Field(default='/openapi.json')
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-web
+    ##################################################
     SERVICE_WEB_PROTOCOL: str = Field(default='')
     SERVICE_WEB_DOMAIN: str = Field(default='')
     SERVICE_WEB_PORT_EXTERNAL: int = Field(default=0)
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-api
+    ##################################################
     SERVICE_API_PROTOCOL: str = Field(default='')
     SERVICE_API_DOMAIN: str = Field(default='')
     SERVICE_API_HOST: str = Field(default='')
     SERVICE_API_PORT_EXTERNAL: int = Field(default=0)
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-api-middleware
-    # SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS: Sequence[str] = Field(default=['*'])
+    ##################################################
     # noinspection PyPep8Naming
     @computed_field
     @property
     def SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS(self) -> Sequence[str] | None:
-        allowed_origins = ['http://localhost:1001']
+        allowed_origins = []
         if self.SERVICE_WEB_PROTOCOL and self.SERVICE_WEB_DOMAIN and self.SERVICE_WEB_PORT_EXTERNAL:
             allowed_origins.append(
                 '{protocol}://{host}:{port}'.format(
                     protocol=self.SERVICE_WEB_PROTOCOL,
                     host=self.SERVICE_WEB_DOMAIN,
-                    port=self.SERVICE_API_PORT_EXTERNAL
+                    port=self.SERVICE_WEB_PORT_EXTERNAL
                 )
             )
         return allowed_origins
@@ -77,31 +80,35 @@ class __Setting(BaseSettings):
 
     SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_WWW_REDIRECT: bool = Field(default=True)
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-api-auth
+    ##################################################
     SERVICE_API_AUTH_JWT_KEY_FILE: str = Field(default='')  # to get a string like this run: openssl rand -hex 32
     SERVICE_API_AUTH_JWT_ALGORITHM_FILE: str = Field(default='')
     SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=0)
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-api-user
+    ##################################################
     SERVICE_API_USER_ROOT_EMAIL: str = Field(default='')
     SERVICE_API_USER_ROOT_PASSWORD_FILE: str = Field(default='')
 
-    #
-    #
+    ##################################################
+    ##################################################
     # service-db
+    ##################################################
     SERVICE_DB_HOST: str = Field(default='')
     SERVICE_DB_PORT: str = Field(default='')
     SERVICE_DB_DATABASE: str = Field(default='')
     SERVICE_DB_USER: str = Field(default='')
     SERVICE_DB_PASSWORD_FILE: str = Field(default='')
 
-    #
-    #
+    ##################################################
+    ##################################################
     # sqlalchemy
+    ##################################################
     # noinspection PyPep8Naming
     @computed_field
     @property
