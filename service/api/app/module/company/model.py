@@ -1,10 +1,9 @@
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm.base import Mapped
-from sqlalchemy.sql.sqltypes import Boolean, String
-
 from app.module.db import (
     model as db_model,
 )
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm.base import Mapped
+from sqlalchemy.sql.sqltypes import Boolean, String
 
 
 class Company(db_model.SQLAlchemyDeclarativeBase):
@@ -14,6 +13,23 @@ class Company(db_model.SQLAlchemyDeclarativeBase):
         String(128),
         nullable=False,
         index=True,
+    )
+    email: Mapped[str] = mapped_column(
+        String(128),
+        nullable=True,
+        default=None,
+        index=True,
+    )
+    phone: Mapped[str] = mapped_column(
+        String(128),
+        nullable=True,
+        default=None,
+        index=True,
+    )
+    logo: Mapped[str] = mapped_column(
+        String(128),
+        nullable=True,
+        default=None,
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean(),

@@ -1,10 +1,9 @@
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm.base import Mapped
-from sqlalchemy.sql.sqltypes import Boolean, String, UUID
-
 from app.module.db import (
     model as db_model,
 )
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm.base import Mapped
+from sqlalchemy.sql.sqltypes import Boolean, String, UUID
 
 
 class User(db_model.SQLAlchemyDeclarativeBase):
@@ -20,6 +19,17 @@ class User(db_model.SQLAlchemyDeclarativeBase):
         unique=True,
         nullable=False,
         index=True,
+    )
+    phone: Mapped[str] = mapped_column(
+        String(128),
+        nullable=True,
+        default=None,
+        index=True,
+    )
+    picture: Mapped[str] = mapped_column(
+        String(128),
+        nullable=True,
+        default=None,
     )
     password: Mapped[str] = mapped_column(
         String(128),
