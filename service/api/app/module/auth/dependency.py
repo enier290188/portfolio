@@ -67,7 +67,7 @@ async def __get_auth_requiere_user_has_permission_of_root(response: Response, ac
     sub = __get_access_token_sub(access_token=access_token)
     user_orm = await __get_user_orm(db_async_session=db_async_session, sub=sub)
     if not user_orm.has_permission_of_root:
-        raise auth_exception.Http403
+        raise auth_exception.Http403ForbiddenUserHasNotPermissionOfRoot
     access_token_new = __create_access_token_new(sub=sub)
     ___update_response_header_authorization(response=response, access_token_new=access_token_new)
     auth_response = __create_auth_response(user_orm=user_orm, access_token_new=access_token_new)
@@ -78,7 +78,7 @@ async def __get_auth_requiere_user_has_permission_of_admin(response: Response, a
     sub = __get_access_token_sub(access_token=access_token)
     user_orm = await __get_user_orm(db_async_session=db_async_session, sub=sub)
     if not user_orm.has_permission_of_admin:
-        raise auth_exception.Http403
+        raise auth_exception.Http403ForbiddenUserHasNotPermissionOfAdmin
     access_token_new = __create_access_token_new(sub=sub)
     ___update_response_header_authorization(response=response, access_token_new=access_token_new)
     auth_response = __create_auth_response(user_orm=user_orm, access_token_new=access_token_new)
@@ -89,7 +89,7 @@ async def __get_auth_requiere_user_has_permission_of_sale(response: Response, ac
     sub = __get_access_token_sub(access_token=access_token)
     user_orm = await __get_user_orm(db_async_session=db_async_session, sub=sub)
     if not user_orm.has_permission_of_sale:
-        raise auth_exception.Http403
+        raise auth_exception.Http403ForbiddenUserHasNotPermissionOfSale
     access_token_new = __create_access_token_new(sub=sub)
     ___update_response_header_authorization(response=response, access_token_new=access_token_new)
     auth_response = __create_auth_response(user_orm=user_orm, access_token_new=access_token_new)
@@ -100,7 +100,7 @@ async def __get_auth_requiere_user_has_permission_of_project(response: Response,
     sub = __get_access_token_sub(access_token=access_token)
     user_orm = await __get_user_orm(db_async_session=db_async_session, sub=sub)
     if not user_orm.has_permission_of_project:
-        raise auth_exception.Http403
+        raise auth_exception.Http403ForbiddenUserHasNotPermissionOfProject
     access_token_new = __create_access_token_new(sub=sub)
     ___update_response_header_authorization(response=response, access_token_new=access_token_new)
     auth_response = __create_auth_response(user_orm=user_orm, access_token_new=access_token_new)
