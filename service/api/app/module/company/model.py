@@ -10,7 +10,7 @@ class Company(db_model.SQLAlchemyDeclarativeBase):
     __tablename__ = 'company'
 
     name: Mapped[str] = mapped_column(
-        String(128),
+        String(32),
         nullable=False,
         default='',
         index=True,
@@ -22,7 +22,7 @@ class Company(db_model.SQLAlchemyDeclarativeBase):
         index=True,
     )
     phone: Mapped[str] = mapped_column(
-        String(128),
+        String(10),
         nullable=False,
         default='',
         index=True,
