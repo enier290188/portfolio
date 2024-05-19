@@ -22,29 +22,41 @@ const __fetch__ = async (
         },
     },
 ): Promise<TypeFetchResponse> => {
-    const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
-
+    console.log('')
     console.log('**********')
-    console.log(url)
+    try {
+        const url = `${SERVICE_API_PROTOCOL}:>//${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
 
-    // Default options are marked with *
-    const response = await fetch(url, {
-        method: request.options.method, // *GET, POST, PATCH, DELETE
-        mode: request.options.mode, // no-cors, *cors, same-origin
-        cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: request.options.credentials, // include, *same-origin, omit
-        redirect: request.options.redirect, // manual, *follow, error
-        referrerPolicy: request.options.referrerPolicy, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
-        headers: request.options.headers,
-        body: request.options.body, // body data type must match "Content-Type" header
-    })
+        console.log(url)
 
-    const status: number = response.status
-    const data: object = await response.json() // parses JSON response into native JavaScript objects
+        // Default options are marked with *
+        const response = await fetch(url, {
+            method: request.options.method, // *GET, POST, PATCH, DELETE
+            mode: request.options.mode, // no-cors, *cors, same-origin
+            cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: request.options.credentials, // include, *same-origin, omit
+            redirect: request.options.redirect, // manual, *follow, error
+            referrerPolicy: request.options.referrerPolicy, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
+            headers: request.options.headers,
+            body: request.options.body, // body data type must match "Content-Type" header
+        })
 
-    return {
-        status: status,
-        data: data,
+        const status: number = response.status
+        const data: object = await response.json() // parses JSON response into native JavaScript objects
+
+        console.log(data)
+
+        return {
+            status: status,
+            data: data,
+        }
+    } catch (error) {
+        console.log(error)
+
+        return {
+            status: 400,
+            error: 'SomethingWentWrong',
+        }
     }
 }
 

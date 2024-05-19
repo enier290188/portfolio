@@ -2,6 +2,7 @@ import { service } from '../service.ts'
 
 const login = async (email: string, password: string) => {
     try {
+        console.log('Login')
         const responseLogin = await service.login({
             resource: `/api/v1/auth/login/`,
             body: {
@@ -9,8 +10,8 @@ const login = async (email: string, password: string) => {
                 password: password,
             },
         })
-        console.log(responseLogin)
 
+        console.log('Index')
         switch (responseLogin.status) {
             case 200: {
                 const responseIndex = await service.post({
@@ -18,8 +19,6 @@ const login = async (email: string, password: string) => {
                     accessToken: responseLogin.data.access_token,
                     body: null,
                 })
-                console.log(responseIndex)
-
                 return responseIndex
             }
             case 401: {

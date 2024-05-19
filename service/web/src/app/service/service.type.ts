@@ -14,10 +14,15 @@ export type TypeFetchRequest = {
         referrerPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'
     }
 }
-export type TypeFetchResponse = {
+export type TypeFetchResponseSuccess = {
     status: number
     data: object
 }
+export type TypeFetchResponseError = {
+    status: 400
+    error: 'SomethingWentWrong'
+}
+export type TypeFetchResponse = TypeFetchResponseSuccess | TypeFetchResponseError
 
 export type TypeFetchLoginRequest = {
     resource: string

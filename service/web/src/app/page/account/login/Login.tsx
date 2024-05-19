@@ -32,7 +32,7 @@ const View = () => {
             if (!value) {
                 messageList.push(i18n.getText('login.field.email.validate.required'))
             }
-            if (320 < value.length) {
+            if (128 < value.length) {
                 messageList.push(i18n.getText('login.field.email.validate.max-length', { value: 320 }))
             }
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
@@ -76,9 +76,7 @@ const View = () => {
         async (data) => {
             const { email, password } = data
 
-            const result = await app.service.account.login(email, password)
-            console.log('')
-            console.log(result)
+            await app.service.account.login(email, password)
 
             contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: email }) })
             contextUser.login({
