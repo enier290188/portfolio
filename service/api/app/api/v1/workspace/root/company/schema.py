@@ -1,13 +1,12 @@
 from typing import Sequence
 
-from pydantic.main import BaseModel
-
 from app.module.auth import (
     schema as auth_schema,
 )
 from app.module.company import (
     schema as company_schema,
 )
+from pydantic.main import BaseModel
 
 
 class CompanyRequestCreate(BaseModel):

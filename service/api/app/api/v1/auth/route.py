@@ -1,11 +1,5 @@
 from typing import Annotated
 
-from fastapi import status
-from fastapi.param_functions import Depends
-from fastapi.responses import Response
-from fastapi.routing import APIRouter
-from fastapi.security.oauth2 import OAuth2PasswordRequestForm
-
 from app.api.v1.auth import (
     schema as api_schema,
 )
@@ -18,6 +12,11 @@ from app.module.auth import (
 from app.module.db import (
     dependency as db_dependency,
 )
+from fastapi import status
+from fastapi.param_functions import Depends
+from fastapi.responses import Response
+from fastapi.routing import APIRouter
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix='/auth',

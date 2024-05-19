@@ -1,5 +1,3 @@
-from fastapi.routing import APIRouter
-
 from app.api.v1.workspace.admin import (
     route as admin_route,
 )
@@ -12,6 +10,7 @@ from app.api.v1.workspace.root import (
 from app.api.v1.workspace.sale import (
     route as sale_route,
 )
+from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/workspace',
