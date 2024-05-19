@@ -45,7 +45,7 @@ async def create(request: api_schema.UserRequestCreate, auth_response: auth_depe
     data_email: str = data.get('email', '')
     user_orm = await user_service.get_by_email(db_async_session, data_email)
     if user_orm is not None:
-        raise user_exception.Http409Email
+        raise user_exception.Http409EmailAlreadyExists
 
     data_company_id: str = data.get('company_id', '')
     company_orm = await company_service.get_by_id(db_async_session, data_company_id)
