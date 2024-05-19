@@ -3,42 +3,88 @@ from fastapi.exceptions import HTTPException
 
 Http401 = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
-    detail='Unauthorized',
+    detail={
+        'error': 'Unauthorized'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http401IncorrectUsernameOrPassword = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
-    detail='Incorrect username or password',
+    detail={
+        'error': 'IncorrectUsernameOrPassword'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http401CouldNotValidateUserCredentials = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
-    detail='Could not validate user credentials',
+    detail={
+        'error': 'CouldNotValidateUserCredentials'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http401InactiveUser = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
-    detail='Inactive user',
+    detail={
+        'error': 'InactiveUser'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http401UserMustBelongToACompany = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
-    detail='User must belong to a company',
+    detail={
+        'error': 'UserMustBelongToACompany'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http403 = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
-    detail='Forbidden',
+    detail={
+        'error': 'Forbidden'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
+Http403ForbiddenUserHasNotPermissionOfRoot = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail={
+        'error': 'ForbiddenUserHasNotPermissionOfRoot'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
+Http403ForbiddenUserHasNotPermissionOfAdmin = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail={
+        'error': 'ForbiddenUserHasNotPermissionOfAdmin'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
+Http403ForbiddenUserHasNotPermissionOfSale = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail={
+        'error': 'ForbiddenUserHasNotPermissionOfSale'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
+Http403ForbiddenUserHasNotPermissionOfProject = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail={
+        'error': 'ForbiddenUserHasNotPermissionOfProject'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
 Http403UserNotAllowedToUpdateAttribute = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
-    detail='User not allowed to update attribute',
+    detail={
+        'error': 'UserNotAllowedToUpdateAttribute'
+    },
     headers={'WWW-Authenticate': 'Bearer'},
 )
