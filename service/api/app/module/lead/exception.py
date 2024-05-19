@@ -3,5 +3,7 @@ from fastapi.exceptions import HTTPException
 
 Http404 = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
-    detail='Lead not found',
+    detail={
+        'error': 'LeadNotFound'
+    },
 )

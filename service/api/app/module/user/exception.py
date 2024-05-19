@@ -3,10 +3,14 @@ from fastapi.exceptions import HTTPException
 
 Http404 = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
-    detail='User not found',
+    detail={
+        'error': 'UserNotFound'
+    },
 )
 
-Http409Email = HTTPException(
+Http409EmailAlreadyExists = HTTPException(
     status_code=status.HTTP_409_CONFLICT,
-    detail='Email already exists',
+    detail={
+        'error': 'EmailAlreadyExists'
+    },
 )
