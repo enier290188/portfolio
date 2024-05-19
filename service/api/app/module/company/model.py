@@ -12,24 +12,25 @@ class Company(db_model.SQLAlchemyDeclarativeBase):
     name: Mapped[str] = mapped_column(
         String(128),
         nullable=False,
+        default='',
         index=True,
     )
     email: Mapped[str] = mapped_column(
         String(128),
-        nullable=True,
-        default=None,
+        nullable=False,
+        default='',
         index=True,
     )
     phone: Mapped[str] = mapped_column(
         String(128),
-        nullable=True,
-        default=None,
+        nullable=False,
+        default='',
         index=True,
     )
     logo: Mapped[str] = mapped_column(
         String(128),
-        nullable=True,
-        default=None,
+        nullable=False,
+        default='',
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean(),

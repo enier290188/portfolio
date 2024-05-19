@@ -27,6 +27,8 @@ FieldCompanyID = Annotated[UUID4, Field()]
 class UserResponse(db_schema.SQLAlchemyDeclarativeBaseResponse):
     name: str
     email: str
+    phone: str
+    picture: str
     is_active: bool
     has_permission_of_root: bool
     has_permission_of_admin: bool

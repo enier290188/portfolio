@@ -13,5 +13,6 @@ class Comment(db_model.SQLAlchemyDeclarativeBase):
     text: Mapped[str] = mapped_column(
         String(1024),
         nullable=False,
+        default='',
         index=True,
     )

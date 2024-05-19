@@ -12,6 +12,7 @@ class User(db_model.SQLAlchemyDeclarativeBase):
     name: Mapped[str] = mapped_column(
         String(128),
         nullable=False,
+        default='',
         index=True,
     )
     email: Mapped[str] = mapped_column(
@@ -22,18 +23,19 @@ class User(db_model.SQLAlchemyDeclarativeBase):
     )
     phone: Mapped[str] = mapped_column(
         String(128),
-        nullable=True,
-        default=None,
+        nullable=False,
+        default='',
         index=True,
     )
     picture: Mapped[str] = mapped_column(
         String(128),
-        nullable=True,
-        default=None,
+        nullable=False,
+        default='',
     )
     password: Mapped[str] = mapped_column(
         String(128),
         nullable=False,
+        default='',
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean,
