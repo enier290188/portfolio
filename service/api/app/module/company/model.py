@@ -35,6 +35,6 @@ class Company(db_model.SQLAlchemyDeclarativeBase):
     is_active: Mapped[bool] = mapped_column(
         Boolean(),
         nullable=False,
-        default=True,
+        default=False,
         index=True,
     )

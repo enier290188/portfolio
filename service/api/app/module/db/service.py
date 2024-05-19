@@ -1,5 +1,3 @@
-from sqlalchemy.sql import insert as _insert, select as _select
-
 from app.config import (
     setting,
 )
@@ -10,6 +8,7 @@ from app.module.user import (
     hashing as user_hashing,
     model as user_model,
 )
+from sqlalchemy.sql import insert as _insert, select as _select
 
 __setting = setting.get_setting()
 
@@ -24,6 +23,8 @@ async def on_startup() -> None:
                 data = {
                     'name': __setting.SERVICE_API_USER_ROOT_EMAIL,
                     'email': __setting.SERVICE_API_USER_ROOT_EMAIL,
+                    'phone': '',
+                    'picture': '',
                     'password': user_hashing.get_password_hash(password_plain=__setting.SERVICE_API_USER_ROOT_PASSWORD_FILE),
                     'is_active': True,
                     'has_permission_of_root': True,

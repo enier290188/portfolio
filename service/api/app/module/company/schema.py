@@ -5,11 +5,11 @@ from app.module.db import (
 )
 from pydantic.fields import Field
 
-FieldName = Annotated[str, Field(min_length=1, max_length=32)]
-FieldEmail = Annotated[str, Field(min_length=0, max_length=128)]
-FieldPhone = Annotated[str, Field(min_length=0, max_length=10)]
-FieldLogo = Annotated[str, Field(min_length=0, max_length=128)]
-FieldIsActive = Annotated[bool, Field()]
+FieldName = Annotated[str, Field(min_length=0, max_length=32, default='')]
+FieldEmail = Annotated[str, Field(min_length=0, max_length=128, default='')]
+FieldPhone = Annotated[str, Field(min_length=0, max_length=10, default='')]
+FieldLogo = Annotated[str, Field(min_length=0, max_length=128, default='')]
+FieldIsActive = Annotated[bool, Field(default=False)]
 
 
 class CompanyResponse(db_schema.SQLAlchemyDeclarativeBaseResponse):

@@ -1,27 +1,27 @@
 from typing import Annotated
 
-from pydantic.fields import Field
-from pydantic.functional_validators import AfterValidator
-from pydantic.networks import EmailStr
-from pydantic.types import UUID4
-
 from app.module.db import (
     schema as db_schema,
 )
 from app.module.user import (
     hashing as user_hashing,
 )
+from pydantic.fields import Field
+from pydantic.functional_validators import AfterValidator
+from pydantic.networks import EmailStr
+from pydantic.types import UUID4
 
-FieldName = Annotated[str, Field(min_length=1, max_length=128)]
-FieldEmail = Annotated[EmailStr, Field(min_length=1, max_length=128)]
-FieldPasswordHash = Annotated[str, Field(min_length=1, max_length=32), AfterValidator(user_hashing.get_password_hash)]
-FieldIsActive = Annotated[bool, Field()]
-FieldHasPermissionOfRoot = Annotated[bool, Field()]
-FieldHasPermissionOfAdmin = Annotated[bool, Field()]
-FieldHasPermissionOfSale = Annotated[bool, Field()]
-FieldHasPermissionOfProject = Annotated[bool, Field()]
-
-FieldCompanyID = Annotated[UUID4, Field()]
+FieldName = Annotated[str, Field(min_length=0, max_length=32, default='')]
+FieldEmail = Annotated[EmailStr, Field(min_length=5, max_length=128)]
+FieldPhone = Annotated[str, Field(min_length=0, max_length=10, default='')]
+FieldPicture = Annotated[str, Field(min_length=0, max_length=128, default='')]
+FieldPasswordHash = Annotated[str, Field(min_length=8, max_length=24), AfterValidator(user_hashing.get_password_hash)]
+FieldIsActive = Annotated[bool, Field(default=False)]
+FieldHasPermissionOfRoot = Annotated[bool, Field(default=False)]
+FieldHasPermissionOfAdmin = Annotated[bool, Field(default=False)]
+FieldHasPermissionOfSale = Annotated[bool, Field(default=False)]
+FieldHasPermissionOfProject = Annotated[bool, Field(default=False)]
+FieldCompanyID = Annotated[UUID4 | None, Field(default=None)]
 
 
 class UserResponse(db_schema.SQLAlchemyDeclarativeBaseResponse):

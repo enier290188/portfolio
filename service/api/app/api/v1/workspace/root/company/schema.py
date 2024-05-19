@@ -14,7 +14,6 @@ class CompanyRequestCreate(BaseModel):
     name: company_schema.FieldName
     email: company_schema.FieldEmail
     phone: company_schema.FieldPhone
-    logo: company_schema.FieldLogo
     is_active: company_schema.FieldIsActive
 
 
@@ -22,7 +21,6 @@ class CompanyRequestUpdate(BaseModel):
     name: company_schema.FieldName
     email: company_schema.FieldEmail
     phone: company_schema.FieldPhone
-    logo: company_schema.FieldLogo
     is_active: company_schema.FieldIsActive
 
 

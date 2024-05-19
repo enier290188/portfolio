@@ -11,7 +11,6 @@ class CompanyRequestUpdate(BaseModel):
     name: company_schema.FieldName
     email: company_schema.FieldEmail
     phone: company_schema.FieldPhone
-    logo: company_schema.FieldLogo
 
 
 class CompanyResponse(company_schema.CompanyResponse):

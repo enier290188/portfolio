@@ -40,7 +40,7 @@ class User(db_model.SQLAlchemyDeclarativeBase):
     is_active: Mapped[bool] = mapped_column(
         Boolean,
         nullable=False,
-        default=True,
+        default=False,
         index=True,
     )
     has_permission_of_root: Mapped[bool] = mapped_column(
