@@ -1,4 +1,4 @@
-import { TypeFetchCrudDeleteRequest, TypeFetchCrudGetRequest, TypeFetchCrudPatchRequest, TypeFetchCrudPostRequest, TypeFetchCrudRequest, TypeFetchCrudResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
+import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
 
 const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
@@ -22,12 +22,8 @@ const __fetch__ = async (
         },
     },
 ): Promise<TypeFetchResponse> => {
-    console.log('')
-    console.log('**********')
     try {
-        const url = `${SERVICE_API_PROTOCOL}:>//${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
-
-        console.log(url)
+        const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
 
         // Default options are marked with *
         const response = await fetch(url, {
@@ -44,15 +40,11 @@ const __fetch__ = async (
         const status: number = response.status
         const data: object = await response.json() // parses JSON response into native JavaScript objects
 
-        console.log(data)
-
         return {
             status: status,
             data: data,
         }
     } catch (error) {
-        console.log(error)
-
         return {
             status: 400,
             error: 'SomethingWentWrong',
@@ -61,7 +53,9 @@ const __fetch__ = async (
 }
 
 const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResponse> => {
-    const response = await __fetch__({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return await __fetch__({
         resource: request.resource,
         options: {
             method: 'POST',
@@ -74,17 +68,11 @@ const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLog
             }),
         },
     })
-    return {
-        status: response.status,
-        data: {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            access_token: response.data.access_token,
-        },
-    }
 }
 
-const fetch_crud = async (request: TypeFetchCrudRequest): Promise<TypeFetchCrudResponse> => {
+const fetch_default = async (request: TypeFetchDefaultRequest): Promise<TypeFetchDefaultResponse> => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return await __fetch__({
         resource: request.resource,
         options: {
@@ -98,29 +86,29 @@ const fetch_crud = async (request: TypeFetchCrudRequest): Promise<TypeFetchCrudR
     })
 }
 
-const fetch_crud_get = async (request: TypeFetchCrudGetRequest): Promise<TypeFetchCrudResponse> => {
-    return await fetch_crud({
+const fetch_default_get = async (request: TypeFetchDefaultGetRequest): Promise<TypeFetchDefaultResponse> => {
+    return await fetch_default({
         ...request,
         method: 'GET',
     })
 }
 
-const fetch_crud_post = async (request: TypeFetchCrudPostRequest): Promise<TypeFetchCrudResponse> => {
-    return await fetch_crud({
+const fetch_default_post = async (request: TypeFetchDefaultPostRequest): Promise<TypeFetchDefaultResponse> => {
+    return await fetch_default({
         ...request,
         method: 'POST',
     })
 }
 
-const fetch_crud_patch = async (request: TypeFetchCrudPatchRequest): Promise<TypeFetchCrudResponse> => {
-    return await fetch_crud({
+const fetch_default_patch = async (request: TypeFetchDefaultPatchRequest): Promise<TypeFetchDefaultResponse> => {
+    return await fetch_default({
         ...request,
         method: 'PATCH',
     })
 }
 
-const fetch_crud_delete = async (request: TypeFetchCrudDeleteRequest): Promise<TypeFetchCrudResponse> => {
-    return await fetch_crud({
+const fetch_default_delete = async (request: TypeFetchDefaultDeleteRequest): Promise<TypeFetchDefaultResponse> => {
+    return await fetch_default({
         ...request,
         method: 'DELETE',
     })
@@ -128,8 +116,8 @@ const fetch_crud_delete = async (request: TypeFetchCrudDeleteRequest): Promise<T
 
 export const service = {
     login: fetch_login,
-    get: fetch_crud_get,
-    post: fetch_crud_post,
-    patch: fetch_crud_patch,
-    delete: fetch_crud_delete,
+    get: fetch_default_get,
+    post: fetch_default_post,
+    patch: fetch_default_patch,
+    delete: fetch_default_delete,
 }

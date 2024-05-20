@@ -14,15 +14,15 @@ export type TypeFetchRequest = {
         referrerPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'
     }
 }
-export type TypeFetchResponseSuccess = {
-    status: number
-    data: object
-}
 export type TypeFetchResponseError = {
     status: 400
     error: 'SomethingWentWrong'
 }
-export type TypeFetchResponse = TypeFetchResponseSuccess | TypeFetchResponseError
+export type TypeFetchResponseSuccess = {
+    status: number
+    data: object
+}
+export type TypeFetchResponse = TypeFetchResponseError | TypeFetchResponseSuccess
 
 export type TypeFetchLoginRequest = {
     resource: string
@@ -37,15 +37,35 @@ export type TypeFetchLoginResponse = TypeFetchResponse & {
     }
 }
 
-export type TypeFetchCrudRequest = {
+export type TypeFetchDefaultRequest = {
     resource: string
     method: TypeFetchRequest['options']['method']
     accessToken: string
     body: null | object
 }
-export type TypeFetchCrudResponse = TypeFetchResponse
+export type TypeFetchDefaultResponse = TypeFetchResponse & {
+    data: {
+        auth: {
+            access_token: string
+            user: {
+                id: string
+                name: string
+                email: string
+                phone: string
+                picture: string
+                has_permission_of_root: boolean
+                has_permission_of_admin: boolean
+                has_permission_of_sale: boolean
+                has_permission_of_project: boolean
+                company_id: null | string
+            }
+        }
+        items?: null | []
+        item?: null | object
+    }
+}
 
-export type TypeFetchCrudGetRequest = Omit<TypeFetchCrudRequest, 'method'>
-export type TypeFetchCrudPostRequest = Omit<TypeFetchCrudRequest, 'method'>
-export type TypeFetchCrudPatchRequest = Omit<TypeFetchCrudRequest, 'method'>
-export type TypeFetchCrudDeleteRequest = Omit<TypeFetchCrudRequest, 'method'>
+export type TypeFetchDefaultGetRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultPostRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultPatchRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultDeleteRequest = Omit<TypeFetchDefaultRequest, 'method'>
