@@ -105,7 +105,7 @@ const View = () => {
                         groupList: groupList,
                     }
                     contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
-                    contextAccessToken.update(accessToken)
+                    contextAccessToken.updateValue(accessToken)
                     contextUser.login(user)
                     break
                 }
