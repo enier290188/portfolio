@@ -45,6 +45,14 @@ export type TypeRouteStructure = {
         workspace: {
             [value.PATH]: TypePath
             [value.TO]: () => TypeTo
+            root: {
+                [value.PATH]: TypePath
+                [value.TO]: () => TypeTo
+                dashboard: {
+                    [value.PATH]: TypePath
+                    [value.TO]: () => TypeTo
+                }
+            }
             admin: {
                 [value.PATH]: TypePath
                 [value.TO]: () => TypeTo

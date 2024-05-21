@@ -40,6 +40,14 @@ export const structure: TypeRouteStructure = {
         workspace: {
             [value.PATH]: 'workspace',
             [value.TO]: () => [...structure.app[value.TO](), structure.app.workspace[value.PATH]],
+            root: {
+                [value.PATH]: 'root',
+                [value.TO]: () => [...structure.app.workspace[value.TO](), structure.app.workspace.root[value.PATH]],
+                dashboard: {
+                    [value.PATH]: 'dashboard',
+                    [value.TO]: () => [...structure.app.workspace.root[value.TO](), structure.app.workspace.root.dashboard[value.PATH]],
+                },
+            },
             admin: {
                 [value.PATH]: 'admin',
                 [value.TO]: () => [...structure.app.workspace[value.TO](), structure.app.workspace.admin[value.PATH]],

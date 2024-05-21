@@ -10,21 +10,9 @@ export const WorkspaceRoot = () => {
 
     return (
         <>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.admin.dashboard).getTo()}>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.root.dashboard).getTo()}>
                 <mui.icon.Dashboard />
                 {i18n.getText('workspace-admin.dashboard')}
-            </component.item.link.Link>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()}>
-                <mui.icon.BusinessCenter />
-                {i18n.getText('workspace-admin.lead')}
-            </component.item.link.Link>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal).getTo()}>
-                <mui.icon.Mediation />
-                {i18n.getText('workspace-admin.deal')}
-            </component.item.link.Link>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.admin.setting).getTo()}>
-                <mui.icon.Settings />
-                {i18n.getText('workspace-admin.setting')}
             </component.item.link.Link>
         </>
     )

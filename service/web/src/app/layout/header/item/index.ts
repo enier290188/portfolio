@@ -7,12 +7,14 @@ import { user } from './user'
 import { workspace } from './workspace'
 import { workspaceAdmin } from './workspace-admin'
 import { workspaceProject } from './workspace-project'
+import { workspaceRoot } from './workspace-root'
 import { workspaceSale } from './workspace-sale'
 
 export const item = {
     brand,
     login,
     forgot,
+    workspaceRoot,
     workspaceAdmin,
     workspaceProject,
     workspaceSale,

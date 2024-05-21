@@ -38,6 +38,7 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
                             <item.brand.Brand />
                             {user ? (
                                 <>
+                                    {user.workspace === 'Root' ? <item.workspaceRoot.WorkspaceRoot /> : null}
                                     {user.workspace === 'Admin' ? <item.workspaceAdmin.WorkspaceAdmin /> : null}
                                     {user.workspace === 'Sale' ? <item.workspaceSale.WorkspaceSale /> : null}
                                     {user.workspace === 'Project' ? <item.workspaceProject.WorkspaceProject /> : null}
@@ -52,7 +53,7 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
                         <layout.desktop.DesktopContentRight>
                             {user ? (
                                 <>
-                                    {user.workspace === 'Admin' || user.workspace === 'Sale' || user.workspace === 'Project' ? <item.workspace.Workspace /> : null}
+                                    {user.workspace === 'Root' || user.workspace === 'Admin' || user.workspace === 'Sale' || user.workspace === 'Project' ? <item.workspace.Workspace /> : null}
                                     <item.user.User />
                                     <item.notification.Notification />
                                 </>
@@ -65,7 +66,7 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
                             <item.brand.Brand />
                             {user ? (
                                 <>
-                                    {user.workspace === 'Admin' || user.workspace === 'Sale' || user.workspace === 'Project' ? <item.workspace.Workspace /> : null}
+                                    {user.workspace === 'Root' || user.workspace === 'Admin' || user.workspace === 'Sale' || user.workspace === 'Project' ? <item.workspace.Workspace /> : null}
                                     <item.user.User />
                                     <item.notification.Notification />
                                 </>
@@ -75,6 +76,7 @@ export const Header = ({ maxWidth = 'lg' }: { maxWidth?: muiType.ContainerProps[
                         <layout.mobile.MobileContentBottom>
                             {user ? (
                                 <>
+                                    {user.workspace === 'Root' ? <item.workspaceRoot.WorkspaceRoot /> : null}
                                     {user.workspace === 'Admin' ? <item.workspaceAdmin.WorkspaceAdmin /> : null}
                                     {user.workspace === 'Sale' ? <item.workspaceSale.WorkspaceSale /> : null}
                                     {user.workspace === 'Project' ? <item.workspaceProject.WorkspaceProject /> : null}
