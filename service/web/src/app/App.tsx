@@ -27,55 +27,57 @@ export default function App() {
                 <app.context.i18n.Wrapper>
                     <app.context.online.Wrapper>
                         <app.context.alert.Wrapper>
-                            <app.context.user.Wrapper>
-                                <query.client.QueryClientProvider client={queryClient}>
-                                    <app.layout.online.Online />
-                                    <app.layout.alert.Alert />
-                                    <app.layout.header.Header />
-                                    <app.layout.main.Main>
-                                        <router.component.Routes>
-                                            <router.component.Route path={''}>
-                                                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app).getTo()} />} />
-                                                <router.component.Route path={app.setting.route.getNode(app.setting.route.app).getPath()}>
-                                                    <router.component.Route index element={<app.component.navigate.ToAppWorkspace />} />
-                                                    <router.component.Route
-                                                        path={`${app.setting.route.getNode(app.setting.route.app.account).getPath()}*`}
-                                                        element={
-                                                            <React.Suspense fallback={<app.component.loading.Suspense />}>
-                                                                <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
-                                                                    <Account />
-                                                                </error.component.ErrorBoundary>
-                                                            </React.Suspense>
-                                                        }
-                                                    />
-                                                    <router.component.Route
-                                                        path={`${app.setting.route.getNode(app.setting.route.app.workspace).getPath()}*`}
-                                                        element={
-                                                            <React.Suspense fallback={<app.component.loading.Suspense />}>
-                                                                <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
-                                                                    <Workspace />
-                                                                </error.component.ErrorBoundary>
-                                                            </React.Suspense>
-                                                        }
-                                                    />
-                                                    <router.component.Route
-                                                        path={`${app.setting.route.getNode(app.setting.route.app.error).getPath()}*`}
-                                                        element={
-                                                            <React.Suspense fallback={<app.component.loading.Suspense />}>
-                                                                <Error />
-                                                            </React.Suspense>
-                                                        }
-                                                    />
+                            <app.context.accessToken.Wrapper>
+                                <app.context.user.Wrapper>
+                                    <query.client.QueryClientProvider client={queryClient}>
+                                        <app.layout.online.Online />
+                                        <app.layout.alert.Alert />
+                                        <app.layout.header.Header />
+                                        <app.layout.main.Main>
+                                            <router.component.Routes>
+                                                <router.component.Route path={''}>
+                                                    <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app).getTo()} />} />
+                                                    <router.component.Route path={app.setting.route.getNode(app.setting.route.app).getPath()}>
+                                                        <router.component.Route index element={<app.component.navigate.ToAppWorkspace />} />
+                                                        <router.component.Route
+                                                            path={`${app.setting.route.getNode(app.setting.route.app.account).getPath()}*`}
+                                                            element={
+                                                                <React.Suspense fallback={<app.component.loading.Suspense />}>
+                                                                    <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
+                                                                        <Account />
+                                                                    </error.component.ErrorBoundary>
+                                                                </React.Suspense>
+                                                            }
+                                                        />
+                                                        <router.component.Route
+                                                            path={`${app.setting.route.getNode(app.setting.route.app.workspace).getPath()}*`}
+                                                            element={
+                                                                <React.Suspense fallback={<app.component.loading.Suspense />}>
+                                                                    <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
+                                                                        <Workspace />
+                                                                    </error.component.ErrorBoundary>
+                                                                </React.Suspense>
+                                                            }
+                                                        />
+                                                        <router.component.Route
+                                                            path={`${app.setting.route.getNode(app.setting.route.app.error).getPath()}*`}
+                                                            element={
+                                                                <React.Suspense fallback={<app.component.loading.Suspense />}>
+                                                                    <Error />
+                                                                </React.Suspense>
+                                                            }
+                                                        />
+                                                        <router.component.Route path={`*`} element={<app.component.navigate.ToAppErrorNotFound />} />
+                                                    </router.component.Route>
                                                     <router.component.Route path={`*`} element={<app.component.navigate.ToAppErrorNotFound />} />
                                                 </router.component.Route>
-                                                <router.component.Route path={`*`} element={<app.component.navigate.ToAppErrorNotFound />} />
-                                            </router.component.Route>
-                                        </router.component.Routes>
-                                    </app.layout.main.Main>
-                                    <app.layout.footer.Footer />
-                                    <queryDevtools.client.ReactQueryDevtools initialIsOpen={false} />
-                                </query.client.QueryClientProvider>
-                            </app.context.user.Wrapper>
+                                            </router.component.Routes>
+                                        </app.layout.main.Main>
+                                        <app.layout.footer.Footer />
+                                        <queryDevtools.client.ReactQueryDevtools initialIsOpen={false} />
+                                    </query.client.QueryClientProvider>
+                                </app.context.user.Wrapper>
+                            </app.context.accessToken.Wrapper>
                         </app.context.alert.Wrapper>
                     </app.context.online.Wrapper>
                 </app.context.i18n.Wrapper>
