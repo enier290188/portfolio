@@ -36,6 +36,8 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
         raise auth_exception.Http401IncorrectUsernameOrPassword
     if not user_orm.is_active:
         raise auth_exception.Http401InactiveUser
+    if user_orm.has_permission_of_root is False and user_orm.has_permission_of_admin is False and user_orm.has_permission_of_sale is False and user_orm.has_permission_of_project is False:
+        raise auth_exception.Http401UserMustBelongToAGroup
     if user_orm.company_id is None and not user_orm.has_permission_of_root:
         raise auth_exception.Http401UserMustBelongToACompany
 

@@ -1,26 +1,10 @@
 from fastapi import status
 from fastapi.exceptions import HTTPException
 
-Http401 = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail={
-        'error': 'Unauthorized'
-    },
-    headers={'WWW-Authenticate': 'Bearer'},
-)
-
 Http401IncorrectUsernameOrPassword = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail={
         'error': 'IncorrectUsernameOrPassword'
-    },
-    headers={'WWW-Authenticate': 'Bearer'},
-)
-
-Http401CouldNotValidateUserCredentials = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail={
-        'error': 'CouldNotValidateUserCredentials'
     },
     headers={'WWW-Authenticate': 'Bearer'},
 )
@@ -33,10 +17,26 @@ Http401InactiveUser = HTTPException(
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
+Http401UserMustBelongToAGroup = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail={
+        'error': 'UserMustBelongToAGroup'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
 Http401UserMustBelongToACompany = HTTPException(
-    status_code=status.HTTP_403_FORBIDDEN,
+    status_code=status.HTTP_401_UNAUTHORIZED,
     detail={
         'error': 'UserMustBelongToACompany'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
+Http401CouldNotValidateUserCredentials = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail={
+        'error': 'CouldNotValidateUserCredentials'
     },
     headers={'WWW-Authenticate': 'Bearer'},
 )
