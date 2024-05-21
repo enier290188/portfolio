@@ -1,13 +1,14 @@
 import { appType } from '@./app'
 import React from 'react'
-import { TypeContext, TypeWrapper } from './AccessToken.type.ts'
+import { TypeContext, TypeWrapperValue } from './AccessToken.type.ts'
 
 const LOCAL_STORAGE_KEY = 'app-context-access-token'
-const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapper = ''
+const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperValue = ''
 
 export const Context = React.createContext<TypeContext>({
-    get: () => LOCAL_STORAGE_VALUE_DEFAULT,
-    update: () => null,
+    getValue: () => LOCAL_STORAGE_VALUE_DEFAULT,
+    updateValue: () => null,
+    removeValue: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -16,22 +17,28 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
         localStorageValue = LOCAL_STORAGE_VALUE_DEFAULT
     }
-    const [accessToken, setAccessToken] = React.useState<TypeWrapper>(localStorageValue)
+    const [value, setValue] = React.useState<TypeWrapperValue>(localStorageValue)
 
-    const get = React.useCallback((): TypeWrapper => {
-        return accessToken
-    }, [accessToken])
+    const getValue = React.useCallback((): TypeWrapperValue => {
+        return value
+    }, [value])
 
-    const update = React.useCallback((accessToken: TypeWrapper): void => {
-        setAccessToken(accessToken)
-        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(accessToken))
+    const updateValue = React.useCallback((value: TypeWrapperValue): void => {
+        setValue(value)
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value))
+    }, [])
+
+    const removeValue = React.useCallback((): void => {
+        setValue(LOCAL_STORAGE_VALUE_DEFAULT)
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
 
     return (
         <Context.Provider
             value={{
-                get: get,
-                update: update,
+                getValue: getValue,
+                updateValue: updateValue,
+                removeValue: removeValue,
             }}
         >
             {children}

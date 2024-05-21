@@ -54,3 +54,10 @@ async def index(auth_response: auth_dependency.DependAuth):
     return api_schema.AuthResponse(
         **dict(auth_response)
     )
+
+
+@router.post('/logout/', response_model=None)
+async def logout(auth_response: auth_dependency.DependAuth):
+    return api_schema.AuthResponse(
+        **dict(auth_response)
+    )

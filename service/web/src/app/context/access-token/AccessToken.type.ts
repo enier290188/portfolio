@@ -1,6 +1,7 @@
-export type TypeWrapper = string
+export type TypeWrapperValue = string
 
 export type TypeContext = {
-    get: () => TypeWrapper
-    update: (accessToken: TypeWrapper) => void
+    getValue: () => TypeWrapperValue
+    updateValue: (value: TypeWrapperValue) => void
+    removeValue: () => void
 }
