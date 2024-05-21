@@ -1,7 +1,69 @@
 import { app } from '@./app'
+import { mui } from '@./package/material-ui'
+import { form } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
+import React from 'react'
 
-const View = () => <>View Logout</>
+type TypeForm = object
+
+const DEFAULT_VALUES: TypeForm = {}
+
+const View = () => {
+    const contextI18n = React.useContext(app.context.i18n.Context)
+    const contextI18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.logout, contextI18nLanguage), [contextI18nLanguage])
+
+    const contextAlert = React.useContext(app.context.alert.Context)
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+
+    const contextUser = React.useContext(app.context.user.Context)
+
+    const formLogout = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
+
+    const handleActionSubmit = React.useCallback(async () => {
+        const response = await app.service.account.logout(contextAccessToken.getValue())
+
+        switch (response.status) {
+            case 200: {
+                const user = {
+                    id: response.data.auth.user.id,
+                    name: response.data.auth.user.name,
+                    email: response.data.auth.user.email,
+                }
+                contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
+                break
+            }
+            default: {
+                contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+            }
+        }
+        contextAccessToken.removeValue()
+        contextUser.logout()
+    }, [i18n, contextAlert, contextAccessToken, contextUser])
+
+    return (
+        <app.layout.main.component.structure.page.Page maxWidth={'375px'}>
+            {formLogout.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+            <app.layout.main.component.structure.body.Body>
+                <mui.component.Box component={'form'} width={'100%'} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
+                    <app.layout.main.component.structure.box.content.Content>
+                        <app.component.alert.Alert space={1} variant={'standard'} severity={'warning'}>
+                            {i18n.getText('question.alert')}
+                        </app.component.alert.Alert>
+                    </app.layout.main.component.structure.box.content.Content>
+                    {formLogout.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+                    <app.layout.main.component.structure.box.action.Action>
+                        <app.component.button.ButtonSubmit space={1} disabled={formLogout.formState.isSubmitting} onClick={formLogout.handleSubmit(handleActionSubmit)}>
+                            {formLogout.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Logout />}
+                            {i18n.getText('action.submit')}
+                        </app.component.button.ButtonSubmit>
+                    </app.layout.main.component.structure.box.action.Action>
+                </mui.component.Box>
+            </app.layout.main.component.structure.body.Body>
+        </app.layout.main.component.structure.page.Page>
+    )
+}
 
 export const Logout = () => {
     return (
