@@ -40,6 +40,9 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         (user: TypeWrapperUser): void => {
             if (user) {
                 const userGroupList: NonNullable<TypeWrapperUser>['groupList'] = []
+                if (user.groupList.includes('Root')) {
+                    userGroupList.push('Root')
+                }
                 if (user.groupList.includes('Admin')) {
                     userGroupList.push('Admin')
                 }
@@ -66,7 +69,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     const login = React.useCallback(
         (user: Omit<NonNullable<TypeWrapperUser>, 'workspace'>): void => {
             if (user && user?.id && 0 < user.groupList.length) {
-                const workspace: null | NonNullable<TypeWrapperUser>['workspace'] = user.groupList.includes('Admin') ? 'Admin' : user.groupList.includes('Sale') ? 'Sale' : user.groupList.includes('Project') ? 'Project' : null
+                const workspace: null | NonNullable<TypeWrapperUser>['workspace'] = user.groupList.includes('Root') ? 'Root' : user.groupList.includes('Admin') ? 'Admin' : user.groupList.includes('Sale') ? 'Sale' : user.groupList.includes('Project') ? 'Project' : null
                 if (workspace) {
                     updateUser({ ...user, workspace: workspace })
                 } else {
