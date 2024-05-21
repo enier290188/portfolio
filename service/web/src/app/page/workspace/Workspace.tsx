@@ -10,7 +10,7 @@ const Project = React.lazy(() => import('./project'))
 export const Workspace = () => {
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
-    const userActionUpdate = contextUser.updateUser
+    const userActionUpdateWorkspace = contextUser.updateUserWorkspace
 
     const location = router.hook.useLocation()
 
@@ -25,19 +25,19 @@ export const Workspace = () => {
             const pathname = location?.pathname ?? toAppWorkspace
 
             if (pathname.includes(toAppWorkspaceRoot) && pathname !== toAppWorkspaceRoot && user.groupList.includes('Root') && user.workspace !== 'Root') {
-                userActionUpdate({ ...user, workspace: 'Root' })
+                userActionUpdateWorkspace({ ...user, workspace: 'Root' })
             }
             if (pathname.includes(toAppWorkspaceAdmin) && pathname !== toAppWorkspaceAdmin && user.groupList.includes('Admin') && user.workspace !== 'Admin') {
-                userActionUpdate({ ...user, workspace: 'Admin' })
+                userActionUpdateWorkspace({ ...user, workspace: 'Admin' })
             }
             if (pathname.includes(toAppWorkspaceSale) && pathname !== toAppWorkspaceSale && user.groupList.includes('Sale') && user.workspace !== 'Sale') {
-                userActionUpdate({ ...user, workspace: 'Sale' })
+                userActionUpdateWorkspace({ ...user, workspace: 'Sale' })
             }
             if (pathname.includes(toAppWorkspaceProject) && pathname !== toAppWorkspaceProject && user.groupList.includes('Project') && user.workspace !== 'Project') {
-                userActionUpdate({ ...user, workspace: 'Project' })
+                userActionUpdateWorkspace({ ...user, workspace: 'Project' })
             }
         }
-    }, [user, userActionUpdate, location])
+    }, [user, userActionUpdateWorkspace, location])
 
     if (user) {
         if (user.groupList.includes('Root') || user.groupList.includes('Admin') || user.groupList.includes('Sale') || user.groupList.includes('Project')) {

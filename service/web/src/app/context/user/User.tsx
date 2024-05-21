@@ -9,7 +9,8 @@ export const Context = React.createContext<TypeContext>({
     login: () => null,
     logout: () => null,
     getUser: () => LOCAL_STORAGE_VALUE_DEFAULT,
-    updateUser: () => null,
+    updateUserWorkspace: () => null,
+    // updateUser: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -35,6 +36,36 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         setUser(LOCAL_STORAGE_VALUE_DEFAULT)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
+
+    const updateUserWorkspace = React.useCallback(
+        (user: TypeWrapperUser): void => {
+            if (user) {
+                const userGroupList: NonNullable<TypeWrapperUser>['groupList'] = []
+                if (user.groupList.includes('Root')) {
+                    userGroupList.push('Root')
+                }
+                if (user.groupList.includes('Admin')) {
+                    userGroupList.push('Admin')
+                }
+                if (user.groupList.includes('Sale')) {
+                    userGroupList.push('Sale')
+                }
+                if (user.groupList.includes('Project')) {
+                    userGroupList.push('Project')
+                }
+                if (userGroupList.includes(user.workspace)) {
+                    const userUpdated: TypeWrapperUser = { ...user, groupList: userGroupList }
+                    setUser(userUpdated)
+                    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userUpdated))
+                } else {
+                    logout()
+                }
+            } else {
+                logout()
+            }
+        },
+        [logout],
+    )
 
     const updateUser = React.useCallback(
         (user: TypeWrapperUser): void => {
@@ -104,7 +135,8 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                 login: login,
                 logout: logout,
                 getUser: getUser,
-                updateUser: updateUser,
+                updateUserWorkspace: updateUserWorkspace,
+                // updateUser: updateUser,
             }}
         >
             {children}

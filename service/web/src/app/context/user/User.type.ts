@@ -6,5 +6,6 @@ export type TypeContext = {
     login: (user: Omit<NonNullable<TypeWrapperUser>, 'workspace'>) => void
     logout: () => void
     getUser: () => TypeWrapperUser
-    updateUser: (user: TypeWrapperUser) => void
+    updateUserWorkspace: (user: TypeWrapperUser) => void
+    // updateUser: (user: TypeWrapperUser) => void
 }
