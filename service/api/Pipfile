@@ -21,7 +21,7 @@ psycopg = { version = "==3.1.19", extras = ["binary", "pool"] }
 
 [dev-packages]
 ##### Test #####
-pytest = { version = "==8.2.0" }
+pytest = { version = "==8.2.1" }
 
 [requires]
 python_version = "3.12"
