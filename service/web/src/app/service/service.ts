@@ -1,8 +1,19 @@
-import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse, TypeFetchResponseSuccessDefault, TypeFetchResponseSuccessError, TypeFetchResponseSuccessLogin } from './service.type.ts'
+import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse, TypeFetchResponseError, TypeFetchResponseSuccessDefault, TypeFetchResponseSuccessError, TypeFetchResponseSuccessLogin } from './service.type.ts'
 
 const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
 const SERVICE_API_PORT_EXTERNAL = import.meta.env.VITE_SERVICE_API_PORT_EXTERNAL
+
+const __fetch_something_went_wrong__ = (): TypeFetchResponseError => {
+    return {
+        status: 400,
+        data: {
+            detail: {
+                error: 'SomethingWentWrong',
+            },
+        },
+    }
+}
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 const __fetch__ = async (
@@ -43,38 +54,37 @@ const __fetch__ = async (
 
         if (status === 401 || status === 403 || status === 404 || status === 409) {
             const data: TypeFetchResponseSuccessError['data'] = await response.json() // parses JSON response into native JavaScript objects
-            return {
-                status: status,
-                data: data,
+            if ('detail' in data && 'error' in data.detail) {
+                return {
+                    status: status,
+                    data: data,
+                }
+            } else {
+                return __fetch_something_went_wrong__()
             }
         }
         if (status === 200) {
             const data: TypeFetchResponseSuccessLogin['data'] | TypeFetchResponseSuccessDefault['data'] = await response.json() // parses JSON response into native JavaScript objects
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            return {
-                status: status,
-                data: data,
+            if ('auth' in data && 'access_token' in data.auth) {
+                return {
+                    status: status,
+                    data: data,
+                }
+            } else {
+                if ('access_token' in data) {
+                    return {
+                        status: status,
+                        data: data,
+                    }
+                } else {
+                    return __fetch_something_went_wrong__()
+                }
             }
         }
 
-        return {
-            status: 400,
-            data: {
-                detail: {
-                    error: 'SomethingWentWrong',
-                },
-            },
-        }
+        return __fetch_something_went_wrong__()
     } catch (_) {
-        return {
-            status: 400,
-            data: {
-                detail: {
-                    error: 'SomethingWentWrong',
-                },
-            },
-        }
+        return __fetch_something_went_wrong__()
     }
 }
 
