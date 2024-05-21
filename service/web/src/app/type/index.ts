@@ -4,7 +4,7 @@ import { TypeI18nLanguage as TypeSettingI18nLanguage } from '../setting/i18n/i18
 import { TypeOnlineStatus as TypeSettingOnlineStatus } from '../setting/online/online.type.ts'
 import { TypeRouteStructure as TypeSettingRouteStructure } from '../setting/route/route.type.ts'
 import { TypeThemeComponentSpace as TypeSettingThemeComponentSpace } from '../setting/theme/theme.type.ts'
-import { TypeUser as TypeSettingUser } from '../setting/user/user.type.ts'
+import { TypeUser as TypeSettingUser, TypeUserModel as TypeSettingUserModel } from '../setting/user/user.type.ts'
 
 export type TypeFunctionComponent = TypeReactNode
 
@@ -18,3 +18,4 @@ export type { TypeSettingOnlineStatus }
 export type { TypeSettingRouteStructure }
 export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
+export type { TypeSettingUserModel }

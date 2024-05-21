@@ -1,16 +1,16 @@
 import { app, appType } from '@./app'
 import React from 'react'
-import { TypeContext, TypeWrapperUser } from './User.type.ts'
+import { TypeContext, TypeWrapperUser, TypeWrapperUserModel } from './User.type.ts'
 
 const LOCAL_STORAGE_KEY = 'app-context-user'
 const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperUser = null
 
 export const Context = React.createContext<TypeContext>({
-    login: () => null,
     logout: () => null,
     getUser: () => LOCAL_STORAGE_VALUE_DEFAULT,
-    updateUserWorkspace: () => null,
-    // updateUser: () => null,
+    updateUser: () => null,
+    login: () => null,
+    reset: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -37,35 +37,21 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
 
-    const updateUserWorkspace = React.useCallback(
-        (user: TypeWrapperUser): void => {
-            if (user) {
-                const userGroupList: NonNullable<TypeWrapperUser>['groupList'] = []
-                if (user.groupList.includes('Root')) {
-                    userGroupList.push('Root')
-                }
-                if (user.groupList.includes('Admin')) {
-                    userGroupList.push('Admin')
-                }
-                if (user.groupList.includes('Sale')) {
-                    userGroupList.push('Sale')
-                }
-                if (user.groupList.includes('Project')) {
-                    userGroupList.push('Project')
-                }
-                if (userGroupList.includes(user.workspace)) {
-                    const userUpdated: TypeWrapperUser = { ...user, groupList: userGroupList }
-                    setUser(userUpdated)
-                    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userUpdated))
-                } else {
-                    logout()
-                }
-            } else {
-                logout()
+    const getUser = React.useCallback((): TypeWrapperUser => {
+        if (user?.id && user.groupList.includes(user.workspace)) {
+            return {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                picture: user.picture,
+                groupList: user.groupList,
+                workspace: user.workspace,
             }
-        },
-        [logout],
-    )
+        } else {
+            return LOCAL_STORAGE_VALUE_DEFAULT
+        }
+    }, [user?.id, user?.name, user?.email, user?.phone, user?.picture, user?.groupList, user?.workspace])
 
     const updateUser = React.useCallback(
         (user: TypeWrapperUser): void => {
@@ -113,30 +99,44 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         [updateUser, logout],
     )
 
-    const getUser = React.useCallback((): TypeWrapperUser => {
-        if (user?.id && user.groupList.includes(user.workspace)) {
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                picture: user.picture,
-                groupList: user.groupList,
-                workspace: user.workspace,
+    const reset = React.useCallback(
+        (user: TypeWrapperUser): void => {
+            if (user) {
+                const userGroupList: NonNullable<TypeWrapperUser>['groupList'] = []
+                if (user.groupList.includes('Root')) {
+                    userGroupList.push('Root')
+                }
+                if (user.groupList.includes('Admin')) {
+                    userGroupList.push('Admin')
+                }
+                if (user.groupList.includes('Sale')) {
+                    userGroupList.push('Sale')
+                }
+                if (user.groupList.includes('Project')) {
+                    userGroupList.push('Project')
+                }
+                if (userGroupList.includes(user.workspace)) {
+                    const userUpdated: TypeWrapperUser = { ...user, groupList: userGroupList }
+                    setUser(userUpdated)
+                    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userUpdated))
+                } else {
+                    logout()
+                }
+            } else {
+                logout()
             }
-        } else {
-            return LOCAL_STORAGE_VALUE_DEFAULT
-        }
-    }, [user?.id, user?.name, user?.email, user?.phone, user?.picture, user?.groupList, user?.workspace])
+        },
+        [logout],
+    )
 
     return (
         <Context.Provider
             value={{
-                login: login,
                 logout: logout,
                 getUser: getUser,
-                updateUserWorkspace: updateUserWorkspace,
-                // updateUser: updateUser,
+                updateUser: updateUser,
+                login: login,
+                reset: reset,
             }}
         >
             {children}

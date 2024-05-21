@@ -1,3 +1,5 @@
+import { appType } from '@./app'
+
 export type TypeFetchRequest = {
     resource: string
     options: {
@@ -59,18 +61,7 @@ export type TypeFetchResponseSuccessDefault = {
     data: {
         auth: {
             access_token: string
-            user: {
-                id: string
-                name: string
-                email: string
-                phone: string
-                picture: string
-                has_permission_of_root: boolean
-                has_permission_of_admin: boolean
-                has_permission_of_sale: boolean
-                has_permission_of_project: boolean
-                company_id: null | string
-            }
+            user: appType.TypeSettingUserModel
         }
         items?: null | []
         item?: null | object

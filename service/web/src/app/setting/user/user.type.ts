@@ -10,3 +10,16 @@ export type TypeUser = null | {
     groupList: (typeof USER_GROUP_LIST)[number][]
     workspace: (typeof USER_GROUP_LIST)[number]
 }
+
+export type TypeUserModel = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    picture: string
+    has_permission_of_root: boolean
+    has_permission_of_admin: boolean
+    has_permission_of_sale: boolean
+    has_permission_of_project: boolean
+    company_id: null | string
+}
