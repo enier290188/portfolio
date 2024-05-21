@@ -22,22 +22,8 @@ const View = () => {
     const formLogout = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
 
     const handleActionSubmit = React.useCallback(async () => {
-        const response = await app.service.account.logout(contextAccessToken.getValue())
-
-        switch (response.status) {
-            case 200: {
-                const user = {
-                    id: response.data.auth.user.id,
-                    name: response.data.auth.user.name,
-                    email: response.data.auth.user.email,
-                }
-                contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
-                break
-            }
-            default: {
-                contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-            }
-        }
+        const user = contextUser.getUser()
+        contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user ? (user.name ? user.name : user.email ? user.email : '') : '' }) })
         contextAccessToken.removeValue()
         contextUser.logout()
     }, [i18n, contextAlert, contextAccessToken, contextUser])

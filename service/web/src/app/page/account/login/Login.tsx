@@ -1,4 +1,4 @@
-import { app, appType } from '@./app'
+import { app } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -82,30 +82,10 @@ const View = () => {
 
             if (response.status === 200) {
                 const accessToken = response.data.auth.access_token
-                const groupList: NonNullable<appType.TypeSettingUser>['groupList'] = []
-                if (response.data.auth.user.has_permission_of_root) {
-                    groupList.push('Root')
-                }
-                if (response.data.auth.user.has_permission_of_admin) {
-                    groupList.push('Admin')
-                }
-                if (response.data.auth.user.has_permission_of_sale) {
-                    groupList.push('Sale')
-                }
-                if (response.data.auth.user.has_permission_of_project) {
-                    groupList.push('Project')
-                }
-                const user = {
-                    id: response.data.auth.user.id,
-                    name: response.data.auth.user.name,
-                    email: response.data.auth.user.email,
-                    phone: response.data.auth.user.phone,
-                    picture: response.data.auth.user.picture,
-                    groupList: groupList,
-                }
-                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
+                const userModel = response.data.auth.user
+                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
                 contextAccessToken.updateValue(accessToken)
-                contextUser.login(user)
+                contextUser.login(userModel)
             } else {
                 if ('error' in response.data.detail) {
                     contextAlert.addAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })

@@ -19,15 +19,6 @@ const login = async (email: string, password: string) => {
     }
 }
 
-const logout = async (accessToken: string) => {
-    return await service.post({
-        resource: `/api/v1/auth/logout/`,
-        accessToken: accessToken,
-        body: null,
-    })
-}
-
 export const account = {
     login: login,
-    logout: logout,
 }

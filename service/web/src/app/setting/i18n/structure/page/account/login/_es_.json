@@ -14,7 +14,7 @@
     "login.field.password.validate.pattern.have-at-least-one-symbol": "- Debe tener al menos un símbolo.",
     "login.action.submit": "Iniciar Sesión",
     "login.action.submit.alert.success": "El usuario \"{name}\" ha iniciado sesión",
-    "login.action.submit.alert.error.SomethingWentWrong": "Algo salió mal",
+    "login.action.submit.alert.error.SomethingWentWrong": "Lo sentimos, se ha producido un error inesperado",
     "login.action.submit.alert.error.IncorrectUsernameOrPassword": "Correo o contraseña incorrectos",
     "login.action.submit.alert.error.InactiveUser": "El usuario está deshabilitado. Por favor, informe al administrador de la aplicación",
     "login.action.submit.alert.error.UserMustBelongToAGroup": "El usuario debe pertenecer a un grupo. Por favor, informe al administrador de la aplicación",
