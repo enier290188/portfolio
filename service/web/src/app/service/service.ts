@@ -1,4 +1,4 @@
-import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse } from './service.type.ts'
+import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse, TypeFetchResponseSuccessDefault, TypeFetchResponseSuccessError, TypeFetchResponseSuccessLogin } from './service.type.ts'
 
 const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
@@ -26,7 +26,7 @@ const __fetch__ = async (
         const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
 
         // Default options are marked with *
-        const response = await fetch(url, {
+        const response: Response = await fetch(url, {
             method: request.options.method, // *GET, POST, PATCH, DELETE
             mode: request.options.mode, // no-cors, *cors, same-origin
             cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
@@ -37,17 +37,43 @@ const __fetch__ = async (
             body: request.options.body, // body data type must match "Content-Type" header
         })
 
-        const status: number = response.status
-        const data: object = await response.json() // parses JSON response into native JavaScript objects
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const status: TypeFetchResponse['status'] = response.status
+
+        if (status === 401 || status === 403 || status === 404 || status === 409) {
+            const data: TypeFetchResponseSuccessError['data'] = await response.json() // parses JSON response into native JavaScript objects
+            return {
+                status: status,
+                data: data,
+            }
+        }
+        if (status === 200) {
+            const data: TypeFetchResponseSuccessLogin['data'] | TypeFetchResponseSuccessDefault['data'] = await response.json() // parses JSON response into native JavaScript objects
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return {
+                status: status,
+                data: data,
+            }
+        }
 
         return {
-            status: status,
-            data: data,
+            status: 400,
+            data: {
+                detail: {
+                    error: 'SomethingWentWrong',
+                },
+            },
         }
-    } catch (error) {
+    } catch (_) {
         return {
             status: 400,
-            error: 'SomethingWentWrong',
+            data: {
+                detail: {
+                    error: 'SomethingWentWrong',
+                },
+            },
         }
     }
 }

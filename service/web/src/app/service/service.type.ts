@@ -14,16 +14,6 @@ export type TypeFetchRequest = {
         referrerPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url'
     }
 }
-export type TypeFetchResponseError = {
-    status: 400
-    error: 'SomethingWentWrong'
-}
-export type TypeFetchResponseSuccess = {
-    status: number
-    data: object
-}
-export type TypeFetchResponse = TypeFetchResponseError | TypeFetchResponseSuccess
-
 export type TypeFetchLoginRequest = {
     resource: string
     body: {
@@ -31,19 +21,41 @@ export type TypeFetchLoginRequest = {
         password: string
     }
 }
-export type TypeFetchLoginResponse = TypeFetchResponse & {
-    data: {
-        access_token: string
-    }
-}
-
 export type TypeFetchDefaultRequest = {
     resource: string
     method: TypeFetchRequest['options']['method']
     accessToken: string
     body: null | object
 }
-export type TypeFetchDefaultResponse = TypeFetchResponse & {
+export type TypeFetchDefaultGetRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultPostRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultPatchRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchDefaultDeleteRequest = Omit<TypeFetchDefaultRequest, 'method'>
+
+export type TypeFetchResponseError = {
+    status: 400
+    data: {
+        detail: {
+            error: 'SomethingWentWrong'
+        }
+    }
+}
+export type TypeFetchResponseSuccessError = {
+    status: 401 | 403 | 404 | 409
+    data: {
+        detail: {
+            error: string
+        }
+    }
+}
+export type TypeFetchResponseSuccessLogin = {
+    status: 200
+    data: {
+        access_token: string
+    }
+}
+export type TypeFetchResponseSuccessDefault = {
+    status: 200
     data: {
         auth: {
             access_token: string
@@ -64,8 +76,7 @@ export type TypeFetchDefaultResponse = TypeFetchResponse & {
         item?: null | object
     }
 }
+export type TypeFetchResponse = TypeFetchResponseError | TypeFetchResponseSuccessError | TypeFetchResponseSuccessLogin | TypeFetchResponseSuccessDefault
 
-export type TypeFetchDefaultGetRequest = Omit<TypeFetchDefaultRequest, 'method'>
-export type TypeFetchDefaultPostRequest = Omit<TypeFetchDefaultRequest, 'method'>
-export type TypeFetchDefaultPatchRequest = Omit<TypeFetchDefaultRequest, 'method'>
-export type TypeFetchDefaultDeleteRequest = Omit<TypeFetchDefaultRequest, 'method'>
+export type TypeFetchLoginResponse = TypeFetchResponseError | TypeFetchResponseSuccessError | TypeFetchResponseSuccessLogin
+export type TypeFetchDefaultResponse = TypeFetchResponseError | TypeFetchResponseSuccessError | TypeFetchResponseSuccessDefault
