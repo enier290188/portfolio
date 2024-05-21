@@ -1,4 +1,4 @@
-import { app } from '@./app'
+import { app, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -15,6 +15,8 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.login, contextI18nLanguage), [contextI18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
 
     const contextUser = React.useContext(app.context.user.Context)
 
@@ -76,17 +78,41 @@ const View = () => {
         async (data) => {
             const { email, password } = data
 
-            await app.service.account.login(email, password)
+            const response = await app.service.account.login(email, password)
 
-            contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: email }) })
-            contextUser.login({
-                id: '1',
-                name: '',
-                email: email,
-                phone: '',
-                picture: '',
-                groupList: [],
-            })
+            switch (response.status) {
+                case 200: {
+                    const accessToken = response.data.auth.access_token
+                    const groupList: NonNullable<appType.TypeSettingUser>['groupList'] = []
+                    if (response.data.auth.user.has_permission_of_root) {
+                        groupList.push('Root')
+                    }
+                    if (response.data.auth.user.has_permission_of_admin) {
+                        groupList.push('Admin')
+                    }
+                    if (response.data.auth.user.has_permission_of_sale) {
+                        groupList.push('Sale')
+                    }
+                    if (response.data.auth.user.has_permission_of_project) {
+                        groupList.push('Project')
+                    }
+                    const user = {
+                        id: response.data.auth.user.id,
+                        name: response.data.auth.user.name,
+                        email: response.data.auth.user.email,
+                        phone: response.data.auth.user.phone,
+                        picture: response.data.auth.user.picture,
+                        groupList: groupList,
+                    }
+                    contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
+                    contextAccessToken.update(accessToken)
+                    contextUser.login(user)
+                    break
+                }
+                default: {
+                    contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error') })
+                }
+            }
 
             /*const awsAmplifyAuthLoginResult = {
                 userModel: {
@@ -119,7 +145,7 @@ const View = () => {
                 }
             }*/
         },
-        [i18n, contextAlert, contextUser],
+        [i18n, contextAlert, contextAccessToken, contextUser],
     )
 
     return (
