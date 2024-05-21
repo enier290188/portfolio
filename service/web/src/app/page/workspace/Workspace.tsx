@@ -2,6 +2,7 @@ import { app } from '@./app'
 import { router } from '@./package/react-router'
 import React from 'react'
 
+const Root = React.lazy(() => import('./root'))
 const Admin = React.lazy(() => import('./admin'))
 const Sale = React.lazy(() => import('./sale'))
 const Project = React.lazy(() => import('./project'))
@@ -16,12 +17,16 @@ export const Workspace = () => {
     React.useEffect(() => {
         if (user) {
             const toAppWorkspace = app.setting.route.getNode(app.setting.route.app.workspace).getTo()
+            const toAppWorkspaceRoot = app.setting.route.getNode(app.setting.route.app.workspace.root).getTo()
             const toAppWorkspaceAdmin = app.setting.route.getNode(app.setting.route.app.workspace.admin).getTo()
             const toAppWorkspaceSale = app.setting.route.getNode(app.setting.route.app.workspace.sale).getTo()
             const toAppWorkspaceProject = app.setting.route.getNode(app.setting.route.app.workspace.project).getTo()
 
             const pathname = location?.pathname ?? toAppWorkspace
 
+            if (pathname.includes(toAppWorkspaceRoot) && pathname !== toAppWorkspaceRoot && user.groupList.includes('Root') && user.workspace !== 'Root') {
+                userActionUpdate({ ...user, workspace: 'Root' })
+            }
             if (pathname.includes(toAppWorkspaceAdmin) && pathname !== toAppWorkspaceAdmin && user.groupList.includes('Admin') && user.workspace !== 'Admin') {
                 userActionUpdate({ ...user, workspace: 'Admin' })
             }
@@ -35,10 +40,23 @@ export const Workspace = () => {
     }, [user, userActionUpdate, location])
 
     if (user) {
-        if (user.groupList.includes('Admin') || user.groupList.includes('Sale') || user.groupList.includes('Project')) {
+        if (user.groupList.includes('Root') || user.groupList.includes('Admin') || user.groupList.includes('Sale') || user.groupList.includes('Project')) {
             return (
                 <router.component.Routes>
                     <router.component.Route path={``}>
+                        {user.groupList.includes('Root') ? (
+                            <>
+                                {user.workspace === 'Root' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.root).getTo()} />} /> : null}
+                                <router.component.Route
+                                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.root).getPath()}*`}
+                                    element={
+                                        <React.Suspense fallback={<app.component.loading.Suspense />}>
+                                            <Root />
+                                        </React.Suspense>
+                                    }
+                                />
+                            </>
+                        ) : null}
                         {user.groupList.includes('Admin') ? (
                             <>
                                 {user.workspace === 'Admin' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin).getTo()} />} /> : null}
