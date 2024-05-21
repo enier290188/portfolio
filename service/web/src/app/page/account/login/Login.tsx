@@ -80,70 +80,39 @@ const View = () => {
 
             const response = await app.service.account.login(email, password)
 
-            switch (response.status) {
-                case 200: {
-                    const accessToken = response.data.auth.access_token
-                    const groupList: NonNullable<appType.TypeSettingUser>['groupList'] = []
-                    if (response.data.auth.user.has_permission_of_root) {
-                        groupList.push('Root')
-                    }
-                    if (response.data.auth.user.has_permission_of_admin) {
-                        groupList.push('Admin')
-                    }
-                    if (response.data.auth.user.has_permission_of_sale) {
-                        groupList.push('Sale')
-                    }
-                    if (response.data.auth.user.has_permission_of_project) {
-                        groupList.push('Project')
-                    }
-                    const user = {
-                        id: response.data.auth.user.id,
-                        name: response.data.auth.user.name,
-                        email: response.data.auth.user.email,
-                        phone: response.data.auth.user.phone,
-                        picture: response.data.auth.user.picture,
-                        groupList: groupList,
-                    }
-                    contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
-                    contextAccessToken.updateValue(accessToken)
-                    contextUser.login(user)
-                    break
+            if (response.status === 200) {
+                const accessToken = response.data.auth.access_token
+                const groupList: NonNullable<appType.TypeSettingUser>['groupList'] = []
+                if (response.data.auth.user.has_permission_of_root) {
+                    groupList.push('Root')
                 }
-                default: {
-                    contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error') })
+                if (response.data.auth.user.has_permission_of_admin) {
+                    groupList.push('Admin')
                 }
-            }
-
-            /*const awsAmplifyAuthLoginResult = {
-                userModel: {
-                    id: '',
-                    name: `${email} ::: ${password}`,
-                    email: email,
-                    phone: '',
-                    picture: '',
-                    groupList: [],
-                },
-                error: {
-                    code: null,
-                },
-            }
-            if (!awsAmplifyAuthLoginResult.error) {
-                const userModel = awsAmplifyAuthLoginResult.userModel
-                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
-                contextUser.login({
-                    id: userModel.id,
-                    name: userModel?.name ?? '',
-                    email: userModel?.email ?? '',
-                    phone: userModel?.phone ?? '',
-                    picture: '',
-                    groupList: [],
-                })
+                if (response.data.auth.user.has_permission_of_sale) {
+                    groupList.push('Sale')
+                }
+                if (response.data.auth.user.has_permission_of_project) {
+                    groupList.push('Project')
+                }
+                const user = {
+                    id: response.data.auth.user.id,
+                    name: response.data.auth.user.name,
+                    email: response.data.auth.user.email,
+                    phone: response.data.auth.user.phone,
+                    picture: response.data.auth.user.picture,
+                    groupList: groupList,
+                }
+                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: user.name ? user.name : user.email ? user.email : '' }) })
+                contextAccessToken.updateValue(accessToken)
+                contextUser.login(user)
             } else {
-                switch (awsAmplifyAuthLoginResult.error.code) {
-                    default:
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error') })
+                if ('error' in response.data.detail) {
+                    contextAlert.addAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })
+                } else {
+                    contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.SomethingWentWrong') })
                 }
-            }*/
+            }
         },
         [i18n, contextAlert, contextAccessToken, contextUser],
     )
