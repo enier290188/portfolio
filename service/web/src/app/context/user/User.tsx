@@ -9,8 +9,8 @@ export const Context = React.createContext<TypeContext>({
     removeUser: () => null,
     getUser: () => LOCAL_STORAGE_VALUE_DEFAULT,
     updateUser: () => null,
-    login: () => null,
-    syncUp: () => null,
+    loginUser: () => null,
+    syncUser: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -65,7 +65,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         [removeUser],
     )
 
-    const login = React.useCallback(
+    const loginUser = React.useCallback(
         (userModel: TypeWrapperUserModel): void => {
             const groupList: NonNullable<TypeWrapperUser>['groupList'] = []
             if (userModel.has_permission_of_root) {
@@ -98,7 +98,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         [removeUser, updateUser],
     )
 
-    const syncUp = React.useCallback(
+    const syncUser = React.useCallback(
         (userModel: TypeWrapperUserModel): void => {
             const groupList: NonNullable<TypeWrapperUser>['groupList'] = []
             if (userModel.has_permission_of_root) {
@@ -136,8 +136,8 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                 removeUser: removeUser,
                 getUser: getUser,
                 updateUser: updateUser,
-                login: login,
-                syncUp: syncUp,
+                loginUser: loginUser,
+                syncUser: syncUser,
             }}
         >
             {children}

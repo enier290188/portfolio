@@ -21,7 +21,7 @@ const View = () => {
     const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
-    const userActionLogin = contextUser.login
+    const userActionLoginUser = contextUser.loginUser
 
     const formLogin = form.hook.useForm<TypeFormLogin>({
         defaultValues: {
@@ -88,7 +88,7 @@ const View = () => {
                 const userModel = response.data.auth.user
                 alertActionAddAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
                 accessTokenActionUpdateAccessToken(accessToken)
-                userActionLogin(userModel)
+                userActionLoginUser(userModel)
             } else {
                 if ('error' in response.data.detail) {
                     alertActionAddAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })
@@ -97,7 +97,7 @@ const View = () => {
                 }
             }
         },
-        [i18n, alertActionAddAlert, accessTokenActionUpdateAccessToken, userActionLogin],
+        [i18n, alertActionAddAlert, accessTokenActionUpdateAccessToken, userActionLoginUser],
     )
 
     return (

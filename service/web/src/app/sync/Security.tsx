@@ -16,13 +16,13 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
     const userActionRemoveUser = contextUser.removeUser
-    const userActionSyncUp = contextUser.syncUp
+    const userActionSyncUser = contextUser.syncUser
 
-    const syncUp = React.useCallback(async () => {
+    const sync = React.useCallback(async () => {
         if (interval?.date && onlineStatus && accessToken && user?.id) {
             const response = await app.service.account.index(accessToken)
             if (response.status === 200) {
-                userActionSyncUp(response.data.auth.user)
+                userActionSyncUser(response.data.auth.user)
                 intervalActionStart(60000)
             } else {
                 accessTokenActionRemoveAccessToken()
@@ -32,14 +32,14 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
         } else {
             intervalActionStop()
         }
-    }, [interval?.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveAccessToken, user?.id, userActionRemoveUser, userActionSyncUp])
+    }, [interval?.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveAccessToken, user?.id, userActionRemoveUser, userActionSyncUser])
 
     React.useLayoutEffect(() => {
-        syncUp()
+        sync()
             .then(() => null)
             .catch(() => null)
         return () => intervalActionStop() // Cleanup
-    }, [intervalActionStop, syncUp])
+    }, [intervalActionStop, sync])
 
     return <>{children}</>
 }

@@ -7,6 +7,6 @@ export type TypeContext = {
     removeUser: () => void
     getUser: () => TypeWrapperUser
     updateUser: (user: TypeWrapperUser) => void
-    login: (userModel: TypeWrapperUserModel) => void
-    syncUp: (userModel: TypeWrapperUserModel) => void
+    loginUser: (userModel: TypeWrapperUserModel) => void
+    syncUser: (userModel: TypeWrapperUserModel) => void
 }
