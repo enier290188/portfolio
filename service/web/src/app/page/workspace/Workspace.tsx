@@ -37,7 +37,7 @@ export const Workspace = () => {
                 userActionUpdateUser({ ...user, workspace: 'Project' })
             }
         }
-    }, [user, userActionUpdateUser, location])
+    }, [user, userActionUpdateUser, location?.pathname])
 
     if (user) {
         if (user.groupList.includes('Root') || user.groupList.includes('Admin') || user.groupList.includes('Sale') || user.groupList.includes('Project')) {
