@@ -21,15 +21,15 @@ const View = () => {
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
-    const userActionLogout = contextUser.logout
+    const userActionRemoveUser = contextUser.removeUser
 
     const formLogout = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
 
     const handleActionSubmit = React.useCallback(async () => {
         alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user ? (user.name ? user.name : user.email ? user.email : '') : '' }) })
         accessTokenActionRemoveValue()
-        userActionLogout()
-    }, [i18n, alertActionAddAlert, accessTokenActionRemoveValue, user, userActionLogout])
+        userActionRemoveUser()
+    }, [i18n, alertActionAddAlert, accessTokenActionRemoveValue, user, userActionRemoveUser])
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'375px'}>
