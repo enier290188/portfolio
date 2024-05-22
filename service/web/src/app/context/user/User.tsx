@@ -49,10 +49,9 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                 workspace: user.workspace,
             }
         } else {
-            logout()
             return LOCAL_STORAGE_VALUE_DEFAULT
         }
-    }, [user?.id, user?.name, user?.email, user?.phone, user?.picture, user?.groupList, user?.workspace, logout])
+    }, [user?.id, user?.name, user?.email, user?.phone, user?.picture, user?.groupList, user?.workspace])
 
     const updateUser = React.useCallback(
         (user: TypeWrapperUser): void => {
@@ -96,7 +95,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                 logout()
             }
         },
-        [updateUser, logout],
+        [logout, updateUser],
     )
 
     const reset = React.useCallback(
@@ -114,13 +113,14 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
             if (userModel.has_permission_of_project) {
                 groupList.push('Project')
             }
+            const user = getUser()
             if (user) {
                 updateUser({ ...user, groupList: groupList })
             } else {
                 logout()
             }
         },
-        [user, updateUser, logout],
+        [logout, getUser, updateUser],
     )
 
     return (
