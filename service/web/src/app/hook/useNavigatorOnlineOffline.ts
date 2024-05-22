@@ -14,6 +14,6 @@ const subscribe = (callback: () => void) => {
     }
 }
 
-export const useNavigatorOnline = () => {
+export const useNavigatorOnlineOffline = () => {
     return React.useSyncExternalStore(subscribe, getSnapshot)
 }

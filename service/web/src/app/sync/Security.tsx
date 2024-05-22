@@ -6,8 +6,8 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const intervalActionStart = interval.start
     const intervalActionStop = interval.stop
 
-    const contextOnline = React.useContext(app.context.online.Context)
-    const onlineStatus = contextOnline.getStatus()
+    const contextOnlineStatus = React.useContext(app.context.onlineStatus.Context)
+    const onlineStatus = contextOnlineStatus.getOnlineStatus()
 
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
     const accessToken = contextAccessToken.getAccessToken()

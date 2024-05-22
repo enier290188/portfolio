@@ -2,12 +2,13 @@ import { app } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 
-export const Online = () => {
+export const OnlineStatus = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.online, i18nLanguage), [i18nLanguage])
-    const contextOnline = React.useContext(app.context.online.Context)
-    const status = contextOnline.getStatus()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.onlineStatus, i18nLanguage), [i18nLanguage])
+
+    const contextOnlineStatus = React.useContext(app.context.onlineStatus.Context)
+    const onlineStatus = contextOnlineStatus.getOnlineStatus()
 
     const sxOnline = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -43,7 +44,7 @@ export const Online = () => {
         [],
     )
 
-    return !status ? (
+    return !onlineStatus ? (
         <mui.component.Box component={'section'} sx={sxOnline}>
             <mui.component.Box component={'div'} sx={sxContent}>
                 <app.component.loading.Backdrop />

@@ -25,12 +25,12 @@ export default function App() {
             <mui.style.ThemeProvider theme={app.setting.theme}>
                 <mui.component.CssBaseline />
                 <app.context.i18n.Wrapper>
-                    <app.context.online.Wrapper>
+                    <app.context.onlineStatus.Wrapper>
                         <app.context.alert.Wrapper>
                             <app.context.accessToken.Wrapper>
                                 <app.context.user.Wrapper>
                                     <query.client.QueryClientProvider client={queryClient}>
-                                        <app.layout.online.Online />
+                                        <app.layout.onlineStatus.OnlineStatus />
                                         <app.layout.alert.Alert />
                                         <app.sync.Security>
                                             <app.layout.header.Header />
@@ -81,7 +81,7 @@ export default function App() {
                                 </app.context.user.Wrapper>
                             </app.context.accessToken.Wrapper>
                         </app.context.alert.Wrapper>
-                    </app.context.online.Wrapper>
+                    </app.context.onlineStatus.Wrapper>
                 </app.context.i18n.Wrapper>
             </mui.style.ThemeProvider>
         </router.component.BrowserRouter>
