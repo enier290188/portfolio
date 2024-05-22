@@ -56,7 +56,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     const updateUser = React.useCallback(
         (user: TypeWrapperUser): void => {
             if (user?.id && user.groupList.includes(user.workspace)) {
-                setUser(user)
+                setUser(() => user)
                 window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user))
             } else {
                 removeUser()

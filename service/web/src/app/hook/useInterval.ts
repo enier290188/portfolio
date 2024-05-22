@@ -18,7 +18,7 @@ export const useInterval = (): { date: ReturnType<typeof Date.now>; start: (time
             if (intervalRef.current) {
                 intervalStop()
             }
-            intervalRef.current = setInterval(() => setDate(_getDate()), timeout)
+            intervalRef.current = setInterval(() => setDate(() => _getDate()), timeout)
         },
         [intervalStop],
     )
