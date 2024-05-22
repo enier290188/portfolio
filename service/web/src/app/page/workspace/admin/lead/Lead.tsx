@@ -20,8 +20,8 @@ type TypeLead = {
 
 const ViewList = React.memo(() => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead, i18nLanguage), [i18nLanguage])
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()

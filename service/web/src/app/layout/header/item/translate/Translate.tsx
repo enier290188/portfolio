@@ -5,8 +5,8 @@ import { component } from '../../component'
 
 export const Translate = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
 
@@ -24,13 +24,13 @@ export const Translate = () => {
         <component.item.menu.Menu>
             <component.item.menu.MenuButton onClick={handleMenuOnOpen}>
                 <mui.icon.Language />
-                {contextI18nLanguage.toUpperCase()}
+                {i18nLanguage.toUpperCase()}
             </component.item.menu.MenuButton>
             <component.item.menu.MenuContent anchorEl={anchorEl} onClick={handleMenuOnClose}>
                 {app.setting.i18n.value.I18N_LANGUAGE_LIST.map((language) => (
                     <component.item.menu.MenuContentItemButton
                         key={language}
-                        match={contextI18nLanguage === language}
+                        match={i18nLanguage === language}
                         onClick={() => {
                             contextI18n.updateLanguage(language)
                             contextAlert.addAlert({ type: 'success', message: i18n.getText(`translate.alert.success.${language}`), duration: 1000 })
