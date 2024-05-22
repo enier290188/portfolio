@@ -6,18 +6,22 @@ export const useInterval = (): { date: ReturnType<typeof Date.now>; start: (time
     const [date, setDate] = React.useState<ReturnType<typeof Date.now>>(_getDate)
     const intervalRef = React.useRef<null | ReturnType<typeof setInterval>>(null)
 
-    const intervalStart = React.useCallback((timeout = 1000) => {
-        if (!intervalRef.current) {
-            intervalRef.current = setInterval(() => setDate(_getDate()), timeout)
-        }
-    }, [])
-
     const intervalStop = React.useCallback(() => {
         if (intervalRef.current) {
             clearInterval(intervalRef.current)
             intervalRef.current = null
         }
     }, [])
+
+    const intervalStart = React.useCallback(
+        (timeout = 1000) => {
+            if (intervalRef.current) {
+                intervalStop()
+            }
+            intervalRef.current = setInterval(() => setDate(_getDate()), timeout)
+        },
+        [intervalStop],
+    )
 
     React.useEffect(() => {
         return () => intervalStop() // Cleanup
