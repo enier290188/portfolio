@@ -6,11 +6,11 @@ const LOCAL_STORAGE_KEY = 'app-context-user'
 const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperUser = null
 
 export const Context = React.createContext<TypeContext>({
-    logout: () => null,
+    removeUser: () => null,
     getUser: () => LOCAL_STORAGE_VALUE_DEFAULT,
     updateUser: () => null,
     login: () => null,
-    reset: () => null,
+    syncUp: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -32,7 +32,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     }
     const [user, setUser] = React.useState<TypeWrapperUser>(localStorageValue)
 
-    const logout = React.useCallback((): void => {
+    const removeUser = React.useCallback((): void => {
         setUser(LOCAL_STORAGE_VALUE_DEFAULT)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
@@ -59,10 +59,10 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                 setUser(user)
                 window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user))
             } else {
-                logout()
+                removeUser()
             }
         },
-        [logout],
+        [removeUser],
     )
 
     const login = React.useCallback(
@@ -92,13 +92,13 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
                     workspace: workspace,
                 })
             } else {
-                logout()
+                removeUser()
             }
         },
-        [logout, updateUser],
+        [removeUser, updateUser],
     )
 
-    const reset = React.useCallback(
+    const syncUp = React.useCallback(
         (userModel: TypeWrapperUserModel): void => {
             const groupList: NonNullable<TypeWrapperUser>['groupList'] = []
             if (userModel.has_permission_of_root) {
@@ -117,20 +117,56 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
             if (user) {
                 updateUser({ ...user, groupList: groupList })
             } else {
-                logout()
+                removeUser()
             }
         },
-        [logout, getUser, updateUser],
+        [removeUser, getUser, updateUser],
     )
+
+    const interval = app.hook.useInterval()
+    const intervalActionStart = interval.start
+    const intervalActionStop = interval.stop
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getValue()
+    const accessTokenActionUpdateValue = contextAccessToken.updateValue
+
+    const authenticate = React.useCallback(async () => {
+        console.log('')
+        console.log('********** ********** ********** ********** **********')
+        console.log('>>> authenticate')
+
+        if (accessToken) {
+            console.log(accessToken)
+
+            const response = await app.service.account.index(accessToken)
+            console.log(response)
+
+            if (response.status === 200) {
+                accessTokenActionUpdateValue(response.data.auth.access_token)
+            }
+
+            intervalActionStart(1000)
+        } else {
+            intervalActionStop()
+        }
+    }, [intervalActionStart, intervalActionStop, accessToken, accessTokenActionUpdateValue])
+
+    React.useEffect(() => {
+        authenticate()
+            .then(() => null)
+            .catch(() => null)
+        return () => intervalActionStop() // Cleanup
+    }, [intervalActionStop, authenticate])
 
     return (
         <Context.Provider
             value={{
-                logout: logout,
+                removeUser: removeUser,
                 getUser: getUser,
                 updateUser: updateUser,
                 login: login,
-                reset: reset,
+                syncUp: syncUp,
             }}
         >
             {children}
