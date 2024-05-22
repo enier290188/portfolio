@@ -1,59 +1,42 @@
 import { app, appType } from '@./app'
-import { awsAmplifyAuth } from '@./package/aws-amplify-auth'
 import React from 'react'
 
-export const Security = ({ children }: { children?: appType.ChildrenProps }) => {
-    const contextUser = React.useContext(app.context.user.Context)
-    const user = contextUser.getUser()
-    const userActionUpdate = contextUser.updateUser
-    const userActionLogout = contextUser.logout
-
+export const Security = ({ children }: { children?: appType.TypeChildrenProps }) => {
     const interval = app.hook.useInterval()
+    const intervalActionStart = interval.start
+    const intervalActionStop = interval.stop
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getValue()
+    const accessTokenActionUpdateValue = contextAccessToken.updateValue
 
     const authenticate = React.useCallback(async () => {
-        if (user) {
-            const amplifyAuthGetUserResult = await awsAmplifyAuth.getUser()
-            if (!amplifyAuthGetUserResult.error) {
-                if (amplifyAuthGetUserResult?.data) {
-                    if (amplifyAuthGetUserResult.data?.userCognito) {
-                        const userCognito = amplifyAuthGetUserResult.data.userCognito
-                        const userCognitoGroupList: NonNullable<appType.ContextUser>['groupList'] = userCognito.groupList
-                        if (0 < userCognitoGroupList.length) {
-                            let isOkUserGroupList = true
-                            if (userCognitoGroupList.length === user.groupList.length) {
-                                for (const userGroup of user.groupList) {
-                                    if (!userCognitoGroupList.includes(userGroup)) {
-                                        isOkUserGroupList = false
-                                        break
-                                    }
-                                }
-                            } else {
-                                isOkUserGroupList = false
-                            }
-                            if (!isOkUserGroupList) {
-                                userActionUpdate({ ...user, groupList: userCognitoGroupList })
-                            } else {
-                                interval.start(60000)
-                            }
-                        } else {
-                            userActionLogout()
-                        }
-                    }
-                }
-            } else {
-                userActionLogout()
+        console.log('')
+        console.log('********** ********** ********** ********** **********')
+        console.log('>>> authenticate')
+
+        if (accessToken) {
+            console.log(accessToken)
+
+            const response = await app.service.account.index(accessToken)
+            console.log(response)
+
+            if (response.status === 200) {
+                accessTokenActionUpdateValue(response.data.auth.access_token)
             }
+
+            intervalActionStart(1000)
         } else {
-            interval.stop()
+            intervalActionStop()
         }
-    }, [user, userActionUpdate, userActionLogout, interval])
+    }, [intervalActionStart, intervalActionStop, accessToken, accessTokenActionUpdateValue])
 
     React.useEffect(() => {
         authenticate()
             .then(() => null)
             .catch(() => null)
-        return () => interval.stop() // Cleanup
-    }, [interval, authenticate])
+        return () => intervalActionStop() // Cleanup
+    }, [intervalActionStop, authenticate])
 
     return <>{children}</>
 }
