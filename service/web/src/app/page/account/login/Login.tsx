@@ -15,10 +15,13 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.login, contextI18nLanguage), [contextI18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
 
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessTokenActionUpdateValue = contextAccessToken.updateValue
 
     const contextUser = React.useContext(app.context.user.Context)
+    const userActionLogin = contextUser.login
 
     const formLogin = form.hook.useForm<TypeFormLogin>({
         defaultValues: {
@@ -83,18 +86,18 @@ const View = () => {
             if (response.status === 200) {
                 const accessToken = response.data.auth.access_token
                 const userModel = response.data.auth.user
-                contextAlert.addAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
-                contextAccessToken.updateValue(accessToken)
-                contextUser.login(userModel)
+                alertActionAddAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
+                accessTokenActionUpdateValue(accessToken)
+                userActionLogin(userModel)
             } else {
                 if ('error' in response.data.detail) {
-                    contextAlert.addAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })
+                    alertActionAddAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })
                 } else {
-                    contextAlert.addAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.SomethingWentWrong') })
+                    alertActionAddAlert({ type: 'error', message: i18n.getText('login.action.submit.alert.error.SomethingWentWrong') })
                 }
             }
         },
-        [i18n, contextAlert, contextAccessToken, contextUser],
+        [i18n, alertActionAddAlert, accessTokenActionUpdateValue, userActionLogin],
     )
 
     return (

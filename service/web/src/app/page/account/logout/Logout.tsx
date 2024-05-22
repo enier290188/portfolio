@@ -14,19 +14,22 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.logout, contextI18nLanguage), [contextI18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
 
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessTokenActionRemoveValue = contextAccessToken.removeValue
 
     const contextUser = React.useContext(app.context.user.Context)
+    const user = contextUser.getUser()
+    const userActionLogout = contextUser.logout
 
     const formLogout = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
 
     const handleActionSubmit = React.useCallback(async () => {
-        const user = contextUser.getUser()
-        contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user ? (user.name ? user.name : user.email ? user.email : '') : '' }) })
-        contextAccessToken.removeValue()
-        contextUser.logout()
-    }, [i18n, contextAlert, contextAccessToken, contextUser])
+        alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user ? (user.name ? user.name : user.email ? user.email : '') : '' }) })
+        accessTokenActionRemoveValue()
+        userActionLogout()
+    }, [i18n, alertActionAddAlert, accessTokenActionRemoveValue, user, userActionLogout])
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'375px'}>
