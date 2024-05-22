@@ -53,14 +53,14 @@ export type TypeFetchResponseSuccessError = {
 export type TypeFetchResponseSuccessLogin = {
     status: 200
     data: {
-        access_token: string
+        access_token: appType.TypeSettingAccessToken
     }
 }
 export type TypeFetchResponseSuccessDefault = {
     status: 200
     data: {
         auth: {
-            access_token: string
+            access_token: appType.TypeSettingAccessToken
             user: appType.TypeSettingUserModel
         }
         items?: null | []
