@@ -1,5 +1,5 @@
 import { Security } from './Security.tsx'
 
-export const security = {
+export const sync = {
     Security,
 }
