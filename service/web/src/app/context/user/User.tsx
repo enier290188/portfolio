@@ -113,14 +113,21 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
             if (userModel.has_permission_of_project) {
                 groupList.push('Project')
             }
-            const user = getUser()
-            if (user) {
-                updateUser({ ...user, groupList: groupList })
+            if (user?.workspace) {
+                updateUser({
+                    id: userModel.id,
+                    name: userModel.name,
+                    email: userModel.email,
+                    phone: userModel.phone,
+                    picture: userModel.picture,
+                    groupList: groupList,
+                    workspace: user.workspace,
+                })
             } else {
                 removeUser()
             }
         },
-        [removeUser, getUser, updateUser],
+        [user?.workspace, removeUser, updateUser],
     )
 
     return (
