@@ -9,16 +9,21 @@ const login = async (email: string, password: string) => {
         },
     })
     if (response.status === 200) {
-        return await service.post({
-            resource: `/api/v1/auth/index/`,
-            accessToken: response.data.access_token,
-            body: null,
-        })
+        return await index(response.data.access_token)
     } else {
         return response
     }
 }
 
+const index = async (accessToken: string) => {
+    return await service.post({
+        resource: `/api/v1/auth/index/`,
+        accessToken: accessToken,
+        body: null,
+    })
+}
+
 export const account = {
     login: login,
+    index: index,
 }
