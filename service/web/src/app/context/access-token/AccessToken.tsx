@@ -1,14 +1,14 @@
 import { appType } from '@./app'
 import React from 'react'
-import { TypeContext, TypeWrapperValue } from './AccessToken.type.ts'
+import { TypeContext, TypeWrapperAccessToken } from './AccessToken.type.ts'
 
 const LOCAL_STORAGE_KEY = 'app-context-access-token'
-const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperValue = ''
+const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperAccessToken = ''
 
 export const Context = React.createContext<TypeContext>({
-    getValue: () => LOCAL_STORAGE_VALUE_DEFAULT,
-    updateValue: () => null,
-    removeValue: () => null,
+    getAccessToken: () => LOCAL_STORAGE_VALUE_DEFAULT,
+    updateAccessToken: () => null,
+    removeAccessToken: () => null,
 })
 
 export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) => {
@@ -17,28 +17,28 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
         localStorageValue = LOCAL_STORAGE_VALUE_DEFAULT
     }
-    const [value, setValue] = React.useState<TypeWrapperValue>(localStorageValue)
+    const [accessToken, setAccessToken] = React.useState<TypeWrapperAccessToken>(localStorageValue)
 
-    const getValue = React.useCallback((): TypeWrapperValue => {
-        return value
-    }, [value])
+    const getAccessToken = React.useCallback((): TypeWrapperAccessToken => {
+        return accessToken
+    }, [accessToken])
 
-    const updateValue = React.useCallback((value: TypeWrapperValue): void => {
-        setValue(value)
-        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value))
+    const updateAccessToken = React.useCallback((accessToken: TypeWrapperAccessToken): void => {
+        setAccessToken(accessToken)
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(accessToken))
     }, [])
 
-    const removeValue = React.useCallback((): void => {
-        setValue(LOCAL_STORAGE_VALUE_DEFAULT)
+    const removeAccessToken = React.useCallback((): void => {
+        setAccessToken(LOCAL_STORAGE_VALUE_DEFAULT)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
 
     return (
         <Context.Provider
             value={{
-                getValue: getValue,
-                updateValue: updateValue,
-                removeValue: removeValue,
+                getAccessToken: getAccessToken,
+                updateAccessToken: updateAccessToken,
+                removeAccessToken: removeAccessToken,
             }}
         >
             {children}

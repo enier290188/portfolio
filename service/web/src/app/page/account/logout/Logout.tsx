@@ -17,7 +17,7 @@ const View = () => {
     const alertActionAddAlert = contextAlert.addAlert
 
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
-    const accessTokenActionRemoveValue = contextAccessToken.removeValue
+    const accessTokenActionRemoveAccessToken = contextAccessToken.removeAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
@@ -27,9 +27,9 @@ const View = () => {
 
     const handleActionSubmit = React.useCallback(async () => {
         alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success', { name: user ? (user.name ? user.name : user.email ? user.email : '') : '' }) })
-        accessTokenActionRemoveValue()
+        accessTokenActionRemoveAccessToken()
         userActionRemoveUser()
-    }, [i18n, alertActionAddAlert, accessTokenActionRemoveValue, user, userActionRemoveUser])
+    }, [i18n, alertActionAddAlert, accessTokenActionRemoveAccessToken, user, userActionRemoveUser])
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'375px'}>
