@@ -9,7 +9,7 @@ services:
       test: curl -f https://${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
       interval: 1s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 0s
       start_interval: 0s
     depends_on:
@@ -47,7 +47,7 @@ services:
       test: curl -f http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
       interval: 1s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 0s
       start_interval: 0s
     depends_on:
@@ -90,7 +90,7 @@ services:
       test: curl -f https://${DC_SERVICE_API_LOAD_BALANCER_HOST}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
       interval: 1s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 0s
       start_interval: 0s
     depends_on:
@@ -128,7 +128,7 @@ services:
       test: curl -f http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
       interval: 1s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 0s
       start_interval: 0s
     depends_on:
@@ -184,10 +184,10 @@ services:
       test: pg_isready -q -d ${DC_SERVICE_DB_DATABASE} -U ${DC_SERVICE_DB_USER}
       interval: 1s
       timeout: 1s
-      retries: 3
+      retries: 10
       start_period: 0s
       start_interval: 0s
-    image: postgres:16.2-alpine
+    image: postgres:16.3-alpine
     restart: unless-stopped
     environment:
       - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}
