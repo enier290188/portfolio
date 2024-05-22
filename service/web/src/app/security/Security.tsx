@@ -6,6 +6,9 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const intervalActionStart = interval.start
     const intervalActionStop = interval.stop
 
+    const contextOnline = React.useContext(app.context.online.Context)
+    const onlineStatus = contextOnline.getStatus()
+
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
     const accessToken = contextAccessToken.getValue()
     const accessTokenActionRemoveValue = contextAccessToken.removeValue
@@ -21,7 +24,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
         console.log('>>> authenticate')
         console.log(interval?.date)
 
-        if (interval?.date && accessToken && user?.id) {
+        if (interval?.date && onlineStatus && accessToken && user?.id) {
             console.log(accessToken)
 
             const response = await app.service.account.index(accessToken)
@@ -42,7 +45,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
         } else {
             intervalActionStop()
         }
-    }, [interval?.date, intervalActionStart, intervalActionStop, accessToken, accessTokenActionRemoveValue, user?.id, userActionRemoveUser, userActionSyncUp])
+    }, [interval?.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveValue, user?.id, userActionRemoveUser, userActionSyncUp])
 
     React.useLayoutEffect(() => {
         authenticate()
