@@ -5,8 +5,8 @@ import { component } from '../../component'
 
 export const WorkspaceRoot = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, i18nLanguage), [i18nLanguage])
 
     return (
         <>

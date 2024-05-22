@@ -4,8 +4,8 @@ import React from 'react'
 
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.error.boundary, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.error.boundary, i18nLanguage), [i18nLanguage])
 
     return (
         <>

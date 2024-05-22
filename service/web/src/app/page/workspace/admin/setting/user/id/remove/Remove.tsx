@@ -38,7 +38,7 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.setting.user.id.remove, i18nLanguage), [contextI18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.setting.user.id.remove, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
 

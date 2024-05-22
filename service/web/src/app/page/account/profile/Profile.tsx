@@ -9,8 +9,8 @@ const Picture = React.lazy(() => import('./picture'))
 
 const Layout = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.profile, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.profile, i18nLanguage), [i18nLanguage])
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'575px'}>
