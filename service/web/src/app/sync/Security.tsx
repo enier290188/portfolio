@@ -19,17 +19,8 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const userActionSyncUp = contextUser.syncUp
 
     const syncUp = React.useCallback(async () => {
-        console.log('')
-        console.log('********** ********** ********** ********** **********')
-        console.log('>>> authenticate')
-        console.log(interval?.date)
-
         if (interval?.date && onlineStatus && accessToken && user?.id) {
-            console.log(accessToken)
-
             const response = await app.service.account.index(accessToken)
-            console.log(response)
-
             if (response.status === 200) {
                 userActionSyncUp(response.data.auth.user)
                 intervalActionStart(60000)
