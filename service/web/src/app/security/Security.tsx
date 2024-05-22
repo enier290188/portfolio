@@ -18,7 +18,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const userActionRemoveUser = contextUser.removeUser
     const userActionSyncUp = contextUser.syncUp
 
-    const authenticate = React.useCallback(async () => {
+    const syncUp = React.useCallback(async () => {
         console.log('')
         console.log('********** ********** ********** ********** **********')
         console.log('>>> authenticate')
@@ -32,15 +32,11 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
 
             if (response.status === 200) {
                 userActionSyncUp(response.data.auth.user)
-                intervalActionStart(5000)
+                intervalActionStart(60000)
             } else {
-                if ('error' in response.data.detail) {
-                    accessTokenActionRemoveValue()
-                    userActionRemoveUser()
-                    intervalActionStop()
-                } else {
-                    intervalActionStart(10000)
-                }
+                accessTokenActionRemoveValue()
+                userActionRemoveUser()
+                intervalActionStop()
             }
         } else {
             intervalActionStop()
@@ -48,11 +44,11 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     }, [interval?.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveValue, user?.id, userActionRemoveUser, userActionSyncUp])
 
     React.useLayoutEffect(() => {
-        authenticate()
+        syncUp()
             .then(() => null)
             .catch(() => null)
         return () => intervalActionStop() // Cleanup
-    }, [intervalActionStop, authenticate])
+    }, [intervalActionStop, syncUp])
 
     return <>{children}</>
 }
