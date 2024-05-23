@@ -25,13 +25,6 @@ router = APIRouter(
 )
 
 
-@router.get('/sync/', response_model=api_schema.SyncResponse)
-async def sync(auth_response: auth_dependency.DependAuth):
-    return api_schema.SyncResponse(
-        **dict(auth_response)
-    )
-
-
 @router.post(path='/login/', status_code=status.HTTP_200_OK, response_model=api_schema.LoginResponse)
 async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm, Depends()], db_async_session: db_dependency.DependDBAsyncSession):
     username: str = request.username
@@ -59,12 +52,21 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.get('/profile/', response_model=api_schema.SyncResponse)
+@router.get('/sync/', response_model=api_schema.SyncResponse)
+async def sync(auth_response: auth_dependency.DependAuth):
+    return api_schema.SyncResponse(
+        **dict(auth_response)
+    )
+
+
+@router.get('/profile/', response_model=api_schema.ProfileItemResponse)
 async def profile(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
-    user_orm = await auth_service.get_user_by_id(db_async_session, auth_response.auth.user.id)
+    data_user_id: str = auth_response.auth.user.id
+    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
 
-    return api_schema.SyncResponse(
-        **dict(auth_response)
+    return api_schema.ProfileItemResponse(
+        **dict(auth_response),
+        item=api_schema.ProfileResponse(**dict(user_orm.__dict__)),
     )

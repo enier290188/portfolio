@@ -13,12 +13,12 @@ from app.module.user import (
 )
 
 
-class SyncResponse(auth_schema.AuthResponse):
-    pass
-
-
 class LoginResponse(BaseModel):
     access_token: str
+
+
+class SyncResponse(auth_schema.AuthResponse):
+    pass
 
 
 class ProfileResponse(user_schema.UserResponse):
@@ -32,3 +32,7 @@ class ProfileResponse(user_schema.UserResponse):
     has_permission_of_project: Annotated[bool, Field(exclude=True)]
 
     company_id: Annotated[UUID4 | None, Field(exclude=True)]
+
+
+class ProfileItemResponse(auth_schema.AuthResponse):
+    item: ProfileResponse
