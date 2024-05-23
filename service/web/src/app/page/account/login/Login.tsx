@@ -38,7 +38,7 @@ const View = () => {
                 messageList.push(i18n.getText('login.field.email.validate.required'))
             }
             if (128 < value.length) {
-                messageList.push(i18n.getText('login.field.email.validate.max-length', { value: 320 }))
+                messageList.push(i18n.getText('login.field.email.validate.max-length', { value: 128 }))
             }
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
                 messageList.push(i18n.getText('login.field.email.validate.pattern'))
