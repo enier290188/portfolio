@@ -21,7 +21,15 @@ const login = async (email: string, password: string) => {
     }
 }
 
+const profile = async (accessToken: string) => {
+    return await service.get({
+        resource: `/api/v1/auth/profile/`,
+        accessToken: accessToken,
+    })
+}
+
 export const account = {
     sync: sync,
     login: login,
+    profile: profile,
 }
