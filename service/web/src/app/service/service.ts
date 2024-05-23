@@ -16,45 +16,24 @@ const __fetch_something_went_wrong__ = (): TypeFetchResponseError => {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-const __fetch__ = async (
-    request: TypeFetchRequest = {
-        resource: '',
-        options: {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: null,
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-        },
-    },
-): Promise<TypeFetchResponse> => {
-    console.log('>>> __fetch__')
+const __fetch__ = async (request: TypeFetchRequest): Promise<TypeFetchResponse> => {
     try {
-        const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
+        const input: string = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
         // Default options are marked with *
-        const query = {
-            method: request.options.method, // *GET, POST, PATCH, DELETE
-            headers: request.options.headers,
-            body: request.options.body, // body data type must match "Content-Type" header
-            mode: request.options.mode, // no-cors, *cors, same-origin
-            cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: request.options.credentials, // include, *same-origin, omit
-            redirect: request.options.redirect, // manual, *follow, error
-            referrerPolicy: request.options.referrerPolicy, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
+        const init: RequestInit = {}
+        init.method = request.options.method // *GET, POST, PATCH, DELETE
+        init.headers = request.options.headers
+        if (request.options.body) {
+            // TypeError: Failed to execute 'fetch' on 'Window': Request with GET/HEAD method cannot have body.
+            init.body = request.options.body // body data type must match "Content-Type" header
         }
-        if (query.body === null) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            delete query.body // TypeError: Failed to execute 'fetch' on 'Window': Request with GET/HEAD method cannot have body.
-        }
-        console.log(query)
-        const response: Response = await fetch(url, query)
-        console.log(response)
+        init.mode = request.options?.mode ?? 'cors' // no-cors, *cors, same-origin
+        init.cache = request.options?.cache ?? 'no-cache' // *default, no-cache, reload, force-cache, only-if-cached
+        init.credentials = request.options?.credentials ?? 'same-origin' // include, *same-origin, omit
+        init.redirect = request.options?.redirect ?? 'follow' // manual, *follow, error
+        init.referrerPolicy = request.options?.referrerPolicy ?? 'no-referrer' // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
+
+        const response: Response = await fetch(input, init)
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -97,8 +76,6 @@ const __fetch__ = async (
 }
 
 const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResponse> => {
-    console.log('')
-    console.log('>>> fetch_login')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return await __fetch__({
@@ -117,8 +94,6 @@ const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLog
 }
 
 const fetch_default = async (request: TypeFetchDefaultRequest): Promise<TypeFetchDefaultResponse> => {
-    console.log('')
-    console.log('>>> fetch_default')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return await __fetch__({
@@ -138,6 +113,7 @@ const fetch_default_get = async (request: TypeFetchDefaultGetRequest): Promise<T
     return await fetch_default({
         ...request,
         method: 'GET',
+        body: null,
     })
 }
 
@@ -145,6 +121,7 @@ const fetch_default_post = async (request: TypeFetchDefaultPostRequest): Promise
     return await fetch_default({
         ...request,
         method: 'POST',
+        body: request?.body ? request.body : {},
     })
 }
 
@@ -152,6 +129,7 @@ const fetch_default_patch = async (request: TypeFetchDefaultPatchRequest): Promi
     return await fetch_default({
         ...request,
         method: 'PATCH',
+        body: request?.body ? request.body : {},
     })
 }
 
@@ -159,6 +137,7 @@ const fetch_default_delete = async (request: TypeFetchDefaultDeleteRequest): Pro
     return await fetch_default({
         ...request,
         method: 'DELETE',
+        body: request?.body ? request.body : {},
     })
 }
 

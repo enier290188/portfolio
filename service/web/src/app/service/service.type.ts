@@ -27,7 +27,7 @@ export type TypeFetchDefaultRequest = {
     resource: string
     method: TypeFetchRequest['options']['method']
     accessToken: string
-    body: null | object
+    body?: null | object
 }
 export type TypeFetchDefaultGetRequest = Omit<TypeFetchDefaultRequest, 'method'>
 export type TypeFetchDefaultPostRequest = Omit<TypeFetchDefaultRequest, 'method'>
