@@ -24,12 +24,12 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     }, [accessToken])
 
     const updateAccessToken = React.useCallback((accessToken: TypeWrapperAccessToken): void => {
-        setAccessToken(accessToken)
+        setAccessToken(() => accessToken)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(accessToken))
     }, [])
 
     const removeAccessToken = React.useCallback((): void => {
-        setAccessToken(LOCAL_STORAGE_VALUE_DEFAULT)
+        setAccessToken(() => LOCAL_STORAGE_VALUE_DEFAULT)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
 

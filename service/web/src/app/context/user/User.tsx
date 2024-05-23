@@ -33,7 +33,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     const [user, setUser] = React.useState<TypeWrapperUser>(localStorageValue)
 
     const removeUser = React.useCallback((): void => {
-        setUser(LOCAL_STORAGE_VALUE_DEFAULT)
+        setUser(() => LOCAL_STORAGE_VALUE_DEFAULT)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(LOCAL_STORAGE_VALUE_DEFAULT))
     }, [])
 

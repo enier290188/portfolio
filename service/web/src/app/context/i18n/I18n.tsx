@@ -23,7 +23,7 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     }, [language])
 
     const updateLanguage = React.useCallback((language: TypeWrapperLanguage): void => {
-        setLanguage(language)
+        setLanguage(() => language)
         window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(language))
     }, [])
 
