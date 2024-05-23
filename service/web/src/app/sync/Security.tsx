@@ -15,24 +15,32 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
+    const userId = user?.id ?? null
     const userActionRemoveUser = contextUser.removeUser
     const userActionSyncUser = contextUser.syncUser
 
+    const intervalDateRef = React.useRef<null | number>(null)
+
     const sync = React.useCallback(async () => {
-        if (interval?.date && onlineStatus && accessToken && user?.id) {
-            const response = await app.service.account.index(accessToken)
-            if (response.status === 200) {
-                userActionSyncUser(response.data.auth.user)
-                intervalActionStart(60000)
+        if (interval.date && onlineStatus && accessToken && userId) {
+            if (intervalDateRef.current === null || intervalDateRef.current !== interval.date) {
+                const response = await app.service.account.index(accessToken)
+                if (response.status === 200) {
+                    userActionSyncUser(response.data.auth.user)
+                    intervalActionStart(30000)
+                } else {
+                    accessTokenActionRemoveAccessToken()
+                    userActionRemoveUser()
+                    intervalActionStop()
+                }
             } else {
-                accessTokenActionRemoveAccessToken()
-                userActionRemoveUser()
-                intervalActionStop()
+                intervalActionStart(1000)
             }
         } else {
             intervalActionStop()
         }
-    }, [interval?.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveAccessToken, user?.id, userActionRemoveUser, userActionSyncUser])
+        intervalDateRef.current = interval.date
+    }, [interval.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveAccessToken, userId, userActionRemoveUser, userActionSyncUser])
 
     React.useLayoutEffect(() => {
         sync()
