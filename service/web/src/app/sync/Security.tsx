@@ -34,7 +34,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
                     intervalActionStop()
                 }
             } else {
-                intervalActionStart(1000)
+                intervalActionStart(60000)
             }
         } else {
             intervalActionStop()
