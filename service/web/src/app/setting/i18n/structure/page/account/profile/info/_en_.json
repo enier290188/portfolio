@@ -11,9 +11,10 @@
     "field.phone.validate.required": "- It is required.",
     "field.phone.validate.max-length": "- Should be less than {value} characters.",
     "field.phone.validate.pattern": "- Format is invalid.",
+    "action.fetch.alert.error.SomethingWentWrong": "Sorry, an unexpected error has occurred",
     "action.refresh": "Refresh",
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",
-    "action.submit.alert.error": "Sorry, an unexpected error has occurred",
+    "action.submit.alert.error.SomethingWentWrong": "Sorry, an unexpected error has occurred",
     "action.reset": "Reset"
 }

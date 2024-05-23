@@ -11,9 +11,10 @@
     "field.phone.validate.required": "- Es requerido.",
     "field.phone.validate.max-length": "- Debe tener menos de {value} caracteres.",
     "field.phone.validate.pattern": "- El formato no es válido.",
+    "action.fetch.alert.error.SomethingWentWrong": "Lo sentimos, se ha producido un error inesperado",
     "action.refresh": "Actualizar",
     "action.submit": "Guardar",
     "action.submit.alert.success": "Guardado con éxito",
-    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.submit.alert.error.SomethingWentWrong": "Lo sentimos, se ha producido un error inesperado",
     "action.reset": "Reinicializar"
 }

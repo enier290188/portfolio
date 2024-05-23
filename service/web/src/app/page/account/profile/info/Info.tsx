@@ -29,20 +29,32 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.profile.info, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
 
     const contextAccessToken = React.useContext(app.context.accessToken.Context)
     const accessToken = contextAccessToken.getAccessToken()
-    // const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
     const userId = user?.id ?? ''
     const userActionUpdateUser = contextUser.updateUser
+    const userActionSyncUser = contextUser.syncUser
 
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
-        queryFn: async () => await app.service.account.profile(accessToken),
+        queryFn: async () => {
+            const response = await app.service.account.profile(accessToken)
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                return response
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error.SomethingWentWrong') })
+                return null
+            }
+        },
         initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
@@ -164,9 +176,9 @@ const View = () => {
     const effectStepFilling = React.useCallback(async () => {
         console.log(queryUserGet.data)
 
-        const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
-        const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
-        const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
+        const name = queryUserGet.data?.data.item.name ?? DEFAULT_VALUES.name
+        const email = queryUserGet.data?.data.item.email ?? DEFAULT_VALUES.email
+        const phone = queryUserGet.data?.data.item.phone ?? DEFAULT_VALUES.phone
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
@@ -203,109 +215,137 @@ const View = () => {
 
     return (
         <>
-            <app.layout.main.component.structure.body.Body alignItems={'center'}>
-                <mui.component.Box component={'form'} width={'100%'} maxWidth={'375px'} my={4} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
-                    <app.layout.main.component.structure.box.content.Content>
-                        <form.component.Controller
-                            name={'name'}
-                            control={formUpdate.control}
-                            rules={{
-                                validate: {
-                                    handleValidateFieldName,
-                                },
-                            }}
-                            render={({ field }) => (
-                                <app.component.field.text.Text
-                                    type={'text'}
-                                    required={true}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <mui.component.InputAdornment position={'start'}>
-                                                <mui.icon.Description />
-                                            </mui.component.InputAdornment>
-                                        ),
-                                    }}
-                                    label={i18n.getText('field.name.label')}
-                                    error={!!formUpdate.formState.errors.name}
-                                    helperText={formUpdate.formState.errors.name?.message}
-                                    disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
-                                    autoFocus={true}
-                                    space={{
-                                        top: 2,
-                                        right: 1,
-                                        bottom: 1,
-                                        left: 1,
-                                    }}
-                                    field={field}
-                                />
-                            )}
-                        />
-                        <form.component.Controller
-                            name={'email'}
-                            control={formUpdate.control}
-                            rules={{
-                                validate: {
-                                    handleValidateFieldEmail,
-                                },
-                            }}
-                            render={({ field }) => (
-                                <app.component.field.text.TextEmail
-                                    required={true}
-                                    label={i18n.getText('field.email.label')}
-                                    error={!!formUpdate.formState.errors.email}
-                                    helperText={formUpdate.formState.errors.email?.message}
-                                    disabled={true} //disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
-                                    autoFocus={false}
-                                    space={{
-                                        top: 2,
-                                        right: 1,
-                                        bottom: 1,
-                                        left: 1,
-                                    }}
-                                    field={field}
-                                />
-                            )}
-                        />
-                        <form.component.Controller
-                            name={'phone'}
-                            control={formUpdate.control}
-                            rules={{
-                                validate: {
-                                    handleValidateFieldPhone,
-                                },
-                            }}
-                            render={({ field }) => (
-                                <app.component.field.text.TextPhone
-                                    required={true}
-                                    label={i18n.getText('field.phone.label')}
-                                    error={!!formUpdate.formState.errors.phone}
-                                    helperText={formUpdate.formState.errors.phone?.message}
-                                    disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
-                                    autoFocus={false}
-                                    space={{
-                                        top: 2,
-                                        right: 1,
-                                        bottom: 1,
-                                        left: 1,
-                                    }}
-                                    field={field}
-                                />
-                            )}
-                        />
-                    </app.layout.main.component.structure.box.content.Content>
-                    {mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
-                    <app.layout.main.component.structure.box.action.Action>
-                        <app.component.button.ButtonSubmit space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>
-                            {mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
-                            {i18n.getText('action.submit')}
-                        </app.component.button.ButtonSubmit>
-                        <app.component.button.Button space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionReset}>
-                            {formUpdate.formState.isValidating ? <app.component.loading.ProgressCircular /> : <mui.icon.Restore />}
-                            {i18n.getText('action.reset')}
-                        </app.component.button.Button>
-                    </app.layout.main.component.structure.box.action.Action>
-                </mui.component.Box>
-            </app.layout.main.component.structure.body.Body>
+            {queryUserGet.isFetching || mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+            <app.layout.main.component.structure.head.spaceBetween.Head>
+                <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
+                    <app.layout.main.component.structure.box.title.Title level={2}>
+                        <mui.icon.ManageAccounts />
+                        {i18n.getText('title')}
+                    </app.layout.main.component.structure.box.title.Title>
+                </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
+                <app.layout.main.component.structure.head.spaceBetween.HeadRight>
+                    <app.component.button.Button space={1} disabled={queryUserGet.isFetching || mutationUserUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                        {queryUserGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
+                        {i18n.getText('action.refresh')}
+                    </app.component.button.Button>
+                </app.layout.main.component.structure.head.spaceBetween.HeadRight>
+            </app.layout.main.component.structure.head.spaceBetween.Head>
+            {queryUserGet.isFetching ? (
+                <>
+                    <app.component.loading.ProgressLinear />
+                    <app.layout.main.component.structure.body.Body>
+                        <app.layout.main.component.structure.box.content.Content>
+                            <app.component.loading.Text />
+                        </app.layout.main.component.structure.box.content.Content>
+                    </app.layout.main.component.structure.body.Body>
+                </>
+            ) : (
+                <>
+                    <app.layout.main.component.structure.body.Body alignItems={'center'}>
+                        <mui.component.Box component={'form'} width={'100%'} maxWidth={'375px'} my={4} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
+                            {/*<app.layout.main.component.structure.box.content.Content>*/}
+                            {/*    <form.component.Controller*/}
+                            {/*        name={'name'}*/}
+                            {/*        control={formUpdate.control}*/}
+                            {/*        rules={{*/}
+                            {/*            validate: {*/}
+                            {/*                handleValidateFieldName,*/}
+                            {/*            },*/}
+                            {/*        }}*/}
+                            {/*        render={({ field }) => (*/}
+                            {/*            <app.component.field.text.Text*/}
+                            {/*                type={'text'}*/}
+                            {/*                required={true}*/}
+                            {/*                InputProps={{*/}
+                            {/*                    startAdornment: (*/}
+                            {/*                        <mui.component.InputAdornment position={'start'}>*/}
+                            {/*                            <mui.icon.Description />*/}
+                            {/*                        </mui.component.InputAdornment>*/}
+                            {/*                    ),*/}
+                            {/*                }}*/}
+                            {/*                label={i18n.getText('field.name.label')}*/}
+                            {/*                error={!!formUpdate.formState.errors.name}*/}
+                            {/*                helperText={formUpdate.formState.errors.name?.message}*/}
+                            {/*                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}*/}
+                            {/*                autoFocus={true}*/}
+                            {/*                space={{*/}
+                            {/*                    top: 2,*/}
+                            {/*                    right: 1,*/}
+                            {/*                    bottom: 1,*/}
+                            {/*                    left: 1,*/}
+                            {/*                }}*/}
+                            {/*                field={field}*/}
+                            {/*            />*/}
+                            {/*        )}*/}
+                            {/*    />*/}
+                            {/*    <form.component.Controller*/}
+                            {/*        name={'email'}*/}
+                            {/*        control={formUpdate.control}*/}
+                            {/*        rules={{*/}
+                            {/*            validate: {*/}
+                            {/*                handleValidateFieldEmail,*/}
+                            {/*            },*/}
+                            {/*        }}*/}
+                            {/*        render={({ field }) => (*/}
+                            {/*            <app.component.field.text.TextEmail*/}
+                            {/*                required={true}*/}
+                            {/*                label={i18n.getText('field.email.label')}*/}
+                            {/*                error={!!formUpdate.formState.errors.email}*/}
+                            {/*                helperText={formUpdate.formState.errors.email?.message}*/}
+                            {/*                disabled={true} // disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}*/}
+                            {/*                autoFocus={false}*/}
+                            {/*                space={{*/}
+                            {/*                    top: 2,*/}
+                            {/*                    right: 1,*/}
+                            {/*                    bottom: 1,*/}
+                            {/*                    left: 1,*/}
+                            {/*                }}*/}
+                            {/*                field={field}*/}
+                            {/*            />*/}
+                            {/*        )}*/}
+                            {/*    />*/}
+                            {/*    <form.component.Controller*/}
+                            {/*        name={'phone'}*/}
+                            {/*        control={formUpdate.control}*/}
+                            {/*        rules={{*/}
+                            {/*            validate: {*/}
+                            {/*                handleValidateFieldPhone,*/}
+                            {/*            },*/}
+                            {/*        }}*/}
+                            {/*        render={({ field }) => (*/}
+                            {/*            <app.component.field.text.TextPhone*/}
+                            {/*                required={true}*/}
+                            {/*                label={i18n.getText('field.phone.label')}*/}
+                            {/*                error={!!formUpdate.formState.errors.phone}*/}
+                            {/*                helperText={formUpdate.formState.errors.phone?.message}*/}
+                            {/*                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}*/}
+                            {/*                autoFocus={false}*/}
+                            {/*                space={{*/}
+                            {/*                    top: 2,*/}
+                            {/*                    right: 1,*/}
+                            {/*                    bottom: 1,*/}
+                            {/*                    left: 1,*/}
+                            {/*                }}*/}
+                            {/*                field={field}*/}
+                            {/*            />*/}
+                            {/*        )}*/}
+                            {/*    />*/}
+                            {/*</app.layout.main.component.structure.box.content.Content>*/}
+                            {/*{mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}*/}
+                            {/*<app.layout.main.component.structure.box.action.Action>*/}
+                            {/*    <app.component.button.ButtonSubmit space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>*/}
+                            {/*        {mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}*/}
+                            {/*        {i18n.getText('action.submit')}*/}
+                            {/*    </app.component.button.ButtonSubmit>*/}
+                            {/*    <app.component.button.Button space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionReset}>*/}
+                            {/*        {formUpdate.formState.isValidating ? <app.component.loading.ProgressCircular /> : <mui.icon.Restore />}*/}
+                            {/*        {i18n.getText('action.reset')}*/}
+                            {/*    </app.component.button.Button>*/}
+                            {/*</app.layout.main.component.structure.box.action.Action>*/}
+                        </mui.component.Box>
+                    </app.layout.main.component.structure.body.Body>
+                </>
+            )}
         </>
     )
 }
