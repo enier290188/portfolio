@@ -88,3 +88,11 @@ Http403UserNotAllowedToUpdateAttribute = HTTPException(
     },
     headers={'WWW-Authenticate': 'Bearer'},
 )
+
+Http404 = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail={
+        'error': 'ProfileNotFound'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)

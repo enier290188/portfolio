@@ -59,8 +59,12 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.get('/profile/', response_model=api_schema.ProfileResponse)
-async def sync(auth_response: auth_dependency.DependAuth):
+@router.get('/profile/', response_model=api_schema.SyncResponse)
+async def profile(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    user_orm = await auth_service.get_user_by_id(db_async_session, auth_response.auth.user.id)
+    if user_orm is None:
+        raise auth_exception.Http401IncorrectUsernameOrPassword
+
     return api_schema.SyncResponse(
         **dict(auth_response)
     )
