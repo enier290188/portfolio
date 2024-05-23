@@ -1,5 +1,11 @@
 from typing import Annotated
 
+from fastapi import status
+from fastapi.param_functions import Depends
+from fastapi.responses import Response
+from fastapi.routing import APIRouter
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+
 from app.api.v1.auth import (
     schema as api_schema,
 )
@@ -12,16 +18,18 @@ from app.module.auth import (
 from app.module.db import (
     dependency as db_dependency,
 )
-from fastapi import status
-from fastapi.param_functions import Depends
-from fastapi.responses import Response
-from fastapi.routing import APIRouter
-from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix='/auth',
     tags=['api.v1.auth'],
 )
+
+
+@router.post('/sync/', response_model=api_schema.SyncResponse)
+async def sync(auth_response: auth_dependency.DependAuth):
+    return api_schema.SyncResponse(
+        **dict(auth_response)
+    )
 
 
 @router.post(path='/login/', status_code=status.HTTP_200_OK, response_model=api_schema.LoginResponse)
@@ -51,8 +59,8 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.post('/index/', response_model=api_schema.AuthResponse)
-async def index(auth_response: auth_dependency.DependAuth):
-    return api_schema.AuthResponse(
+@router.post('/profile/', response_model=api_schema.ProfileResponse)
+async def sync(auth_response: auth_dependency.DependAuth):
+    return api_schema.SyncResponse(
         **dict(auth_response)
     )
