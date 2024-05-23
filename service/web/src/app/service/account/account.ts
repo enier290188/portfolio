@@ -1,7 +1,7 @@
 import { service } from '../service.ts'
 
 const sync = async (accessToken: string) => {
-    return await service.post({
+    return await service.get({
         resource: `/api/v1/auth/sync/`,
         accessToken: accessToken,
         body: null,

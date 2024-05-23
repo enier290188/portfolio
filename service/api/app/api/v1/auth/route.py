@@ -25,7 +25,7 @@ router = APIRouter(
 )
 
 
-@router.post('/sync/', response_model=api_schema.SyncResponse)
+@router.get('/sync/', response_model=api_schema.SyncResponse)
 async def sync(auth_response: auth_dependency.DependAuth):
     return api_schema.SyncResponse(
         **dict(auth_response)
@@ -59,7 +59,7 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.post('/profile/', response_model=api_schema.ProfileResponse)
+@router.get('/profile/', response_model=api_schema.ProfileResponse)
 async def sync(auth_response: auth_dependency.DependAuth):
     return api_schema.SyncResponse(
         **dict(auth_response)

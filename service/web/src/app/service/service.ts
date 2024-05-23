@@ -33,20 +33,28 @@ const __fetch__ = async (
         },
     },
 ): Promise<TypeFetchResponse> => {
+    console.log('>>> __fetch__')
     try {
         const url = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
-
         // Default options are marked with *
-        const response: Response = await fetch(url, {
+        const query = {
             method: request.options.method, // *GET, POST, PATCH, DELETE
+            headers: request.options.headers,
+            body: request.options.body, // body data type must match "Content-Type" header
             mode: request.options.mode, // no-cors, *cors, same-origin
             cache: request.options.cache, // *default, no-cache, reload, force-cache, only-if-cached
             credentials: request.options.credentials, // include, *same-origin, omit
             redirect: request.options.redirect, // manual, *follow, error
             referrerPolicy: request.options.referrerPolicy, // no-referrer, no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, *strict-origin-when-cross-origin, unsafe-url
-            headers: request.options.headers,
-            body: request.options.body, // body data type must match "Content-Type" header
-        })
+        }
+        if (query.body === null) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            delete query.body // TypeError: Failed to execute 'fetch' on 'Window': Request with GET/HEAD method cannot have body.
+        }
+        console.log(query)
+        const response: Response = await fetch(url, query)
+        console.log(response)
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -89,6 +97,8 @@ const __fetch__ = async (
 }
 
 const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLoginResponse> => {
+    console.log('')
+    console.log('>>> fetch_login')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return await __fetch__({
@@ -107,6 +117,8 @@ const fetch_login = async (request: TypeFetchLoginRequest): Promise<TypeFetchLog
 }
 
 const fetch_default = async (request: TypeFetchDefaultRequest): Promise<TypeFetchDefaultResponse> => {
+    console.log('')
+    console.log('>>> fetch_default')
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return await __fetch__({
@@ -117,7 +129,7 @@ const fetch_default = async (request: TypeFetchDefaultRequest): Promise<TypeFetc
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${request.accessToken}`,
             },
-            body: JSON.stringify(request.body),
+            body: request.body === null ? request.body : JSON.stringify(request.body),
         },
     })
 }
