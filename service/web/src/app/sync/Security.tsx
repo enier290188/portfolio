@@ -27,7 +27,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
                 const response = await app.service.account.index(accessToken)
                 if (response.status === 200) {
                     userActionSyncUser(response.data.auth.user)
-                    intervalActionStart(30000)
+                    intervalActionStart(60000)
                 } else {
                     accessTokenActionRemoveAccessToken()
                     userActionRemoveUser()
