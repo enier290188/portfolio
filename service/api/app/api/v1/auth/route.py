@@ -43,7 +43,7 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     if not auth_service.verify_user_password_plain(password, user_orm.password):
         raise auth_exception.Http401IncorrectUsernameOrPassword
     if not user_orm.is_active:
-        raise auth_exception.Http401InactiveUser
+        raise auth_exception.Http401UserInactive
     if user_orm.has_permission_of_root is False and user_orm.has_permission_of_admin is False and user_orm.has_permission_of_sale is False and user_orm.has_permission_of_project is False:
         raise auth_exception.Http401UserMustBelongToAGroup
     if user_orm.company_id is None and not user_orm.has_permission_of_root:
@@ -63,7 +63,7 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
 async def profile(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
     user_orm = await auth_service.get_user_by_id(db_async_session, auth_response.auth.user.id)
     if user_orm is None:
-        raise auth_exception.Http401IncorrectUsernameOrPassword
+        raise auth_exception.Http404UserNotFound
 
     return api_schema.SyncResponse(
         **dict(auth_response)

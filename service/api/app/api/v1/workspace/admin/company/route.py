@@ -31,7 +31,7 @@ async def get(id: Annotated[UUID4, Path()], auth_response: auth_dependency.Depen
         raise company_exception.Http404
 
     if auth_response.auth.user.company_id != id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     return api_schema.CompanyItemResponse(
         **dict(auth_response),
@@ -48,7 +48,7 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.CompanyReques
         raise company_exception.Http404
 
     if auth_response.auth.user.company_id != id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     company_orm = await company_service.update(db_async_session, id, data)
     if company_orm is None:

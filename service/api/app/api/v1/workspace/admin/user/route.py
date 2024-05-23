@@ -63,7 +63,7 @@ async def get(id: Annotated[UUID4, Path()], auth_response: auth_dependency.Depen
 
     data_company_id: str = auth_response.auth.user.company_id
     if data_company_id != user_orm.company_id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     return api_schema.UserItemResponse(
         **dict(auth_response),
@@ -81,7 +81,7 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.UserRequestUp
 
     data_company_id: str = auth_response.auth.user.company_id
     if data_company_id != user_orm.company_id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     if auth_response.auth.user.id == id:
         data_is_active: bool = data.get('is_active', False)
@@ -109,10 +109,10 @@ async def remove(id: Annotated[UUID4, Path()], auth_response: auth_dependency.De
 
     data_company_id: str = auth_response.auth.user.company_id
     if data_company_id != user_orm.company_id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     if auth_response.auth.user.id == id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     user_orm = await user_service.remove(db_async_session, id)
     if user_orm is None:

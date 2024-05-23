@@ -94,7 +94,7 @@ async def remove(id: Annotated[UUID4, Path()], auth_response: auth_dependency.De
         raise company_exception.Http404
 
     if auth_response.auth.user.company_id == id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     users_by_company_id_orm = await user_service.fetch_by_company_id(db_async_session, id)
     for user_by_company_id_orm in users_by_company_id_orm:

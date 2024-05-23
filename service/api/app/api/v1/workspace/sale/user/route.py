@@ -32,7 +32,7 @@ async def get(id: Annotated[UUID4, Path()], auth_response: auth_dependency.Depen
 
     data_company_id: str = auth_response.auth.user.company_id
     if data_company_id != user_orm.company_id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     return api_schema.UserItemResponse(
         **dict(auth_response),

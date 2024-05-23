@@ -109,7 +109,7 @@ async def remove(id: Annotated[UUID4, Path()], auth_response: auth_dependency.De
         raise user_exception.Http404
 
     if auth_response.auth.user.id == id:
-        raise auth_exception.Http403
+        raise auth_exception.Http403UserNotAllowed
 
     user_orm = await user_service.remove(db_async_session, id)
     if user_orm is None:

@@ -16,7 +16,7 @@
     "login.action.submit.alert.success": "The user \"{name}\" has logged in",
     "login.action.submit.alert.error.SomethingWentWrong": "Sorry, an unexpected error has occurred",
     "login.action.submit.alert.error.IncorrectUsernameOrPassword": "Incorrect email or password",
-    "login.action.submit.alert.error.InactiveUser": "The user is disabled. Please, inform the application's admin",
+    "login.action.submit.alert.error.UserInactive": "The user is disabled. Please, inform the application's admin",
     "login.action.submit.alert.error.UserMustBelongToAGroup": "The user needs to belong to a group. Please, inform the application's admin",
     "login.action.submit.alert.error.UserMustBelongToACompany": "The user needs to belong to a company. Please, inform the application's admin",
     "new-password.title": "New Password Required",
