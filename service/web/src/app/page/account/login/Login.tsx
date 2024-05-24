@@ -81,7 +81,7 @@ const View = () => {
         async (data) => {
             const { email, password } = data
 
-            const response = await app.service.api.page.account.login(email, password)
+            const response = await app.service.api.page.account.login({ email: email, password: password })
 
             if (response.status === 200) {
                 const accessToken = response.data.auth.access_token

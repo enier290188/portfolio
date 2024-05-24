@@ -1,11 +1,17 @@
+import { appType } from '@./app'
 import { api } from '../../api.ts'
 
-const sync = async (accessToken: string, id: string) => {
+type TypeSyncRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    id: appType.TypeSettingUserModel['id']
+}
+
+const sync = async (request: TypeSyncRequest) => {
     return await api.post({
         resource: `/api/v1/sync/account/sync/`,
-        accessToken: accessToken,
+        accessToken: request.accessToken,
         body: {
-            id: id,
+            id: request.id,
         },
     })
 }

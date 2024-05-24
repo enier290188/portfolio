@@ -5,6 +5,19 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
+export type TypeUserResponse = {
+    name: appType.TypeSettingUserModel['name']
+    email: appType.TypeSettingUserModel['email']
+    phone: appType.TypeSettingUserModel['phone']
+    picture: appType.TypeSettingUserModel['picture']
+}
+export type TypeUserRequest = {
+    id: appType.TypeSettingUserModel['id']
+    name: appType.TypeSettingUserModel['name']
+    email: appType.TypeSettingUserModel['email']
+    phone: appType.TypeSettingUserModel['phone']
+}
+
 type TypeForm = {
     name: string
     email: string
@@ -44,8 +57,8 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
-        queryFn: async (): Promise<null | appType.TypePageAccountProfileResponse> => {
-            const response = await app.service.api.page.account.profile_get(accessToken, userId)
+        queryFn: async (): Promise<null | TypeUserResponse> => {
+            const response = await app.service.api.page.account.profile_get({ accessToken: accessToken, id: userId })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
@@ -53,7 +66,7 @@ const View = () => {
                 // @ts-ignore
                 return response.data.item
             } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error.SomethingWentWrong') })
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
                 return null
             }
         },
@@ -61,12 +74,14 @@ const View = () => {
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/`, 'mutation', 'db'],
-        mutationFn: async (user: appType.TypePageAccountProfileInfoRequest) => {
-            const response = await app.service.api.page.account.profile_info_update(accessToken, user.id, user.name, user.email, user.phone)
+        mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
+            const response = await app.service.api.page.account.profile_info_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 return response.data.item
             } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.SomethingWentWrong') })
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                 return null
             }
         },
@@ -148,7 +163,7 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (userUpdated: awsAmplifyApiType.User | null) => {
+                    onSuccess: (userUpdated: null | TypeUserResponse) => {
                         if (user && userUpdated) {
                             userActionUpdateUser({
                                 ...user,
@@ -156,8 +171,8 @@ const View = () => {
                                 email: email,
                                 phone: phone,
                             })
-                            queryClient.setQueryData([`/app/page/account/profile/${userId}/`, 'query', 'db'], userUpdated)
-                            contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                            queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], userUpdated)
+                            alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
                                 name: name,
@@ -165,16 +180,16 @@ const View = () => {
                                 phone: phone,
                             }))
                         } else {
-                            contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                            alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
                     },
                     onError: () => {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                        alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                     },
                 },
             )
         },
-        [i18n, contextAlert, user, userId, userActionUpdateUser, queryClient, mutationUserUpdate],
+        [i18n, alertActionAddAlert, user, userId, userActionUpdateUser, queryClient, mutationUserUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
