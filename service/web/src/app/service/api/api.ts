@@ -1,4 +1,4 @@
-import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse, TypeFetchResponseError, TypeFetchResponseSuccessDefault, TypeFetchResponseSuccessError, TypeFetchResponseSuccessLogin } from './service.type.ts'
+import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDefaultPatchRequest, TypeFetchDefaultPostRequest, TypeFetchDefaultRequest, TypeFetchDefaultResponse, TypeFetchLoginRequest, TypeFetchLoginResponse, TypeFetchRequest, TypeFetchResponse, TypeFetchResponseError, TypeFetchResponseSuccessDefault, TypeFetchResponseSuccessError, TypeFetchResponseSuccessLogin } from './api.type.ts'
 
 const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN

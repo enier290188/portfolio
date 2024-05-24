@@ -1,1 +1,1 @@
-export const service = {}
+export const page = {}
