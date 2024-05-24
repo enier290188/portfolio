@@ -141,7 +141,7 @@ const fetch_default_delete = async (request: TypeFetchDefaultDeleteRequest): Pro
     })
 }
 
-export const service = {
+export const api = {
     login: fetch_login,
     get: fetch_default_get,
     post: fetch_default_post,
