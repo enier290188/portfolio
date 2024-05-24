@@ -8,7 +8,7 @@ from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/admin',
-    tags=['api.v1.workspace.admin'],
+    tags=['api.v1.page.workspace.admin'],
 )
 
 router.include_router(
