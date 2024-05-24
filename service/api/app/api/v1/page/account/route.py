@@ -6,7 +6,7 @@ from fastapi.responses import Response
 from fastapi.routing import APIRouter
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
-from app.api.v1.auth import (
+from app.api.v1.page.account import (
     schema as api_schema,
 )
 from app.module.auth import (
@@ -20,8 +20,8 @@ from app.module.db import (
 )
 
 router = APIRouter(
-    prefix='/auth',
-    tags=['api.v1.auth'],
+    prefix='/account',
+    tags=['api.v1.page.account'],
 )
 
 

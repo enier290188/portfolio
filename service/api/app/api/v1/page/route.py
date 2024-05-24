@@ -8,7 +8,7 @@ from app.api.v1.page.workspace import (
 )
 
 router = APIRouter(
-    prefix='/v1',
+    prefix='/page',
 )
 
 router.include_router(
