@@ -1,7 +1,7 @@
 import { app, appType } from '@./app'
 import React from 'react'
 
-export const Security = ({ children }: { children?: appType.TypeChildrenProps }) => {
+export const Account = ({ children }: { children?: appType.TypeChildrenProps }) => {
     const interval = app.hook.useInterval()
     const intervalActionStart = interval.start
     const intervalActionStop = interval.stop
