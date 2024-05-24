@@ -1,10 +1,11 @@
 from typing import Annotated
 
 from fastapi import status
-from fastapi.param_functions import Depends
+from fastapi.param_functions import Depends, Path
 from fastapi.responses import Response
 from fastapi.routing import APIRouter
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from pydantic.types import UUID4
 
 from app.api.v1.page.account import (
     schema as api_schema,
@@ -59,17 +60,12 @@ async def login_sync(auth_response: auth_dependency.DependAuth):
     )
 
 
-@router.post(path='/sync/', response_model=api_schema.SyncResponse)
-async def sync(auth_response: auth_dependency.DependAuth):
-    return api_schema.SyncResponse(
-        **dict(auth_response)
-    )
-
-
 @router.get(path='/profile/{id}/', response_model=api_schema.ProfileItemResponse)
-async def profile_get(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
-    data_user_id: str = auth_response.auth.user.id
-    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
+async def profile_get(id: Annotated[UUID4, Path()], auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    auth_user_id: str = auth_response.auth.user.id
+    if auth_user_id != id:
+        raise auth_exception.Http403UserNotAllowed
+    user_orm = await auth_service.get_user_by_id(db_async_session, auth_user_id)
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
 
@@ -80,9 +76,11 @@ async def profile_get(auth_response: auth_dependency.DependAuth, db_async_sessio
 
 
 @router.patch(path='/profile/{id}/info/', response_model=api_schema.ProfileItemResponse)
-async def profile_info_update(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
-    data_user_id: str = auth_response.auth.user.id
-    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
+async def profile_info_update(id: Annotated[UUID4, Path()], auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    auth_user_id: str = auth_response.auth.user.id
+    if auth_user_id != id:
+        raise auth_exception.Http403UserNotAllowed
+    user_orm = await auth_service.get_user_by_id(db_async_session, auth_user_id)
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
 
@@ -93,9 +91,11 @@ async def profile_info_update(auth_response: auth_dependency.DependAuth, db_asyn
 
 
 @router.patch(path='/profile/{id}/password/', response_model=api_schema.ProfileItemResponse)
-async def profile_info_update(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
-    data_user_id: str = auth_response.auth.user.id
-    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
+async def profile_info_update(id: Annotated[UUID4, Path()], auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    auth_user_id: str = auth_response.auth.user.id
+    if auth_user_id != id:
+        raise auth_exception.Http403UserNotAllowed
+    user_orm = await auth_service.get_user_by_id(db_async_session, auth_user_id)
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
 

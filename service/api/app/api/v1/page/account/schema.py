@@ -21,10 +21,6 @@ class LoginSyncResponse(auth_schema.AuthResponse):
     pass
 
 
-class SyncResponse(auth_schema.AuthResponse):
-    pass
-
-
 class ProfileResponse(user_schema.UserResponse):
     created_at: Annotated[datetime, Field(exclude=True)]
     updated_at: Annotated[datetime, Field(exclude=True)]
