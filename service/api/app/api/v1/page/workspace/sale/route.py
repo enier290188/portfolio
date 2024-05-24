@@ -1,7 +1,7 @@
-from app.api.v1.workspace.sale.company import (
+from app.api.v1.page.workspace.sale.company import (
     route as company_route,
 )
-from app.api.v1.workspace.sale.user import (
+from app.api.v1.page.workspace.sale.user import (
     route as user_route,
 )
 from fastapi.routing import APIRouter

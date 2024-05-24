@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from app.api.v1.workspace.project.company import (
+from app.api.v1.page.workspace.project.company import (
     schema as api_schema,
 )
 from app.module.auth import (
