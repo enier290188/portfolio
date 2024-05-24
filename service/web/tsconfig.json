@@ -4,9 +4,7 @@
         "baseUrl": ".",
         "paths": {
             "@./app": ["./src/app"],
-            "@./app/page/account": ["./src/app/page/account"],
-            "@./app/page/error": ["./src/app/page/error"],
-            "@./app/page/workspace": ["./src/app/page/workspace"],
+            "@./app/page/": ["./src/app/page/"],
             "@./package/material-ui": ["./src/package/material-ui"],
             "@./package/react-error-boundary": ["./src/package/react-error-boundary"],
             "@./package/react-hook-form": ["./src/package/react-hook-form"],

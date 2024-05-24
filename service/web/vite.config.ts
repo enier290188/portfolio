@@ -13,9 +13,7 @@ export default defineConfig({
         alias: {
             // Absolute Imports using React with Ts and Vite. Check tsconfig.json
             '@./app': path.resolve(__dirname, './src/app'),
-            '@./app/page/account': path.resolve(__dirname, './src/app/page/account'),
-            '@./app/page/error': path.resolve(__dirname, './src/app/page/error'),
-            '@./app/page/workspace': path.resolve(__dirname, './src/app/page/workspace'),
+            '@./app/page/': path.resolve(__dirname, './src/app/page/'),
             '@./package/material-ui': path.resolve(__dirname, './src/package/material-ui'),
             '@./package/react-error-boundary': path.resolve(__dirname, './src/package/react-error-boundary'),
             '@./package/react-hook-form': path.resolve(__dirname, './src/package/react-hook-form'),
