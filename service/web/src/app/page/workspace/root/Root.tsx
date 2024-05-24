@@ -8,9 +8,9 @@ export const Root = () => {
     return (
         <router.component.Routes>
             <router.component.Route path={``}>
-                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.root.dashboard).getTo()} />} />
+                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.dashboard).getTo()} />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.root.dashboard).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.root.dashboard).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Dashboard />

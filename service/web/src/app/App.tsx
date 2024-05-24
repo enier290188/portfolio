@@ -41,7 +41,7 @@ export default function App() {
                                                         <router.component.Route path={app.setting.route.getNode(app.setting.route.app).getPath()}>
                                                             <router.component.Route index element={<app.component.navigate.ToAppWorkspace />} />
                                                             <router.component.Route
-                                                                path={`${app.setting.route.getNode(app.setting.route.app.account).getPath()}*`}
+                                                                path={`${app.setting.route.getNode(app.setting.route.app.page.account).getPath()}*`}
                                                                 element={
                                                                     <React.Suspense fallback={<app.component.loading.Suspense />}>
                                                                         <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
@@ -51,7 +51,7 @@ export default function App() {
                                                                 }
                                                             />
                                                             <router.component.Route
-                                                                path={`${app.setting.route.getNode(app.setting.route.app.workspace).getPath()}*`}
+                                                                path={`${app.setting.route.getNode(app.setting.route.app.page.workspace).getPath()}*`}
                                                                 element={
                                                                     <React.Suspense fallback={<app.component.loading.Suspense />}>
                                                                         <error.component.ErrorBoundary FallbackComponent={() => <app.component.navigate.ToAppErrorBoundary />}>
@@ -61,7 +61,7 @@ export default function App() {
                                                                 }
                                                             />
                                                             <router.component.Route
-                                                                path={`${app.setting.route.getNode(app.setting.route.app.error).getPath()}*`}
+                                                                path={`${app.setting.route.getNode(app.setting.route.app.page.error).getPath()}*`}
                                                                 element={
                                                                     <React.Suspense fallback={<app.component.loading.Suspense />}>
                                                                         <Error />

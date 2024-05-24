@@ -9,7 +9,7 @@ export const Forgot = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, i18nLanguage), [i18nLanguage])
 
     return (
-        <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.account.forgot).getTo()}>
+        <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.account.forgot).getTo()}>
             <mui.icon.PersonSearch />
             {i18n.getText('forgot')}
         </component.item.link.Link>

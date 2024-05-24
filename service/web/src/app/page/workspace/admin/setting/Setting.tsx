@@ -23,7 +23,7 @@ const Layout = () => {
             <app.layout.main.component.structure.body.spaceBetween.Body>
                 <app.layout.main.component.structure.body.spaceBetween.BodyLeft>
                     <app.layout.main.component.structure.box.list.List>
-                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.user).getTo()}>
+                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()}>
                             <mui.icon.People />
                             {i18n.getText('list.user.title')}
                         </app.layout.main.component.structure.box.list.ListItemButtonLink>
@@ -41,9 +41,9 @@ export const Setting = () => {
     return (
         <router.component.Routes>
             <router.component.Route path={``} element={<Layout />}>
-                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.user).getTo()} />} />
+                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()} />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.application).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.application).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense justifyContent={'flex-start'} />}>
                             <Application />
@@ -51,7 +51,7 @@ export const Setting = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.user).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense justifyContent={'flex-start'} />}>
                             <User />

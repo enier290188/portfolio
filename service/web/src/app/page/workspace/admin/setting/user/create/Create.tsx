@@ -209,7 +209,7 @@ const View = () => {
     }, [effectStep, effectStepFetching, effectStepFilling])
 
     if (mutationUserCreate.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.user[':id'].update).getTo({ id: mutationUserCreate.data.id })} />
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].update).getTo({ id: mutationUserCreate.data.id })} />
     }
 
     if (!queryUserGet.isFetching && !queryUserGet.data) {
@@ -232,7 +232,7 @@ const View = () => {
                             {queryUserGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.setting.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>

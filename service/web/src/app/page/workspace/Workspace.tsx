@@ -16,11 +16,11 @@ export const Workspace = () => {
 
     React.useEffect(() => {
         if (user) {
-            const toAppWorkspace = app.setting.route.getNode(app.setting.route.app.workspace).getTo()
-            const toAppWorkspaceRoot = app.setting.route.getNode(app.setting.route.app.workspace.root).getTo()
-            const toAppWorkspaceAdmin = app.setting.route.getNode(app.setting.route.app.workspace.admin).getTo()
-            const toAppWorkspaceSale = app.setting.route.getNode(app.setting.route.app.workspace.sale).getTo()
-            const toAppWorkspaceProject = app.setting.route.getNode(app.setting.route.app.workspace.project).getTo()
+            const toAppWorkspace = app.setting.route.getNode(app.setting.route.app.page.workspace).getTo()
+            const toAppWorkspaceRoot = app.setting.route.getNode(app.setting.route.app.page.workspace.root).getTo()
+            const toAppWorkspaceAdmin = app.setting.route.getNode(app.setting.route.app.page.workspace.admin).getTo()
+            const toAppWorkspaceSale = app.setting.route.getNode(app.setting.route.app.page.workspace.sale).getTo()
+            const toAppWorkspaceProject = app.setting.route.getNode(app.setting.route.app.page.workspace.project).getTo()
 
             const pathname = location?.pathname ?? toAppWorkspace
 
@@ -46,9 +46,9 @@ export const Workspace = () => {
                     <router.component.Route path={``}>
                         {user.groupList.includes('Root') ? (
                             <>
-                                {user.workspace === 'Root' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.root).getTo()} />} /> : null}
+                                {user.workspace === 'Root' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root).getTo()} />} /> : null}
                                 <router.component.Route
-                                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.root).getPath()}*`}
+                                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.root).getPath()}*`}
                                     element={
                                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                                             <Root />
@@ -59,9 +59,9 @@ export const Workspace = () => {
                         ) : null}
                         {user.groupList.includes('Admin') ? (
                             <>
-                                {user.workspace === 'Admin' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin).getTo()} />} /> : null}
+                                {user.workspace === 'Admin' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin).getTo()} />} /> : null}
                                 <router.component.Route
-                                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin).getPath()}*`}
+                                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin).getPath()}*`}
                                     element={
                                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                                             <Admin />
@@ -72,9 +72,9 @@ export const Workspace = () => {
                         ) : null}
                         {user.groupList.includes('Sale') ? (
                             <>
-                                {user.workspace === 'Sale' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.sale).getTo()} />} /> : null}
+                                {user.workspace === 'Sale' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.sale).getTo()} />} /> : null}
                                 <router.component.Route
-                                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.sale).getPath()}*`}
+                                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.sale).getPath()}*`}
                                     element={
                                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                                             <Sale />
@@ -85,9 +85,9 @@ export const Workspace = () => {
                         ) : null}
                         {user.groupList.includes('Project') ? (
                             <>
-                                {user.workspace === 'Project' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.project).getTo()} />} /> : null}
+                                {user.workspace === 'Project' ? <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.project).getTo()} />} /> : null}
                                 <router.component.Route
-                                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.project).getPath()}*`}
+                                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.project).getPath()}*`}
                                     element={
                                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                                             <Project />

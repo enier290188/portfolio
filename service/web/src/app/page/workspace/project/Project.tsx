@@ -9,9 +9,9 @@ export const Project = () => {
     return (
         <router.component.Routes>
             <router.component.Route path={``}>
-                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.project.dashboard).getTo()} />} />
+                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.project.dashboard).getTo()} />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.project.dashboard).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.project.dashboard).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Dashboard />
@@ -19,7 +19,7 @@ export const Project = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.project.deal).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.project.deal).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Deal />

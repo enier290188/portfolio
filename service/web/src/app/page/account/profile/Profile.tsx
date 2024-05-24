@@ -24,15 +24,15 @@ const Layout = () => {
             <app.layout.main.component.structure.body.spaceBetween.Body>
                 <app.layout.main.component.structure.body.spaceBetween.BodyLeft>
                     <app.layout.main.component.structure.box.list.List>
-                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.account.profile.info).getTo()}>
+                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.account.profile.info).getTo()}>
                             <mui.icon.ManageAccounts />
                             {i18n.getText('list.info.title')}
                         </app.layout.main.component.structure.box.list.ListItemButtonLink>
-                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.account.profile.password).getTo()}>
+                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.account.profile.password).getTo()}>
                             <mui.icon.Password />
                             {i18n.getText('list.password.title')}
                         </app.layout.main.component.structure.box.list.ListItemButtonLink>
-                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.account.profile.picture).getTo()}>
+                        <app.layout.main.component.structure.box.list.ListItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.account.profile.picture).getTo()}>
                             <mui.icon.Crop />
                             {i18n.getText('list.picture.title')}
                         </app.layout.main.component.structure.box.list.ListItemButtonLink>
@@ -50,9 +50,9 @@ export const Profile = () => {
     return (
         <router.component.Routes>
             <router.component.Route path={``} element={<Layout />}>
-                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.account.profile.info).getTo()} />} />
+                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.account.profile.info).getTo()} />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.profile.info).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.profile.info).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense justifyContent={'flex-start'} />}>
                             <Info />
@@ -60,7 +60,7 @@ export const Profile = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.profile.password).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.profile.password).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense justifyContent={'flex-start'} />}>
                             <Password />
@@ -68,7 +68,7 @@ export const Profile = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.profile.picture).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.profile.picture).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense justifyContent={'flex-start'} />}>
                             <Picture />

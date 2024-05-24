@@ -11,9 +11,9 @@ export const Admin = () => {
     return (
         <router.component.Routes>
             <router.component.Route path={``}>
-                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.dashboard).getTo()} />} />
+                <router.component.Route index element={<app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.dashboard).getTo()} />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.dashboard).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.dashboard).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Dashboard />
@@ -21,7 +21,7 @@ export const Admin = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Lead />
@@ -29,7 +29,7 @@ export const Admin = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.deal).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Deal />
@@ -37,7 +37,7 @@ export const Admin = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.setting).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Setting />

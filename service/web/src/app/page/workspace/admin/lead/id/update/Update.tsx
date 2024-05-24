@@ -234,7 +234,7 @@ const View = () => {
                             {queryLeadGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>

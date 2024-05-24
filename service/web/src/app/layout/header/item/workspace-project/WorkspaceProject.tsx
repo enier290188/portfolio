@@ -10,11 +10,11 @@ export const WorkspaceProject = () => {
 
     return (
         <>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.project.dashboard).getTo()}>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.project.dashboard).getTo()}>
                 <mui.icon.Dashboard />
                 {i18n.getText('workspace-project.dashboard')}
             </component.item.link.Link>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.project.deal).getTo()}>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.project.deal).getTo()}>
                 <mui.icon.Mediation />
                 {i18n.getText('workspace-project.deal')}
             </component.item.link.Link>

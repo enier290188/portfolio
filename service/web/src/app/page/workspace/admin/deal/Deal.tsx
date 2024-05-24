@@ -42,16 +42,16 @@ const ViewList = React.memo(() => {
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
                 header: () => (
-                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
+                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
                         <mui.icon.AddCircle sx={{ m: `0 !important` }} />
                     </app.component.button.ButtonLink>
                 ),
                 cell: ({ row }) => (
                     <>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal[':id'].update).getTo({ id: row.id })} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal[':id'].update).getTo({ id: row.id })} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Edit sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal[':id'].remove).getTo({ id: row.id })} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal[':id'].remove).getTo({ id: row.id })} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.DeleteForever sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                         {row.getCanExpand() ? (
@@ -161,7 +161,7 @@ export const Deal = () => {
             <router.component.Route path={``}>
                 <router.component.Route index element={<ViewList />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.workspace.admin.deal.create).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal.create).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -172,7 +172,7 @@ export const Deal = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.workspace.admin.deal[':id'].update).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal[':id'].update).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -183,7 +183,7 @@ export const Deal = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.workspace.admin.deal[':id'].remove).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal[':id'].remove).getPath()}*`}
                     element={
                         <>
                             <ViewList />

@@ -10,11 +10,11 @@ export const WorkspaceSale = () => {
 
     return (
         <>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.sale.dashboard).getTo()}>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.sale.dashboard).getTo()}>
                 <mui.icon.Dashboard />
                 {i18n.getText('workspace-sale.dashboard')}
             </component.item.link.Link>
-            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.workspace.sale.lead).getTo()}>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.sale.lead).getTo()}>
                 <mui.icon.BusinessCenter />
                 {i18n.getText('workspace-sale.lead')}
             </component.item.link.Link>

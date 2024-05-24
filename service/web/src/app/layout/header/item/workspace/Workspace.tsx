@@ -47,7 +47,7 @@ export const Workspace = () => {
                                 contextAlert.addAlert({ type: 'success', message: i18n.getText('workspace.alert.success', { group: i18n.getText(`workspace.group.${groupStringLowerCase}`) }), duration: 1000 })
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
-                                navigate(app.setting.route.getNode(app.setting.route.app.workspace[groupStringLowerCase]).getTo())
+                                navigate(app.setting.route.getNode(app.setting.route.app.page.workspace[groupStringLowerCase]).getTo())
                             }}
                         >
                             <mui.icon.Widgets />

@@ -15,7 +15,7 @@ export const Account = () => {
     const [searchParams] = router.hook.useSearchParams()
 
     if (user) {
-        const toAppAccountLogin = app.setting.route.getNode(app.setting.route.app.account.login).getTo()
+        const toAppAccountLogin = app.setting.route.getNode(app.setting.route.app.page.account.login).getTo()
         const toFrom = location?.pathname ?? toAppAccountLogin
         const searchParamUrlTo = searchParams.get('urlTo')
         if (toFrom === toAppAccountLogin && searchParamUrlTo) {
@@ -28,7 +28,7 @@ export const Account = () => {
             <router.component.Route path={``}>
                 <router.component.Route index element={<app.component.navigate.ToAppErrorNotFound />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.login).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.login).getPath()}*`}
                     element={
                         user ? (
                             <app.component.navigate.ToAppWorkspace />
@@ -40,7 +40,7 @@ export const Account = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.forgot).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.forgot).getPath()}*`}
                     element={
                         user ? (
                             <app.component.navigate.ToAppWorkspace />
@@ -52,7 +52,7 @@ export const Account = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.profile).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.profile).getPath()}*`}
                     element={
                         user ? (
                             <React.Suspense fallback={<app.component.loading.Suspense />}>
@@ -64,7 +64,7 @@ export const Account = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.account.logout).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.account.logout).getPath()}*`}
                     element={
                         user ? (
                             <React.Suspense fallback={<app.component.loading.Suspense />}>

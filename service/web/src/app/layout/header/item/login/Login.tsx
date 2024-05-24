@@ -9,7 +9,7 @@ export const Login = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.layout.header, i18nLanguage), [i18nLanguage])
 
     return (
-        <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.account.login).getTo()}>
+        <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.account.login).getTo()}>
             <mui.icon.Login />
             {i18n.getText('login')}
         </component.item.link.Link>

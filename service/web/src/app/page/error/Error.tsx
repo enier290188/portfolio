@@ -37,7 +37,7 @@ export const Error = () => {
             <router.component.Route path={``} element={<Layout />}>
                 <router.component.Route index element={<app.component.navigate.ToAppErrorNotFound />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.error.boundary).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.error.boundary).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Boundary />
@@ -45,7 +45,7 @@ export const Error = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.error.forbidden).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.error.forbidden).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Forbidden />
@@ -53,7 +53,7 @@ export const Error = () => {
                     }
                 />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.error.notFound).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.error.notFound).getPath()}*`}
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <NotFound />

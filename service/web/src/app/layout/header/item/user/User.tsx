@@ -27,18 +27,18 @@ export const User = () => {
 
     return (
         <component.item.menu.Menu>
-            <component.item.menu.MenuButton toList={[app.setting.route.getNode(app.setting.route.app.account.profile).getTo(), app.setting.route.getNode(app.setting.route.app.account.logout).getTo()]} onClick={handleMenuOnOpen}>
+            <component.item.menu.MenuButton toList={[app.setting.route.getNode(app.setting.route.app.page.account.profile).getTo(), app.setting.route.getNode(app.setting.route.app.page.account.logout).getTo()]} onClick={handleMenuOnOpen}>
                 <mui.component.Avatar component={'span'} variant={'circular'} src={user.picture} sx={{ width: 24, height: 24 }}>
                     <mui.icon.AccountCircle sx={{ width: '100%', height: '100%' }} />
                 </mui.component.Avatar>
                 {user.name ? user.name : user.email ? user.email : ''}
             </component.item.menu.MenuButton>
             <component.item.menu.MenuContent anchorEl={anchorEl} onClick={handleMenuOnClose}>
-                <component.item.menu.MenuContentItemButtonLink to={app.setting.route.getNode(app.setting.route.app.account.profile).getTo()}>
+                <component.item.menu.MenuContentItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.account.profile).getTo()}>
                     <mui.icon.AccountCircle />
                     {i18n.getText('user.profile')}
                 </component.item.menu.MenuContentItemButtonLink>
-                <component.item.menu.MenuContentItemButtonLink to={app.setting.route.getNode(app.setting.route.app.account.logout).getTo()}>
+                <component.item.menu.MenuContentItemButtonLink to={app.setting.route.getNode(app.setting.route.app.page.account.logout).getTo()}>
                     <mui.icon.Logout />
                     {i18n.getText('user.logout')}
                 </component.item.menu.MenuContentItemButtonLink>

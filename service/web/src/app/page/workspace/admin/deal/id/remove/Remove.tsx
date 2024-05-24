@@ -136,7 +136,7 @@ const View = () => {
     }, [effectStep, effectStepFetching, effectStepFilling])
 
     if (mutationDealRemove.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal).getTo()} />
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal).getTo()} />
     }
 
     if (!queryDealGet.isFetching && !queryDealGet.data) {
@@ -159,7 +159,7 @@ const View = () => {
                             {queryDealGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.deal).getTo()} variant={'contained'} space={1} disabled={queryDealGet.isFetching || mutationDealRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.deal).getTo()} variant={'contained'} space={1} disabled={queryDealGet.isFetching || mutationDealRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
