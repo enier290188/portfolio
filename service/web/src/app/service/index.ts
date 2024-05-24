@@ -1,1 +1,5 @@
-export const service = {}
+import { api } from './api'
+
+export const service = {
+    api,
+}
