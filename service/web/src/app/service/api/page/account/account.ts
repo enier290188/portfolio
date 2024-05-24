@@ -18,7 +18,7 @@ const login = async (email: string, password: string) => {
     }
 }
 
-const profile = async (accessToken: string, id: string) => {
+const profile_get = async (accessToken: string, id: string) => {
     return await api.post({
         resource: `/api/v1/page/account/profile/`,
         accessToken: accessToken,
@@ -28,7 +28,20 @@ const profile = async (accessToken: string, id: string) => {
     })
 }
 
+const profile_info_update = async (accessToken: string, id: string, name: string, phone: string) => {
+    return await api.patch({
+        resource: `/api/v1/page/account/profile/`,
+        accessToken: accessToken,
+        body: {
+            id: id,
+            name: name,
+            phone: phone,
+        },
+    })
+}
+
 export const account = {
     login: login,
-    profile: profile,
+    profile_get: profile_get,
+    profile_info_update: profile_info_update,
 }

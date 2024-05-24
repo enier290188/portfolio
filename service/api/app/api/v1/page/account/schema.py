@@ -8,6 +8,9 @@ from pydantic.types import UUID4
 from app.module.auth import (
     schema as auth_schema,
 )
+from app.module.db import (
+    schema as db_schema,
+)
 from app.module.user import (
     schema as user_schema,
 )
@@ -40,3 +43,10 @@ class ProfileResponse(user_schema.UserResponse):
 
 class ProfileItemResponse(auth_schema.AuthResponse):
     item: ProfileResponse
+
+
+class ProfileInfoRequestUpdate(BaseModel):
+    id: db_schema.FieldID
+    name: user_schema.FieldName
+    email: user_schema.FieldEmail
+    phone: user_schema.FieldPhone

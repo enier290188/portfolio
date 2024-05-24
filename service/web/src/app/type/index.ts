@@ -22,9 +22,19 @@ export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
 export type { TypeSettingUserModel }
 
-export type TypePageAccountProfile = {
+export type TypePageAccountProfileRequest = {
+    accessToken: TypeSettingAccessToken
+    id: TypeSettingUserModel['id']
+}
+export type TypePageAccountProfileResponse = {
     name: TypeSettingUserModel['name']
     email: TypeSettingUserModel['email']
     phone: TypeSettingUserModel['phone']
     picture: TypeSettingUserModel['picture']
+}
+export type TypePageAccountProfileInfoRequest = {
+    id: TypeSettingUserModel['id']
+    name: TypeSettingUserModel['name']
+    email: TypeSettingUserModel['email']
+    phone: TypeSettingUserModel['phone']
 }
