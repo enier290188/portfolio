@@ -32,7 +32,7 @@ export default function App() {
                                     <query.client.QueryClientProvider client={queryClient}>
                                         <app.layout.onlineStatus.OnlineStatus />
                                         <app.layout.alert.Alert />
-                                        <app.sync.Security>
+                                        <app.sync.account.Account>
                                             <app.layout.header.Header />
                                             <app.layout.main.Main>
                                                 <router.component.Routes>
@@ -75,7 +75,7 @@ export default function App() {
                                                 </router.component.Routes>
                                             </app.layout.main.Main>
                                             <app.layout.footer.Footer />
-                                        </app.sync.Security>
+                                        </app.sync.account.Account>
                                         <queryDevtools.client.ReactQueryDevtools initialIsOpen={false} />
                                     </query.client.QueryClientProvider>
                                 </app.context.user.Wrapper>

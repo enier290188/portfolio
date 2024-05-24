@@ -1,5 +1,5 @@
-import { Account } from './Account.tsx'
+import { account } from './account'
 
 export const sync = {
-    Security: Account,
+    account,
 }
