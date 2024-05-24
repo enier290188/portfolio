@@ -1,11 +1,12 @@
+from pydantic.networks import EmailStr
+from pydantic.types import UUID4
+from sqlalchemy.ext.asyncio.session import AsyncSession
+
 from app.module.user import (
     hashing as user_hashing,
     model as user_model,
     service as user_service,
 )
-from pydantic.networks import EmailStr
-from pydantic.types import UUID4
-from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 async def get_user_by_id(db_async_session: AsyncSession, id: UUID4) -> user_model.User | None:

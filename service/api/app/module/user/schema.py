@@ -1,15 +1,16 @@
 from typing import Annotated
 
+from pydantic.fields import Field
+from pydantic.functional_validators import AfterValidator
+from pydantic.networks import EmailStr
+from pydantic.types import UUID4
+
 from app.module.db import (
     schema as db_schema,
 )
 from app.module.user import (
     hashing as user_hashing,
 )
-from pydantic.fields import Field
-from pydantic.functional_validators import AfterValidator
-from pydantic.networks import EmailStr
-from pydantic.types import UUID4
 
 FieldName = Annotated[str, Field(min_length=0, max_length=32, default='')]
 FieldEmail = Annotated[EmailStr, Field(min_length=5, max_length=128)]
