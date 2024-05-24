@@ -42,7 +42,7 @@ export const Account = ({ children }: { children?: appType.TypeChildrenProps }) 
         intervalDateRef.current = interval.date
     }, [interval.date, intervalActionStart, intervalActionStop, onlineStatus, accessToken, accessTokenActionRemoveAccessToken, userId, userActionRemoveUser, userActionSyncUser])
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         sync()
             .then(() => null)
             .catch(() => null)

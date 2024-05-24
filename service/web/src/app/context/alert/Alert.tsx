@@ -18,7 +18,10 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         localStorageValue = LOCAL_STORAGE_VALUE_DEFAULT
     }
     const [alertList, setAlertList] = React.useState<TypeWrapperAlert[]>(localStorageValue)
+
     const interval = app.hook.useInterval()
+    const intervalActionStart = interval.start
+    const intervalActionStop = interval.stop
 
     const getAlertList = React.useCallback((): TypeWrapperAlert[] => {
         return alertList
@@ -57,17 +60,20 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
         })
     }, [])
 
-    if (0 < alertList.length) {
-        interval.start(1000)
-        for (const alert of alertList) {
-            const duration = alert.duration ?? 10000
-            if (duration < interval.date - alert.id) {
-                deleteAlert(alert.id)
+    React.useEffect(() => {
+        if (0 < alertList.length) {
+            intervalActionStart(1000)
+            for (const alert of alertList) {
+                const duration = alert.duration ?? 10000
+                if (duration < interval.date - alert.id) {
+                    deleteAlert(alert.id)
+                }
             }
+        } else {
+            intervalActionStop()
         }
-    } else {
-        interval.stop()
-    }
+        return () => intervalActionStop() // Cleanup
+    }, [interval.date, intervalActionStart, intervalActionStop, alertList, deleteAlert])
 
     return (
         <Context.Provider
