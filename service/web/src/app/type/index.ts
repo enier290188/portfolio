@@ -21,3 +21,10 @@ export type { TypeSettingRouteStructure }
 export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
 export type { TypeSettingUserModel }
+
+export type TypePageAccountProfile = {
+    name: TypeSettingUserModel['name']
+    email: TypeSettingUserModel['email']
+    phone: TypeSettingUserModel['phone']
+    picture: TypeSettingUserModel['picture']
+}

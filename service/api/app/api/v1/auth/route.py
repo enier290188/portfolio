@@ -52,15 +52,48 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
     )
 
 
-@router.get('/sync/', response_model=api_schema.SyncResponse)
+@router.post(path='/login-sync/', response_model=api_schema.LoginSyncResponse)
+async def login_sync(auth_response: auth_dependency.DependAuth):
+    return api_schema.LoginSyncResponse(
+        **dict(auth_response)
+    )
+
+
+@router.post(path='/sync/', response_model=api_schema.SyncResponse)
 async def sync(auth_response: auth_dependency.DependAuth):
     return api_schema.SyncResponse(
         **dict(auth_response)
     )
 
 
-@router.get('/profile/', response_model=api_schema.ProfileItemResponse)
-async def profile(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+@router.get(path='/profile/{id}/', response_model=api_schema.ProfileItemResponse)
+async def profile_get(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    data_user_id: str = auth_response.auth.user.id
+    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
+    if user_orm is None:
+        raise auth_exception.Http404UserNotFound
+
+    return api_schema.ProfileItemResponse(
+        **dict(auth_response),
+        item=api_schema.ProfileResponse(**dict(user_orm.__dict__)),
+    )
+
+
+@router.patch(path='/profile/{id}/info/', response_model=api_schema.ProfileItemResponse)
+async def profile_info_update(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    data_user_id: str = auth_response.auth.user.id
+    user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
+    if user_orm is None:
+        raise auth_exception.Http404UserNotFound
+
+    return api_schema.ProfileItemResponse(
+        **dict(auth_response),
+        item=api_schema.ProfileResponse(**dict(user_orm.__dict__)),
+    )
+
+
+@router.patch(path='/profile/{id}/password/', response_model=api_schema.ProfileItemResponse)
+async def profile_info_update(auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
     data_user_id: str = auth_response.auth.user.id
     user_orm = await auth_service.get_user_by_id(db_async_session, data_user_id)
     if user_orm is None:

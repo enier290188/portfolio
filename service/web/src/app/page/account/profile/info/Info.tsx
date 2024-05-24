@@ -1,4 +1,4 @@
-import { app } from '@./app'
+import { app, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -44,12 +44,14 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
-        queryFn: async () => {
+        queryFn: async (): Promise<null | appType.TypePageAccountProfile> => {
             const response = await app.service.account.profile(accessToken)
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                return response
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data.item
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error.SomethingWentWrong') })
                 return null
@@ -176,9 +178,9 @@ const View = () => {
     const effectStepFilling = React.useCallback(async () => {
         console.log(queryUserGet.data)
 
-        const name = queryUserGet.data?.data.item.name ?? DEFAULT_VALUES.name
-        const email = queryUserGet.data?.data.item.email ?? DEFAULT_VALUES.email
-        const phone = queryUserGet.data?.data.item.phone ?? DEFAULT_VALUES.phone
+        const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
+        const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
+        const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,

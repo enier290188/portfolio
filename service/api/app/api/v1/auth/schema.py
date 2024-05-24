@@ -17,6 +17,10 @@ class LoginResponse(BaseModel):
     access_token: str
 
 
+class LoginSyncResponse(auth_schema.AuthResponse):
+    pass
+
+
 class SyncResponse(auth_schema.AuthResponse):
     pass
 

@@ -24,7 +24,7 @@ export const Security = ({ children }: { children?: appType.TypeChildrenProps })
     const sync = React.useCallback(async () => {
         if (interval.date && onlineStatus && accessToken && userId) {
             if (intervalDateRef.current === null || intervalDateRef.current !== interval.date) {
-                const response = await app.service.account.sync(accessToken)
+                const response = await app.service.account.sync(accessToken, userId)
                 if (response.status === 200) {
                     userActionSyncUser(response.data.auth.user)
                     intervalActionStart(60000)
