@@ -1,18 +1,13 @@
-from app.api.v1.auth import (
-    route as auth_route,
-)
-from app.api.v1.workspace import (
-    route as workspace_route,
-)
 from fastapi.routing import APIRouter
 
+from app.api.v1.page import (
+    route as page_route,
+)
+
 router = APIRouter(
-    prefix='/v1',
+    prefix='/page',
 )
 
 router.include_router(
-    auth_route.router,
-)
-router.include_router(
-    workspace_route.router,
+    page_route.router,
 )
