@@ -1,7 +1,7 @@
-import { service } from '../service.ts'
+import { api } from '../../api.ts'
 
 const login = async (email: string, password: string) => {
-    const response = await service.login({
+    const response = await api.login({
         resource: `/api/v1/auth/login/`,
         body: {
             username: email,
@@ -9,7 +9,7 @@ const login = async (email: string, password: string) => {
         },
     })
     if (response.status === 200) {
-        return await service.post({
+        return await api.post({
             resource: `/api/v1/auth/login-sync/`,
             accessToken: response.data.access_token,
         })
@@ -19,7 +19,7 @@ const login = async (email: string, password: string) => {
 }
 
 const sync = async (accessToken: string, id: string) => {
-    return await service.post({
+    return await api.post({
         resource: `/api/v1/auth/sync/`,
         accessToken: accessToken,
         body: {
@@ -29,7 +29,7 @@ const sync = async (accessToken: string, id: string) => {
 }
 
 const profile = async (accessToken: string, id: string) => {
-    return await service.get({
+    return await api.get({
         resource: `/api/v1/auth/profile/${id}/`,
         accessToken: accessToken,
     })
