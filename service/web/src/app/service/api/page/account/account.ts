@@ -49,7 +49,7 @@ const profile_get = async (request: TypeProfileGetRequest) => {
 
 const profile_info_update = async (request: TypeProfileInfoUpdateRequest) => {
     return await api.patch({
-        resource: `/api/v1/page/account/profile/`,
+        resource: `/api/v1/page/account/profile/info/`,
         accessToken: request.accessToken,
         body: {
             ...request.user,

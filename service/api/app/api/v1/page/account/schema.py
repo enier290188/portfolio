@@ -45,8 +45,8 @@ class ProfileItemResponse(auth_schema.AuthResponse):
     item: ProfileResponse
 
 
-class ProfileInfoRequestUpdate(BaseModel):
+class ProfileInfoRequest(BaseModel):
     id: db_schema.FieldID
     name: user_schema.FieldName
-    email: user_schema.FieldEmail
+    # email: user_schema.FieldEmail
     phone: user_schema.FieldPhone

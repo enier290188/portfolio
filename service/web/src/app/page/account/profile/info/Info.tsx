@@ -75,6 +75,7 @@ const View = () => {
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/`, 'mutation', 'db'],
         mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
+            console.log(user)
             const response = await app.service.api.page.account.profile_info_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -163,7 +164,7 @@ const View = () => {
                     phone: phone,
                 },
                 {
-                    onSuccess: (userUpdated: null | TypeUserResponse) => {
+                    onSuccess: (userUpdated) => {
                         if (user && userUpdated) {
                             userActionUpdateUser({
                                 ...user,
@@ -199,8 +200,6 @@ const View = () => {
     }, [queryUserGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        console.log(queryUserGet.data)
-
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone

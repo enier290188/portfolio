@@ -18,6 +18,10 @@ from app.module.auth import (
 from app.module.db import (
     dependency as db_dependency,
 )
+from app.module.user import (
+    exception as user_exception,
+    service as user_service,
+)
 
 router = APIRouter(
     prefix='/account',
@@ -80,7 +84,7 @@ async def profile_get(request: api_schema.ProfileRequest, auth_response: auth_de
 
 
 @router.patch(path='/profile/info/', response_model=api_schema.ProfileItemResponse)
-async def profile_info_update(request: api_schema.ProfileRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+async def profile_info_update(request: api_schema.ProfileInfoRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
     data = dict(**request.model_dump())
     data_id: str = data.get('id', '')
 
@@ -92,6 +96,10 @@ async def profile_info_update(request: api_schema.ProfileRequest, auth_response:
     user_orm = await auth_service.get_user_by_id(db_async_session, auth_user_id)
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
+
+    user_orm = await user_service.update(db_async_session, data_id, data)
+    if user_orm is None:
+        raise user_exception.Http404
 
     return api_schema.ProfileItemResponse(
         **dict(auth_response),
