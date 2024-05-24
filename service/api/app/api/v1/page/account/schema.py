@@ -21,6 +21,10 @@ class LoginSyncResponse(auth_schema.AuthResponse):
     pass
 
 
+class ProfileRequest(BaseModel):
+    id: UUID4
+
+
 class ProfileResponse(user_schema.UserResponse):
     created_at: Annotated[datetime, Field(exclude=True)]
     updated_at: Annotated[datetime, Field(exclude=True)]

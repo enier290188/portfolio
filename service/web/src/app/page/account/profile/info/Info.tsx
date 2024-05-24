@@ -45,7 +45,7 @@ const View = () => {
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
         queryFn: async (): Promise<null | appType.TypePageAccountProfile> => {
-            const response = await app.service.account.profile(accessToken)
+            const response = await app.service.api.page.account.profile(accessToken, userId)
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)

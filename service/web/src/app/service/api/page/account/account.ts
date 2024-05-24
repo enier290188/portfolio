@@ -19,9 +19,12 @@ const login = async (email: string, password: string) => {
 }
 
 const profile = async (accessToken: string, id: string) => {
-    return await api.get({
-        resource: `/api/v1/page/account/profile/${id}/`,
+    return await api.post({
+        resource: `/api/v1/page/account/profile/`,
         accessToken: accessToken,
+        body: {
+            id: id,
+        },
     })
 }
 
