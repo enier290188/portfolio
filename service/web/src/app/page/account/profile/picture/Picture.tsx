@@ -76,7 +76,6 @@ const View = () => {
                 // @ts-ignore
                 return response.data.item
             } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                 return null
             }
         },
