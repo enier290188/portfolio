@@ -237,13 +237,6 @@ const View = () => {
         return <app.component.navigate.ToAppErrorNotFound />
     }
 
-    console.log('')
-    // console.log(queryUserGet.isFetching)
-    // console.log(mutationUserUpdate.isPending)
-    // console.log(formUpdate.formState.isSubmitting)
-    console.log(formUpdate.formState.isValidating)
-    console.log(formUpdate.formState.isValid)
-
     return (
         <>
             {queryUserGet.isFetching || mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
