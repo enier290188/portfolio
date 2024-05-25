@@ -5,6 +5,11 @@ import React from 'react'
 export const Alert = () => {
     const contextAlert = React.useContext(app.context.alert.Context)
     const alertList = contextAlert.getAlertList()
+    const alertActionDeleteAlert = contextAlert.deleteAlert
+
+    const interval = app.hook.useInterval()
+    const intervalActionStart = interval.start
+    const intervalActionStop = interval.stop
 
     const sxAlert = React.useCallback(
         (theme: muiType.Theme) => ({
@@ -40,11 +45,26 @@ export const Alert = () => {
         [],
     )
 
+    React.useEffect(() => {
+        if (0 < alertList.length) {
+            intervalActionStart(1000)
+            for (const alert of alertList) {
+                const duration = alert.duration ?? 10000
+                if (duration < interval.date - alert.id) {
+                    alertActionDeleteAlert(alert.id)
+                }
+            }
+        } else {
+            intervalActionStop()
+        }
+        return () => intervalActionStop() // Cleanup
+    }, [interval.date, intervalActionStart, intervalActionStop, alertList, alertActionDeleteAlert])
+
     return 0 < alertList.length ? (
         <mui.component.Box component={'section'} sx={sxAlert}>
             <mui.component.Box component={'div'} sx={sxContent}>
                 {alertList.map((alert, index) => (
-                    <app.component.alert.Alert key={alert.id} space={alertList.length === index + 1 ? 0 : { top: 0, right: 0, bottom: 2, left: 0 }} variant={'filled'} severity={alert.type} onClose={() => contextAlert.deleteAlert(alert.id)}>
+                    <app.component.alert.Alert key={alert.id} space={alertList.length === index + 1 ? 0 : { top: 0, right: 0, bottom: 2, left: 0 }} variant={'filled'} severity={alert.type} onClose={() => alertActionDeleteAlert(alert.id)}>
                         {alert.message}
                     </app.component.alert.Alert>
                 ))}
