@@ -24,5 +24,6 @@
     "action.submit": "Guardar",
     "action.submit.alert.success": "Guardado con éxito",
     "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.submit.alert.error.CouldNotValidateUserCredentials": "No se pudieron validar las credenciales del usuario",
     "action.reset": "Reinicializar"
 }

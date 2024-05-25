@@ -76,10 +76,17 @@ const View = () => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
+                queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], response.data.item)
+                alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 return response.data.item
             } else {
+                if (response.data.detail.error === 'CouldNotValidateUserCredentials') {
+                    alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.CouldNotValidateUserCredentials') })
+                } else {
+                    alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                }
                 return null
             }
         },
@@ -188,22 +195,14 @@ const View = () => {
                 },
                 {
                     onSuccess: (userUpdated) => {
-                        if (userUpdated) {
-                            queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], userUpdated)
-                            alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                        if (user && userUpdated) {
                             setEffectStep(EFFECT_STEP.FILLING)
-                        } else {
-                            alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
-                    },
-                    onError: () => {
-                        alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                        setEffectStep(EFFECT_STEP.FILLING)
                     },
                 },
             )
         },
-        [i18n, alertActionAddAlert, userId, queryClient, mutationUserUpdate],
+        [user, userId, mutationUserUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {

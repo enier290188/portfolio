@@ -24,5 +24,6 @@
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",
     "action.submit.alert.error": "Sorry, an unexpected error has occurred",
+    "action.submit.alert.error.CouldNotValidateUserCredentials": "Could not validate user credentials",
     "action.reset": "Reset"
 }
