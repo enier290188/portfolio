@@ -108,9 +108,11 @@ async def profile_info_update(request: api_schema.ProfileInfoRequest, auth_respo
 
 
 @router.patch(path='/profile/password/', response_model=api_schema.ProfileItemResponse)
-async def profile_password_update(request: api_schema.ProfileInfoRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+async def profile_password_update(request: api_schema.ProfilePasswordRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
     data = dict(**request.model_dump())
     data_id: str = data.get('id', '')
+    data_password_current: str = data.get('password_current', '')
+    data_password_new: str = data.get('password_new', '')
 
     auth_user_id: str = auth_response.auth.user.id
 
@@ -121,9 +123,12 @@ async def profile_password_update(request: api_schema.ProfileInfoRequest, auth_r
     if user_orm is None:
         raise auth_exception.Http404UserNotFound
 
-    # user_orm = await user_service.update(db_async_session, data_id, data)
-    # if user_orm is None:
-    #     raise user_exception.Http404
+    if not auth_service.verify_user_password_plain(data_password_current, user_orm.password):
+        raise auth_exception.Http401CouldNotValidateUserCredentials
+
+    user_orm = await user_service.update(db_async_session, data_id, {'password': data_password_new})
+    if user_orm is None:
+        raise user_exception.Http404
 
     return api_schema.ProfileItemResponse(
         **dict(auth_response),

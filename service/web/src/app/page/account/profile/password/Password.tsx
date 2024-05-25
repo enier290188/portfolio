@@ -191,10 +191,10 @@ const View = () => {
                         if (userUpdated) {
                             queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], userUpdated)
                             alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                            setEffectStep(EFFECT_STEP.FILLING)
                         } else {
                             alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
-                        setEffectStep(EFFECT_STEP.FILLING)
                     },
                     onError: () => {
                         alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })

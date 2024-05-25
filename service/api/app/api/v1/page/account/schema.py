@@ -55,7 +55,7 @@ class ProfileInfoRequest(BaseModel):
 class ProfilePasswordRequest(BaseModel):
     id: db_schema.FieldID
     password_current: Annotated[str, Field(min_length=8, max_length=24)]
-    password_new: Annotated[str, Field(min_length=8, max_length=24)]
+    password_new: user_schema.FieldPasswordHash
 
 
 class ProfilePictureRequest(BaseModel):

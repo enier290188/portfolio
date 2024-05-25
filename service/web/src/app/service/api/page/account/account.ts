@@ -62,9 +62,9 @@ const profile_get = async (request: TypeProfileGetRequest) => {
     })
 }
 
-const profile_password_update = async (request: TypeProfilePasswordUpdateRequest) => {
+const profile_info_update = async (request: TypeProfileInfoUpdateRequest) => {
     return await api.patch({
-        resource: `/api/v1/page/account/profile/password/`,
+        resource: `/api/v1/page/account/profile/info/`,
         accessToken: request.accessToken,
         body: {
             ...request.user,
@@ -72,9 +72,9 @@ const profile_password_update = async (request: TypeProfilePasswordUpdateRequest
     })
 }
 
-const profile_info_update = async (request: TypeProfileInfoUpdateRequest) => {
+const profile_password_update = async (request: TypeProfilePasswordUpdateRequest) => {
     return await api.patch({
-        resource: `/api/v1/page/account/profile/info/`,
+        resource: `/api/v1/page/account/profile/password/`,
         accessToken: request.accessToken,
         body: {
             ...request.user,
