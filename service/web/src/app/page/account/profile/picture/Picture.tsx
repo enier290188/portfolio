@@ -66,7 +66,7 @@ const View = () => {
         initialData: null,
     })
     const mutationUserUpdate = query.hook.useMutation({
-        mutationKey: [`/app/page/account/profile/`, 'mutation', 'db'],
+        mutationKey: [`/app/page/account/profile/picture/`, 'mutation', 'db'],
         mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
             const response = await app.service.api.page.account.profile_picture_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {

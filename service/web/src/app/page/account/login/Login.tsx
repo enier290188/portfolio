@@ -57,8 +57,8 @@ const View = () => {
             if (value.length < 8) {
                 messageList.push(i18n.getText('login.field.password.validate.min-length', { value: 8 }))
             }
-            if (32 < value.length) {
-                messageList.push(i18n.getText('login.field.password.validate.max-length', { value: 32 }))
+            if (24 < value.length) {
+                messageList.push(i18n.getText('login.field.password.validate.max-length', { value: 24 }))
             }
             if (!/(?=.*\d)/.test(value)) {
                 messageList.push(i18n.getText('login.field.password.validate.pattern.have-at-least-one-number'))

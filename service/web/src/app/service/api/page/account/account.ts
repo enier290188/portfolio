@@ -22,8 +22,8 @@ type TypeProfilePasswordUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
         id: appType.TypeSettingUserModel['id']
-        passwordCurrent: string
-        passwordNew: string
+        password_current: string
+        password_new: string
     }
 }
 type TypeProfilePictureUpdateRequest = {
