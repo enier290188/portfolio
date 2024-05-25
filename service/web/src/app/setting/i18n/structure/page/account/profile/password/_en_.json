@@ -19,11 +19,10 @@
     "field.password-confirm.label": "Confirm New Password",
     "field.password-confirm.validate.required": "- It is required.",
     "field.password-confirm.validate.match": "- Have to match with \"New Password\" field.",
+    "action.fetch.alert.error": "Sorry, an unexpected error has occurred",
     "action.refresh": "Refresh",
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",
-    "action.submit.alert.error": "Password does not conform to required policy",
-    "action.submit.alert.error.NotAuthorizedException": "Current Password is incorrect",
-    "action.submit.alert.error.LimitExceededException": "Attempt limit exceeded. Please, try again after a while",
+    "action.submit.alert.error": "Sorry, an unexpected error has occurred",
     "action.reset": "Reset"
 }

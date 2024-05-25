@@ -2,6 +2,7 @@
     "title": "Picture",
     "field.picture.label": "File",
     "field.picture.validate.max-size": "- This new cropped image is {currentSize} KB and should be less than {maxSize} KB.",
+    "action.fetch.alert.error": "Sorry, an unexpected error has occurred",
     "action.refresh": "Refresh",
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",

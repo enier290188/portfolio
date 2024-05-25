@@ -19,11 +19,10 @@
     "field.password-confirm.label": "Confirmar nueva contraseña",
     "field.password-confirm.validate.required": "- Es requerido.",
     "field.password-confirm.validate.match": "- Debe coincidir con el campo \"Nueva contraseña\".",
+    "action.fetch.alert.error": "Lo sentimos, se ha producido un error inesperado",
     "action.refresh": "Actualizar",
     "action.submit": "Guardar",
     "action.submit.alert.success": "Guardado con éxito",
-    "action.submit.alert.error": "Contraseña no se ajusta a la política requerida",
-    "action.submit.alert.error.NotAuthorizedException": "Actual contraseña es incorrecta",
-    "action.submit.alert.error.LimitExceededException": "Se superó el límite de intentos. Por favor, inténtelo de nuevo después de un rato",
+    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
     "action.reset": "Reinicializar"
 }
