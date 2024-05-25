@@ -75,7 +75,6 @@ const View = () => {
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/`, 'mutation', 'db'],
         mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
-            console.log(user)
             const response = await app.service.api.page.account.profile_info_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
