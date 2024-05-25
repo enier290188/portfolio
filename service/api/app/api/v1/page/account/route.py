@@ -107,6 +107,30 @@ async def profile_info_update(request: api_schema.ProfileInfoRequest, auth_respo
     )
 
 
+@router.patch(path='/profile/password/', response_model=api_schema.ProfileItemResponse)
+async def profile_password_update(request: api_schema.ProfileInfoRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
+    data = dict(**request.model_dump())
+    data_id: str = data.get('id', '')
+
+    auth_user_id: str = auth_response.auth.user.id
+
+    if auth_user_id != data_id:
+        raise auth_exception.Http403UserNotAllowed
+
+    user_orm = await auth_service.get_user_by_id(db_async_session, auth_user_id)
+    if user_orm is None:
+        raise auth_exception.Http404UserNotFound
+
+    # user_orm = await user_service.update(db_async_session, data_id, data)
+    # if user_orm is None:
+    #     raise user_exception.Http404
+
+    return api_schema.ProfileItemResponse(
+        **dict(auth_response),
+        item=api_schema.ProfileResponse(**dict(user_orm.__dict__)),
+    )
+
+
 @router.patch(path='/profile/picture/', response_model=api_schema.ProfileItemResponse)
 async def profile_picture_update(request: api_schema.ProfilePictureRequest, auth_response: auth_dependency.DependAuth, db_async_session: db_dependency.DependDBAsyncSession):
     data = dict(**request.model_dump())

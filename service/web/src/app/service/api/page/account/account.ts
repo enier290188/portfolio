@@ -18,6 +18,14 @@ type TypeProfileInfoUpdateRequest = {
         phone: appType.TypeSettingUserModel['phone']
     }
 }
+type TypeProfilePasswordUpdateRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        id: appType.TypeSettingUserModel['id']
+        passwordCurrent: string
+        passwordNew: string
+    }
+}
 type TypeProfilePictureUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
@@ -54,6 +62,16 @@ const profile_get = async (request: TypeProfileGetRequest) => {
     })
 }
 
+const profile_password_update = async (request: TypeProfilePasswordUpdateRequest) => {
+    return await api.patch({
+        resource: `/api/v1/page/account/profile/password/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.user,
+        },
+    })
+}
+
 const profile_info_update = async (request: TypeProfileInfoUpdateRequest) => {
     return await api.patch({
         resource: `/api/v1/page/account/profile/info/`,
@@ -78,5 +96,6 @@ export const account = {
     login: login,
     profile_get: profile_get,
     profile_info_update: profile_info_update,
+    profile_password_update: profile_password_update,
     profile_picture_update: profile_picture_update,
 }

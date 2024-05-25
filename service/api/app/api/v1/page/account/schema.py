@@ -52,6 +52,12 @@ class ProfileInfoRequest(BaseModel):
     phone: user_schema.FieldPhone
 
 
+class ProfilePasswordRequest(BaseModel):
+    id: db_schema.FieldID
+    password_current: Annotated[str, Field(min_length=8, max_length=24)]
+    password_new: Annotated[str, Field(min_length=8, max_length=24)]
+
+
 class ProfilePictureRequest(BaseModel):
     id: db_schema.FieldID
     picture: user_schema.FieldPicture
