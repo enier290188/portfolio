@@ -5,6 +5,17 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
+type TypeUserResponse = {
+    name: appType.TypeSettingUserModel['name']
+    email: appType.TypeSettingUserModel['email']
+    phone: appType.TypeSettingUserModel['phone']
+    picture: appType.TypeSettingUserModel['picture']
+}
+type TypeUserRequest = {
+    id: appType.TypeSettingUserModel['id']
+    password_current: string
+    password_new: string
+}
 type TypeForm = {
     passwordCurrent: string
     passwordNew: string
@@ -25,19 +36,54 @@ enum EFFECT_STEP {
 
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.profile.password, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.account.profile.password, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
     const userId = user?.id ?? ''
+    const userActionSyncUser = contextUser.syncUser
 
+    const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
-        queryKey: [`/app/page/account/profile/${userId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.account.profile.user.get({ id: userId }),
+        queryKey: [`/app/page/account/profile/`, 'query', 'db'],
+        queryFn: async (): Promise<null | TypeUserResponse> => {
+            const response = await app.service.api.page.account.profile_get({ accessToken: accessToken, id: userId })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data.item
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
+            }
+        },
         initialData: null,
+    })
+    const mutationUserUpdate = query.hook.useMutation({
+        mutationKey: [`/app/page/account/profile/password/`, 'mutation', 'db'],
+        mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
+            const response = await app.service.api.page.account.profile_password_update({ accessToken: accessToken, user: user })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data.item
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
+            }
+        },
     })
 
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -56,8 +102,8 @@ const View = () => {
             if (value.length < 8) {
                 messageList.push(i18n.getText('field.password-current.validate.min-length', { value: 8 }))
             }
-            if (32 < value.length) {
-                messageList.push(i18n.getText('field.password-current.validate.max-length', { value: 32 }))
+            if (24 < value.length) {
+                messageList.push(i18n.getText('field.password-current.validate.max-length', { value: 24 }))
             }
             if (!/(?=.*\d)/.test(value)) {
                 messageList.push(i18n.getText('field.password-current.validate.pattern.have-at-least-one-number'))
@@ -85,8 +131,8 @@ const View = () => {
             if (value.length < 8) {
                 messageList.push(i18n.getText('field.password-new.validate.min-length', { value: 8 }))
             }
-            if (32 < value.length) {
-                messageList.push(i18n.getText('field.password-new.validate.max-length', { value: 32 }))
+            if (24 < value.length) {
+                messageList.push(i18n.getText('field.password-new.validate.max-length', { value: 24 }))
             }
             if (!/(?=.*\d)/.test(value)) {
                 messageList.push(i18n.getText('field.password-new.validate.pattern.have-at-least-one-number'))
@@ -132,26 +178,31 @@ const View = () => {
     }, [formUpdate, defaultValuesToReset])
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
-        async (data) => {
+        async (data: TypeForm) => {
             const { passwordCurrent, passwordNew } = data
-            const amplifyAuthChangePasswordResult = await awsAmplifyAuth.changePassword(passwordCurrent, passwordNew)
-            if (!amplifyAuthChangePasswordResult.error) {
-                contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
-                setEffectStep(EFFECT_STEP.FILLING)
-            } else {
-                switch (amplifyAuthChangePasswordResult.error.code) {
-                    case 'NotAuthorizedException':
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.NotAuthorizedException') })
-                        break
-                    case 'LimitExceededException':
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.LimitExceededException') })
-                        break
-                    default:
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                }
-            }
+
+            mutationUserUpdate.mutate(
+                {
+                    id: userId,
+                    password_current: passwordCurrent,
+                    password_new: passwordNew,
+                },
+                {
+                    onSuccess: (userUpdated) => {
+                        if (userUpdated) {
+                            queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], userUpdated)
+                            alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                        } else {
+                            alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                        }
+                    },
+                    onError: () => {
+                        alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                    },
+                },
+            )
         },
-        [i18n, contextAlert],
+        [i18n, alertActionAddAlert, userId, queryClient, mutationUserUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -213,7 +264,7 @@ const View = () => {
 
     return (
         <>
-            {queryUserGet.isFetching || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+            {queryUserGet.isFetching || mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
             <app.layout.main.component.structure.head.spaceBetween.Head>
                 <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.box.title.Title level={2}>
@@ -222,7 +273,7 @@ const View = () => {
                     </app.layout.main.component.structure.box.title.Title>
                 </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                 <app.layout.main.component.structure.head.spaceBetween.HeadRight>
-                    <app.component.button.Button space={1} disabled={queryUserGet.isFetching || formUpdate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                    <app.component.button.Button space={1} disabled={queryUserGet.isFetching || mutationUserUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
                         {queryUserGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                         {i18n.getText('action.refresh')}
                     </app.component.button.Button>
@@ -321,13 +372,13 @@ const View = () => {
                                     )}
                                 />
                             </app.layout.main.component.structure.box.content.Content>
-                            {formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+                            {mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                             <app.layout.main.component.structure.box.action.Action>
-                                <app.component.button.ButtonSubmit space={1} disabled={formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>
-                                    {formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
+                                <app.component.button.ButtonSubmit space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>
+                                    {mutationUserUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
                                     {i18n.getText('action.submit')}
                                 </app.component.button.ButtonSubmit>
-                                <app.component.button.Button space={1} disabled={formUpdate.formState.isSubmitting} onClick={handleActionReset}>
+                                <app.component.button.Button space={1} disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionReset}>
                                     {formUpdate.formState.isValidating ? <app.component.loading.ProgressCircular /> : <mui.icon.Restore />}
                                     {i18n.getText('action.reset')}
                                 </app.component.button.Button>
