@@ -50,3 +50,8 @@ class ProfileInfoRequest(BaseModel):
     name: user_schema.FieldName
     # email: user_schema.FieldEmail
     phone: user_schema.FieldPhone
+
+
+class ProfilePictureRequest(BaseModel):
+    id: db_schema.FieldID
+    picture: user_schema.FieldPicture

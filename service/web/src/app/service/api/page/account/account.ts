@@ -18,6 +18,13 @@ type TypeProfileInfoUpdateRequest = {
         phone: appType.TypeSettingUserModel['phone']
     }
 }
+type TypeProfilePictureUpdateRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        id: appType.TypeSettingUserModel['id']
+        picture: appType.TypeSettingUserModel['picture']
+    }
+}
 
 const login = async (request: TypeLoginRequest) => {
     const response = await api.login({
@@ -57,8 +64,19 @@ const profile_info_update = async (request: TypeProfileInfoUpdateRequest) => {
     })
 }
 
+const profile_picture_update = async (request: TypeProfilePictureUpdateRequest) => {
+    return await api.patch({
+        resource: `/api/v1/page/account/profile/picture/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.user,
+        },
+    })
+}
+
 export const account = {
     login: login,
     profile_get: profile_get,
     profile_info_update: profile_info_update,
+    profile_picture_update: profile_picture_update,
 }

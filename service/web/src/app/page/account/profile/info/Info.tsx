@@ -5,19 +5,18 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-export type TypeUserResponse = {
+type TypeUserResponse = {
     name: appType.TypeSettingUserModel['name']
     email: appType.TypeSettingUserModel['email']
     phone: appType.TypeSettingUserModel['phone']
     picture: appType.TypeSettingUserModel['picture']
 }
-export type TypeUserRequest = {
+type TypeUserRequest = {
     id: appType.TypeSettingUserModel['id']
     name: appType.TypeSettingUserModel['name']
     email: appType.TypeSettingUserModel['email']
     phone: appType.TypeSettingUserModel['phone']
 }
-
 type TypeForm = {
     name: string
     email: string
