@@ -76,6 +76,8 @@ const View = () => {
         mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
             const response = await app.service.api.page.account.profile_info_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 return response.data.item
