@@ -13,7 +13,7 @@ declare module '@tanstack/table-core' {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface ColumnMeta<TData extends tanstackReactTableType.RowData, TValue> {
-        type?: typeof TableColumnAccessorKeyAction | 'text' | 'email' | 'phone' | 'datetime' | 'userGroupList'
+        type?: typeof TableColumnAccessorKeyAction | 'text' | 'email' | 'phone' | 'datetime' | 'boolean' | 'userGroupList'
         width?: string | number
         expander?: boolean
     }
@@ -353,23 +353,48 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                     } else {
                         switch (type) {
                             case 'text': {
-                                const cellValue = cell.getValue()
-                                value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`${cellValue ?? '-'}`}</app.component.typography.Typography>
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {0 < cellValue.length ? cellValue : '-'}
+                                    </app.component.typography.Typography>
+                                )
                                 break
                             }
                             case 'email': {
-                                const cellValue = cell.getValue()
-                                value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`${cellValue ?? '-'}`}</app.component.typography.Typography>
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {0 < cellValue.length ? cellValue : '-'}
+                                    </app.component.typography.Typography>
+                                )
                                 break
                             }
                             case 'phone': {
-                                const cellValue = cell.getValue()
-                                value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`${cellValue ?? '-'}`}</app.component.typography.Typography>
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {0 < cellValue.length ? cellValue : '-'}
+                                    </app.component.typography.Typography>
+                                )
                                 break
                             }
                             case 'datetime': {
-                                const cellValue = cell.getValue()
-                                value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`${cellValue ? new Date(String(cellValue)).toLocaleString() : '-'}`}</app.component.typography.Typography>
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {0 < cellValue.length ? new Date(cellValue).toLocaleString() : '-'}
+                                    </app.component.typography.Typography>
+                                )
+                                break
+                            }
+                            case 'boolean': {
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {cellValue === 'true' ? <mui.icon.RadioButtonChecked /> : cellValue === 'false' ? <mui.icon.RadioButtonUnchecked /> : '-'}
+                                    </app.component.typography.Typography>
+                                )
                                 break
                             }
                             case 'userGroupList': {
@@ -392,8 +417,12 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                                 break
                             }
                             default: {
-                                const cellValue = cell.getValue()
-                                value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`${cellValue ?? '-'}`}</app.component.typography.Typography>
+                                const cellValue = String(cell.getValue()).trim()
+                                value = (
+                                    <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                        {0 < cellValue.length ? cellValue : '-'}
+                                    </app.component.typography.Typography>
+                                )
                             }
                         }
                     }
