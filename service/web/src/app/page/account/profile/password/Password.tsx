@@ -6,7 +6,7 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeUserRequest = {
-    id: appType.TypeSettingUserModel['id']
+    id: appType.TypeSettingUserResponse['id']
     password_current: string
     password_new: string
 }

@@ -1,12 +1,12 @@
 import { appType } from '@./app'
 
 export type TypeWrapperUser = appType.TypeSettingUser
-export type TypeWrapperUserModel = appType.TypeSettingUserModel
+export type TypeWrapperUserResponse = appType.TypeSettingUserResponse
 
 export type TypeContext = {
     removeUser: () => void
     getUser: () => TypeWrapperUser
     updateUser: (user: TypeWrapperUser) => void
-    loginUser: (userModel: TypeWrapperUserModel) => void
-    syncUser: (userModel: TypeWrapperUserModel) => void
+    loginUser: (userResponse: TypeWrapperUserResponse) => void
+    syncUser: (userResponse: TypeWrapperUserResponse) => void
 }

@@ -61,7 +61,7 @@ export type TypeFetchResponseSuccessDefault = {
     data: {
         auth: {
             access_token: appType.TypeSettingAccessToken
-            user: appType.TypeSettingUserModel
+            user: appType.TypeSettingUserResponse
         }
         items?: null | []
         item?: null | object

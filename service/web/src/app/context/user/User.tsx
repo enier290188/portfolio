@@ -1,6 +1,6 @@
 import { app, appType } from '@./app'
 import React from 'react'
-import { TypeContext, TypeWrapperUser, TypeWrapperUserModel } from './User.type.ts'
+import { TypeContext, TypeWrapperUser, TypeWrapperUserResponse } from './User.type.ts'
 
 const LOCAL_STORAGE_KEY = 'app-context-user'
 const LOCAL_STORAGE_VALUE_DEFAULT: TypeWrapperUser = null
@@ -66,28 +66,28 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     )
 
     const loginUser = React.useCallback(
-        (userModel: TypeWrapperUserModel): void => {
+        (userResponse: TypeWrapperUserResponse): void => {
             const groupList: NonNullable<TypeWrapperUser>['groupList'] = []
-            if (userModel.has_permission_of_root) {
+            if (userResponse.has_permission_of_root) {
                 groupList.push('Root')
             }
-            if (userModel.has_permission_of_admin) {
+            if (userResponse.has_permission_of_admin) {
                 groupList.push('Admin')
             }
-            if (userModel.has_permission_of_sale) {
+            if (userResponse.has_permission_of_sale) {
                 groupList.push('Sale')
             }
-            if (userModel.has_permission_of_project) {
+            if (userResponse.has_permission_of_project) {
                 groupList.push('Project')
             }
             const workspace: null | NonNullable<TypeWrapperUser>['workspace'] = groupList.includes('Root') ? 'Root' : groupList.includes('Admin') ? 'Admin' : groupList.includes('Sale') ? 'Sale' : groupList.includes('Project') ? 'Project' : null
             if (workspace) {
                 updateUser({
-                    id: userModel.id,
-                    name: userModel.name,
-                    email: userModel.email,
-                    phone: userModel.phone,
-                    picture: userModel.picture,
+                    id: userResponse.id,
+                    name: userResponse.name,
+                    email: userResponse.email,
+                    phone: userResponse.phone,
+                    picture: userResponse.picture,
                     groupList: groupList,
                     workspace: workspace,
                 })
@@ -99,27 +99,27 @@ export const Wrapper = ({ children }: { children: appType.TypeChildrenProps }) =
     )
 
     const syncUser = React.useCallback(
-        (userModel: TypeWrapperUserModel): void => {
+        (userResponse: TypeWrapperUserResponse): void => {
             const groupList: NonNullable<TypeWrapperUser>['groupList'] = []
-            if (userModel.has_permission_of_root) {
+            if (userResponse.has_permission_of_root) {
                 groupList.push('Root')
             }
-            if (userModel.has_permission_of_admin) {
+            if (userResponse.has_permission_of_admin) {
                 groupList.push('Admin')
             }
-            if (userModel.has_permission_of_sale) {
+            if (userResponse.has_permission_of_sale) {
                 groupList.push('Sale')
             }
-            if (userModel.has_permission_of_project) {
+            if (userResponse.has_permission_of_project) {
                 groupList.push('Project')
             }
             if (user?.workspace) {
                 updateUser({
-                    id: userModel.id,
-                    name: userModel.name,
-                    email: userModel.email,
-                    phone: userModel.phone,
-                    picture: userModel.picture,
+                    id: userResponse.id,
+                    name: userResponse.name,
+                    email: userResponse.email,
+                    phone: userResponse.phone,
+                    picture: userResponse.picture,
                     groupList: groupList,
                     workspace: user.workspace,
                 })

@@ -11,7 +11,7 @@ export type TypeUser = null | {
     workspace: (typeof USER_GROUP_LIST)[number]
 }
 
-export type TypeUserModel = {
+export type TypeUserResponse = {
     id: string
     name: string
     email: string

@@ -7,21 +7,21 @@ export type TypeLoginRequest = {
 
 export type TypeProfileGetRequest = {
     accessToken: appType.TypeSettingAccessToken
-    id: appType.TypeSettingUserModel['id']
+    id: appType.TypeSettingUserResponse['id']
 }
 export type TypeProfileInfoUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
-        id: appType.TypeSettingUserModel['id']
-        name: appType.TypeSettingUserModel['name']
-        email: appType.TypeSettingUserModel['email']
-        phone: appType.TypeSettingUserModel['phone']
+        id: appType.TypeSettingUserResponse['id']
+        name: appType.TypeSettingUserResponse['name']
+        email: appType.TypeSettingUserResponse['email']
+        phone: appType.TypeSettingUserResponse['phone']
     }
 }
 export type TypeProfilePasswordUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
-        id: appType.TypeSettingUserModel['id']
+        id: appType.TypeSettingUserResponse['id']
         password_current: string
         password_new: string
     }
@@ -29,7 +29,7 @@ export type TypeProfilePasswordUpdateRequest = {
 export type TypeProfilePictureUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
-        id: appType.TypeSettingUserModel['id']
-        picture: appType.TypeSettingUserModel['picture']
+        id: appType.TypeSettingUserResponse['id']
+        picture: appType.TypeSettingUserResponse['picture']
     }
 }
