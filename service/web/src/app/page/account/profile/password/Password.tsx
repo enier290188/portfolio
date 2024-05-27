@@ -1,15 +1,10 @@
-import { app, appType } from '@./app'
+import { app, appType, appServiceApiPageAccountType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeUserRequest = {
-    id: appType.TypeModelUser['id']
-    password_current: string
-    password_new: string
-}
 type TypeForm = {
     passwordCurrent: string
     passwordNew: string
@@ -65,7 +60,7 @@ const View = () => {
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/password/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserRequest): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
+        mutationFn: async (user: appServiceApiPageAccountType.TypeProfilePasswordUpdateRequest['user']): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_password_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)

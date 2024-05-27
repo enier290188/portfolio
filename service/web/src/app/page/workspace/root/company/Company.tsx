@@ -11,12 +11,12 @@ const RouteIdRemove = React.lazy(() => import('./id/remove'))
 
 type TypeTable = {
     id: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['id']
+    created_at: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['created_at']
+    updated_at: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['updated_at']
     name: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['name']
     email: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['email']
     phone: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['phone']
     is_active: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['is_active']
-    created_at: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['created_at']
-    updated_at: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['updated_at']
 }
 
 const ViewList = React.memo(() => {

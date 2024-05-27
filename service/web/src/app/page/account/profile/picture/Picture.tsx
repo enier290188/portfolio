@@ -1,14 +1,10 @@
-import { app, appType } from '@./app'
+import { app, appServiceApiPageAccountType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeUserRequest = {
-    id: appType.TypeModelUser['id']
-    picture: appType.TypeModelUser['picture']
-}
 type TypeForm = {
     picture: string
 }
@@ -61,7 +57,7 @@ const View = () => {
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/picture/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserRequest): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
+        mutationFn: async (user: appServiceApiPageAccountType.TypeProfilePictureUpdateRequest['user']): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_picture_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
