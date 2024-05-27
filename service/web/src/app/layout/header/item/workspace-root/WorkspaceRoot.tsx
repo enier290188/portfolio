@@ -12,7 +12,11 @@ export const WorkspaceRoot = () => {
         <>
             <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.dashboard).getTo()}>
                 <mui.icon.Dashboard />
-                {i18n.getText('workspace-admin.dashboard')}
+                {i18n.getText('workspace-root.dashboard')}
+            </component.item.link.Link>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company).getTo()}>
+                <mui.icon.Business />
+                {i18n.getText('workspace-root.company')}
             </component.item.link.Link>
         </>
     )

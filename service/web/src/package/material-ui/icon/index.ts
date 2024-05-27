@@ -1,4 +1,4 @@
-import { AccountCircle, AddAPhoto, AddCircle, ArrowCircleDown, ArrowCircleUp, BusinessCenter, Close, CloudSync, Crop, Dashboard, DeleteForever, Description, DoneOutline, Edit, Email, Error, Group, Image, ImportantDevices, Key, KeyboardArrowDown, KeyboardArrowRight, Language, LockReset, Login, Logout, ManageAccounts, Mediation, Notifications, NotificationsNone, Password, People, PersonPin, PersonSearch, Phone, PhotoCamera, Restore, Save, Search, Send, Settings, Sort, Task, Translate, Update, ViewCarousel, Visibility, VisibilityOff, Widgets } from '@mui/icons-material'
+import { AccountCircle, AddAPhoto, AddCircle, ArrowCircleDown, ArrowCircleUp, Business, BusinessCenter, Close, CloudSync, Crop, Dashboard, DeleteForever, Description, DoneOutline, Edit, Email, Error, Group, Image, ImportantDevices, Key, KeyboardArrowDown, KeyboardArrowRight, Language, LockReset, Login, Logout, ManageAccounts, Mediation, Notifications, NotificationsNone, Password, People, PersonPin, PersonSearch, Phone, PhotoCamera, Restore, Save, Search, Send, Settings, Sort, Task, Translate, Update, ViewCarousel, Visibility, VisibilityOff, Widgets } from '@mui/icons-material'
 
 export const icon = {
     AccountCircle,
@@ -6,6 +6,7 @@ export const icon = {
     AddAPhoto,
     ArrowCircleDown,
     ArrowCircleUp,
+    Business,
     BusinessCenter,
     Close,
     CloudSync,

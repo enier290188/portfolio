@@ -1,0 +1,9 @@
+{
+    "title": "Leads",
+    "action.refresh": "Refresh",
+    "field.name.label": "Name",
+    "field.email.label": "Email",
+    "field.phone.label": "Phone",
+    "field.created-at.label": "Created At",
+    "field.updated-at.label": "Updated At"
+}

@@ -1,0 +1,19 @@
+{
+    "title": "Update Lead",
+    "field.name.label": "Name",
+    "field.name.validate.required": "- It is required.",
+    "field.name.validate.max-length": "- Should be less than {value} characters.",
+    "field.email.label": "Email",
+    "field.email.validate.required": "- It is required.",
+    "field.email.validate.max-length": "- Should be less than {value} characters.",
+    "field.email.validate.pattern": "- Format is invalid.",
+    "field.phone.label": "Phone",
+    "field.phone.validate.required": "- It is required.",
+    "field.phone.validate.max-length": "- Should be less than {value} characters.",
+    "field.phone.validate.pattern": "- Format is invalid.",
+    "action.refresh": "Refresh",
+    "action.submit": "Save",
+    "action.submit.alert.success": "Saved successfully",
+    "action.submit.alert.error": "Sorry, an unexpected error has occurred",
+    "action.reset": "Reset"
+}

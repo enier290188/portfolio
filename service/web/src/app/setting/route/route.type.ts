@@ -55,6 +55,24 @@ export type TypeRouteStructure = {
                         [value.PATH]: TypePath
                         [value.TO]: () => TypeTo
                     }
+                    company: {
+                        [value.PATH]: TypePath
+                        [value.TO]: () => TypeTo
+                        create: {
+                            [value.PATH]: TypePath
+                            [value.TO]: () => TypeTo
+                        }
+                        ':id': {
+                            update: {
+                                [value.PATH]: TypePath
+                                [value.TO]: (args: { id: TypeId }) => TypeTo
+                            }
+                            remove: {
+                                [value.PATH]: TypePath
+                                [value.TO]: (args: { id: TypeId }) => TypeTo
+                            }
+                        }
+                    }
                 }
                 admin: {
                     [value.PATH]: TypePath

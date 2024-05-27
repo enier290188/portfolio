@@ -21,7 +21,7 @@ type TypeLead = {
 const ViewList = React.memo(() => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company, i18nLanguage), [i18nLanguage])
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
@@ -42,16 +42,16 @@ const ViewList = React.memo(() => {
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
                 header: () => (
-                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
+                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
                         <mui.icon.AddCircle sx={{ m: `0 !important` }} />
                     </app.component.button.ButtonLink>
                 ),
                 cell: ({ row }) => (
                     <>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead[':id'].update).getTo({ id: row.id })} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].update).getTo({ id: row.id })} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Edit sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead[':id'].remove).getTo({ id: row.id })} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].remove).getTo({ id: row.id })} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.DeleteForever sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                         {row.getCanExpand() ? (
@@ -161,7 +161,7 @@ export const Company = () => {
             <router.component.Route path={``}>
                 <router.component.Route index element={<ViewList />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead.create).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.root.company.create).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -172,7 +172,7 @@ export const Company = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead[':id'].update).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].update).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -183,7 +183,7 @@ export const Company = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead[':id'].remove).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].remove).getPath()}*`}
                     element={
                         <>
                             <ViewList />

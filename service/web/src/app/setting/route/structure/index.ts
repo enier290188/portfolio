@@ -50,6 +50,24 @@ export const structure: TypeRouteStructure = {
                         [value.PATH]: 'dashboard',
                         [value.TO]: () => [...structure.app.page.workspace.root[value.TO](), structure.app.page.workspace.root.dashboard[value.PATH]],
                     },
+                    company: {
+                        [value.PATH]: 'company',
+                        [value.TO]: () => [...structure.app.page.workspace.root[value.TO](), structure.app.page.workspace.root.company[value.PATH]],
+                        create: {
+                            [value.PATH]: 'create',
+                            [value.TO]: () => [...structure.app.page.workspace.root.company[value.TO](), structure.app.page.workspace.root.company.create[value.PATH]],
+                        },
+                        ':id': {
+                            update: {
+                                [value.PATH]: 'update',
+                                [value.TO]: ({ id }) => [...structure.app.page.workspace.root.company[value.TO](), id, structure.app.page.workspace.root.company[':id'].update[value.PATH]],
+                            },
+                            remove: {
+                                [value.PATH]: 'remove',
+                                [value.TO]: ({ id }) => [...structure.app.page.workspace.root.company[value.TO](), id, structure.app.page.workspace.root.company[':id'].remove[value.PATH]],
+                            },
+                        },
+                    },
                 },
                 admin: {
                     [value.PATH]: 'admin',
