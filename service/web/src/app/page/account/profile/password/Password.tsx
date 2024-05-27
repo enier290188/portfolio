@@ -1,4 +1,4 @@
-import { app, appType, appServiceApiPageAccountType } from '@./app'
+import { app, appServiceApiPageAccountType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
