@@ -22,6 +22,14 @@ export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
 export type { TypeSettingUserModel }
 
+export type TypeAccountProfileResponse = {
+    id: TypeSettingUserModel['id']
+    name: TypeSettingUserModel['name']
+    email: TypeSettingUserModel['email']
+    phone: TypeSettingUserModel['phone']
+    picture: TypeSettingUserModel['picture']
+}
+
 export type TypeWorkspaceRootCompanyModel = {
     id: string
     name: string

@@ -43,6 +43,7 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.update, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
 
     const { id } = router.hook.useParams()
     const paramCompanyId = id ?? ''

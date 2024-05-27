@@ -1,10 +1,5 @@
-import { appType } from '@./app'
 import { api } from '../../api.ts'
-
-type TypeSyncRequest = {
-    accessToken: appType.TypeSettingAccessToken
-    id: appType.TypeSettingUserModel['id']
-}
+import { TypeSyncRequest } from './account.type.ts'
 
 const sync = async (request: TypeSyncRequest) => {
     return await api.post({

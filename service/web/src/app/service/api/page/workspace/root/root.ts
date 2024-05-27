@@ -1,9 +1,5 @@
-import { appType } from '@./app'
 import { api } from '../../../api.ts'
-
-type TypeCompanyFetchRequest = {
-    accessToken: appType.TypeSettingAccessToken
-}
+import { TypeCompanyFetchRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({

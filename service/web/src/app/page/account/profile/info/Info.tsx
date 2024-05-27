@@ -5,12 +5,6 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeUserResponse = {
-    name: appType.TypeSettingUserModel['name']
-    email: appType.TypeSettingUserModel['email']
-    phone: appType.TypeSettingUserModel['phone']
-    picture: appType.TypeSettingUserModel['picture']
-}
 type TypeUserRequest = {
     id: appType.TypeSettingUserModel['id']
     name: appType.TypeSettingUserModel['name']
@@ -56,7 +50,7 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
-        queryFn: async (): Promise<null | TypeUserResponse> => {
+        queryFn: async (): Promise<null | appType.TypeAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_get({ accessToken: accessToken, id: userId })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
@@ -73,7 +67,7 @@ const View = () => {
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/info/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserRequest): Promise<null | TypeUserResponse> => {
+        mutationFn: async (user: TypeUserRequest): Promise<null | appType.TypeAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_info_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)

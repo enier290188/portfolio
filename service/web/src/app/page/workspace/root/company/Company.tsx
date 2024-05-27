@@ -9,7 +9,7 @@ const RouteCreate = React.lazy(() => import('./create'))
 const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
 
-type TypeCompanyResponse = {
+type TypeTable = {
     id: appType.TypeWorkspaceRootCompanyModel['id']
     name: appType.TypeWorkspaceRootCompanyModel['name']
     email: appType.TypeWorkspaceRootCompanyModel['email']
@@ -17,15 +17,6 @@ type TypeCompanyResponse = {
     is_active: appType.TypeWorkspaceRootCompanyModel['is_active']
     created_at: appType.TypeWorkspaceRootCompanyModel['created_at']
     updated_at: appType.TypeWorkspaceRootCompanyModel['updated_at']
-}
-type TypeTable = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    is_active: boolean
-    created_at: string
-    updated_at: string
 }
 
 const ViewList = React.memo(() => {
@@ -47,7 +38,7 @@ const ViewList = React.memo(() => {
 
     const queryCompanyList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
-        queryFn: async (): Promise<TypeCompanyResponse[]> => {
+        queryFn: async (): Promise<appType.TypeWorkspaceRootCompanyModel[]> => {
             const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
