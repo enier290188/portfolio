@@ -1,4 +1,4 @@
-import { app } from '@./app'
+import { app, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
@@ -9,14 +9,23 @@ const RouteCreate = React.lazy(() => import('./create'))
 const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
 
-type TypeCompany = {
+type TypeCompanyResponse = {
+    id: appType.TypeWorkspaceRootCompanyModel['id']
+    name: appType.TypeWorkspaceRootCompanyModel['name']
+    email: appType.TypeWorkspaceRootCompanyModel['email']
+    phone: appType.TypeWorkspaceRootCompanyModel['phone']
+    is_active: appType.TypeWorkspaceRootCompanyModel['is_active']
+    created_at: appType.TypeWorkspaceRootCompanyModel['created_at']
+    updated_at: appType.TypeWorkspaceRootCompanyModel['updated_at']
+}
+type TypeTable = {
     id: string
     name: string
     email: string
     phone: string
-    isActive: string
-    createdAt: string
-    updatedAt: string
+    is_active: boolean
+    created_at: string
+    updated_at: string
 }
 
 const ViewList = React.memo(() => {
@@ -24,21 +33,41 @@ const ViewList = React.memo(() => {
     const i18nLanguage = contextI18n.getLanguage()
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company, i18nLanguage), [i18nLanguage])
 
+    const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
     const userId = user?.id ?? ''
+    const userActionSyncUser = contextUser.syncUser
 
-    const queryLeadList = query.hook.useQuery({
+    const queryCompanyList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
-        queryFn: () => [],
+        queryFn: async (): Promise<TypeCompanyResponse[]> => {
+            const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data?.items ?? []
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return []
+            }
+        },
         initialData: [],
     })
 
     const handleActionRefresh = React.useCallback(async () => {
-        await queryLeadList.refetch()
-    }, [queryLeadList])
+        await queryCompanyList.refetch()
+    }, [queryCompanyList])
 
-    const tableColumns = React.useMemo<tableType.ColumnDef<TypeCompany>[]>(
+    const tableColumns = React.useMemo<tableType.ColumnDef<TypeTable>[]>(
         () => [
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
@@ -102,18 +131,18 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'isActive',
+                accessorKey: 'is_active',
                 header: i18n.getText('field.is-active.label'),
                 enableSorting: true,
                 enableColumnFilter: true,
-                sortingFn: 'alphanumericCaseSensitive',
+                sortingFn: 'basic',
                 filterFn: 'includesString',
                 meta: {
-                    type: 'text',
+                    type: 'boolean',
                 },
             },
             {
-                accessorKey: 'createdAt',
+                accessorKey: 'created_at',
                 header: i18n.getText('field.created-at.label'),
                 enableSorting: true,
                 enableColumnFilter: false,
@@ -125,7 +154,7 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'updatedAt',
+                accessorKey: 'updated_at',
                 header: i18n.getText('field.updated-at.label'),
                 enableSorting: true,
                 enableColumnFilter: false,
@@ -140,7 +169,7 @@ const ViewList = React.memo(() => {
         [i18n],
     )
 
-    const tableData: TypeCompany[] = queryLeadList.data.slice()
+    const tableData: TypeTable[] = queryCompanyList.data.slice()
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'lg'}>
@@ -152,15 +181,15 @@ const ViewList = React.memo(() => {
                     </app.layout.main.component.structure.box.title.Title>
                 </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                 <app.layout.main.component.structure.head.spaceBetween.HeadRight>
-                    <app.component.button.Button space={1} disabled={queryLeadList.isFetching} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
-                        {queryLeadList.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
+                    <app.component.button.Button space={1} disabled={queryCompanyList.isFetching} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                        {queryCompanyList.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                         {i18n.getText('action.refresh')}
                     </app.component.button.Button>
                 </app.layout.main.component.structure.head.spaceBetween.HeadRight>
             </app.layout.main.component.structure.head.spaceBetween.Head>
-            {queryLeadList.isFetching ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+            {queryCompanyList.isFetching ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
             <app.layout.main.component.structure.body.Body>
-                <app.layout.main.component.structure.box.content.Content>{queryLeadList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-root-company-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
+                <app.layout.main.component.structure.box.content.Content>{queryCompanyList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-root-company-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
             </app.layout.main.component.structure.body.Body>
         </app.layout.main.component.structure.page.Page>
     )

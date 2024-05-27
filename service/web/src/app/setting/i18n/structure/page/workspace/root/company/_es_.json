@@ -1,10 +1,11 @@
 {
     "title": "Compañías",
-    "action.refresh": "Actualizar",
     "field.name.label": "Nombre",
     "field.email.label": "Correo",
     "field.phone.label": "Teléfono",
     "field.is-active.label": "Activo",
     "field.created-at.label": "Creado",
-    "field.updated-at.label": "Modificado"
+    "field.updated-at.label": "Modificado",
+    "action.fetch.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.refresh": "Actualizar"
 }

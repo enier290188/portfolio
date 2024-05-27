@@ -21,3 +21,13 @@ export type { TypeSettingRouteStructure }
 export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
 export type { TypeSettingUserModel }
+
+export type TypeWorkspaceRootCompanyModel = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    is_active: boolean
+    created_at: string
+    updated_at: string
+}
