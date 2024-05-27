@@ -44,7 +44,7 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/account/profile/`, 'query', 'db'],
-        queryFn: async (): Promise<null | appType.TypeAccountProfileResponse> => {
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_get({ accessToken: accessToken, id: userId })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
@@ -61,7 +61,7 @@ const View = () => {
     })
     const mutationUserUpdate = query.hook.useMutation({
         mutationKey: [`/app/page/account/profile/picture/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserRequest): Promise<null | appType.TypeAccountProfileResponse> => {
+        mutationFn: async (user: TypeUserRequest): Promise<null | appType.TypeServiceApiPageAccountProfileResponse> => {
             const response = await app.service.api.page.account.profile_picture_update({ accessToken: accessToken, user: user })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)

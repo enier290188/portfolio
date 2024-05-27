@@ -22,7 +22,7 @@ export type { TypeSettingThemeComponentSpace }
 export type { TypeSettingUser }
 export type { TypeSettingUserModel }
 
-export type TypeAccountProfileResponse = {
+export type TypeServiceApiPageAccountProfileResponse = {
     id: TypeSettingUserModel['id']
     name: TypeSettingUserModel['name']
     email: TypeSettingUserModel['email']
@@ -30,7 +30,7 @@ export type TypeAccountProfileResponse = {
     picture: TypeSettingUserModel['picture']
 }
 
-export type TypeWorkspaceRootCompanyModel = {
+export type TypeServiceApiPageWorkspaceRootCompanyResponse = {
     id: string
     name: string
     email: string
