@@ -6,8 +6,8 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeUserRequest = {
-    id: appType.TypeSettingUserResponse['id']
-    picture: appType.TypeSettingUserResponse['picture']
+    id: appType.TypeModelUser['id']
+    picture: appType.TypeModelUser['picture']
 }
 type TypeForm = {
     picture: string
