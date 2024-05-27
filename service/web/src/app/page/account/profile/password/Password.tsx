@@ -61,7 +61,7 @@ const View = () => {
                 userActionSyncUser(response.data.auth.user)
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                return response.data.item
+                return response.data?.item ?? null
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
                 return null
@@ -80,7 +80,7 @@ const View = () => {
                 alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                return response.data.item
+                return response.data?.item ?? null
             } else {
                 if (response.data.detail.error === 'CouldNotValidateUserCredentials') {
                     alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.CouldNotValidateUserCredentials') })
