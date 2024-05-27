@@ -5,13 +5,13 @@ import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeLeadUpdate = {
+type TypeCompanyUpdate = {
     id: string
     name: string
     email: string
     phone: string
 }
-type TypeLead = {
+type TypeCompany = {
     id: string
     name: string
     email: string
@@ -19,7 +19,6 @@ type TypeLead = {
     createdAt: string
     updatedAt: string
 }
-
 type TypeForm = {
     name: string
     email: string
@@ -41,19 +40,19 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead.id.update, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.update, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
 
     const { id } = router.hook.useParams()
-    const paramLeadId = id ?? ''
+    const paramCompanyId = id ?? ''
 
     const queryClient = query.hook.useQueryClient()
-    const queryLeadGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'],
+    const queryCompanyGet = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/`, 'query', 'db'],
         queryFn: async () => {
             return {
-                id: '1',
+                id: paramCompanyId,
                 name: DEFAULT_VALUES.name,
                 email: DEFAULT_VALUES.email,
                 phone: DEFAULT_VALUES.phone,
@@ -61,14 +60,14 @@ const View = () => {
         },
         initialData: null,
     })
-    const mutationLeadUpdate = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/lead/${paramLeadId}/update/`, 'mutation', 'db'],
-        mutationFn: async (lead: TypeLeadUpdate) => {
+    const mutationCompanyUpdate = query.hook.useMutation({
+        mutationKey: [`/app/page/workspace/admin/company/${paramCompanyId}/update/`, 'mutation', 'db'],
+        mutationFn: async (company: TypeCompanyUpdate) => {
             return {
                 id: '1',
-                name: lead.name,
-                email: lead.email,
-                phone: lead.phone,
+                name: company.name,
+                email: company.email,
+                phone: company.phone,
                 createdAt: '',
                 updatedAt: '',
             }
@@ -129,8 +128,8 @@ const View = () => {
 
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
-        await queryLeadGet.refetch()
-    }, [queryLeadGet])
+        await queryCompanyGet.refetch()
+    }, [queryCompanyGet])
 
     const handleActionReset = React.useCallback(async () => {
         formUpdate.setValue('name', defaultValuesToReset.name)
@@ -142,18 +141,18 @@ const View = () => {
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
             const { name, email, phone } = data
-            mutationLeadUpdate.mutate(
+            mutationCompanyUpdate.mutate(
                 {
-                    id: paramLeadId,
+                    id: paramCompanyId,
                     name: name,
                     email: email,
                     phone: phone,
                 },
                 {
-                    onSuccess: (leadUpdated: TypeLead | null) => {
-                        if (leadUpdated) {
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'], leadUpdated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? leadList.map((leadMap: TypeLead) => (leadMap.id === paramLeadId ? leadUpdated : leadMap)) : []))
+                    onSuccess: (companyUpdated: TypeCompany | null) => {
+                        if (companyUpdated) {
+                            queryClient.setQueryData([`/app/page/workspace/admin/company/${paramCompanyId}/`, 'query', 'db'], companyUpdated)
+                            queryClient.setQueryData([`/app/page/workspace/admin/company/list/`, 'query', 'db'], (companyList: TypeCompany[] | undefined) => (companyList ? companyList.map((companyMap: TypeCompany) => (companyMap.id === paramCompanyId ? companyUpdated : companyMap)) : []))
                             contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
@@ -171,19 +170,19 @@ const View = () => {
                 },
             )
         },
-        [i18n, contextAlert, paramLeadId, queryClient, mutationLeadUpdate],
+        [i18n, contextAlert, paramCompanyId, queryClient, mutationCompanyUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
-        if (!queryLeadGet.isFetching) {
+        if (!queryCompanyGet.isFetching) {
             setEffectStep(EFFECT_STEP.FILLING)
         }
-    }, [queryLeadGet.isFetching])
+    }, [queryCompanyGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        const name = queryLeadGet.data?.name ?? DEFAULT_VALUES.name
-        const email = queryLeadGet.data?.email ?? DEFAULT_VALUES.email
-        const phone = queryLeadGet.data?.phone ?? DEFAULT_VALUES.phone
+        const name = queryCompanyGet.data?.name ?? DEFAULT_VALUES.name
+        const email = queryCompanyGet.data?.email ?? DEFAULT_VALUES.email
+        const phone = queryCompanyGet.data?.phone ?? DEFAULT_VALUES.phone
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
@@ -195,7 +194,7 @@ const View = () => {
         formUpdate.setValue('phone', phone)
         await formUpdate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
-    }, [queryLeadGet.data, formUpdate])
+    }, [queryCompanyGet.data, formUpdate])
 
     React.useEffect(() => {
         switch (effectStep) {
@@ -214,14 +213,14 @@ const View = () => {
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
 
-    if (!queryLeadGet.isFetching && !queryLeadGet.data) {
+    if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
     }
 
     return (
         <app.component.dialog.Dialog>
             <app.layout.main.component.structure.page.Page maxWidth={'sm'}>
-                {queryLeadGet.isFetching || mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+                {queryCompanyGet.isFetching || mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
                 <app.layout.main.component.structure.head.spaceBetween.Head>
                     <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                         <app.layout.main.component.structure.box.title.Title level={1}>
@@ -230,16 +229,16 @@ const View = () => {
                         </app.layout.main.component.structure.box.title.Title>
                     </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.head.spaceBetween.HeadRight>
-                        <app.component.button.Button space={1} disabled={queryLeadGet.isFetching || mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
-                            {queryLeadGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
+                        <app.component.button.Button space={1} disabled={queryCompanyGet.isFetching || mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                            {queryCompanyGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company).getTo()} variant={'contained'} space={1} disabled={queryCompanyGet.isFetching || mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
                 </app.layout.main.component.structure.head.spaceBetween.Head>
-                {queryLeadGet.isFetching ? (
+                {queryCompanyGet.isFetching ? (
                     <>
                         <app.component.loading.ProgressLinear />
                         <app.layout.main.component.structure.body.Body>
@@ -276,7 +275,7 @@ const View = () => {
                                                 label={i18n.getText('field.name.label')}
                                                 error={!!formUpdate.formState.errors.name}
                                                 helperText={formUpdate.formState.errors.name?.message}
-                                                disabled={mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={true}
                                                 space={{
                                                     top: 2,
@@ -302,7 +301,7 @@ const View = () => {
                                                 label={i18n.getText('field.email.label')}
                                                 error={!!formUpdate.formState.errors.email}
                                                 helperText={formUpdate.formState.errors.email?.message}
-                                                disabled={mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
@@ -328,7 +327,7 @@ const View = () => {
                                                 label={i18n.getText('field.phone.label')}
                                                 error={!!formUpdate.formState.errors.phone}
                                                 helperText={formUpdate.formState.errors.phone?.message}
-                                                disabled={mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
@@ -341,13 +340,13 @@ const View = () => {
                                         )}
                                     />
                                 </app.layout.main.component.structure.box.content.Content>
-                                {mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+                                {mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                                 <app.layout.main.component.structure.box.action.Action>
-                                    <app.component.button.ButtonSubmit space={1} disabled={mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>
-                                        {mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
+                                    <app.component.button.ButtonSubmit space={1} disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting || formUpdate.formState.isValidating || !formUpdate.formState.isValid} onClick={formUpdate.handleSubmit(handleActionSubmit)}>
+                                        {mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
                                         {i18n.getText('action.submit')}
                                     </app.component.button.ButtonSubmit>
-                                    <app.component.button.Button space={1} disabled={mutationLeadUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionReset}>
+                                    <app.component.button.Button space={1} disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting} onClick={handleActionReset}>
                                         {formUpdate.formState.isValidating ? <app.component.loading.ProgressCircular /> : <mui.icon.Restore />}
                                         {i18n.getText('action.reset')}
                                     </app.component.button.Button>

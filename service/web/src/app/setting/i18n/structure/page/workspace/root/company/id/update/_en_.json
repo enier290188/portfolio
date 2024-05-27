@@ -1,5 +1,5 @@
 {
-    "title": "Update Lead",
+    "title": "Update Company",
     "field.name.label": "Name",
     "field.name.validate.required": "- It is required.",
     "field.name.validate.max-length": "- Should be less than {value} characters.",
@@ -11,6 +11,7 @@
     "field.phone.validate.required": "- It is required.",
     "field.phone.validate.max-length": "- Should be less than {value} characters.",
     "field.phone.validate.pattern": "- Format is invalid.",
+    "action.fetch.alert.error": "Lo sentimos, se ha producido un error inesperado",
     "action.refresh": "Refresh",
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",
