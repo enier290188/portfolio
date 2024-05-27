@@ -9,11 +9,12 @@ const RouteCreate = React.lazy(() => import('./create'))
 const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
 
-type TypeLead = {
+type TypeCompany = {
     id: string
     name: string
     email: string
     phone: string
+    isActive: string
     createdAt: string
     updatedAt: string
 }
@@ -28,7 +29,7 @@ const ViewList = React.memo(() => {
     const userId = user?.id ?? ''
 
     const queryLeadList = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/lead/list/`, 'query', 'db'],
+        queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
         queryFn: () => [],
         initialData: [],
     })
@@ -37,7 +38,7 @@ const ViewList = React.memo(() => {
         await queryLeadList.refetch()
     }, [queryLeadList])
 
-    const tableColumns = React.useMemo<tableType.ColumnDef<TypeLead>[]>(
+    const tableColumns = React.useMemo<tableType.ColumnDef<TypeCompany>[]>(
         () => [
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
@@ -101,6 +102,17 @@ const ViewList = React.memo(() => {
                 },
             },
             {
+                accessorKey: 'isActive',
+                header: i18n.getText('field.is-active.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'alphanumericCaseSensitive',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'text',
+                },
+            },
+            {
                 accessorKey: 'createdAt',
                 header: i18n.getText('field.created-at.label'),
                 enableSorting: true,
@@ -128,14 +140,14 @@ const ViewList = React.memo(() => {
         [i18n],
     )
 
-    const tableData: TypeLead[] = queryLeadList.data.slice()
+    const tableData: TypeCompany[] = queryLeadList.data.slice()
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'lg'}>
             <app.layout.main.component.structure.head.spaceBetween.Head>
                 <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.box.title.Title level={1}>
-                        <mui.icon.BusinessCenter />
+                        <mui.icon.Business />
                         {i18n.getText('title')}
                     </app.layout.main.component.structure.box.title.Title>
                 </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
@@ -148,7 +160,7 @@ const ViewList = React.memo(() => {
             </app.layout.main.component.structure.head.spaceBetween.Head>
             {queryLeadList.isFetching ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
             <app.layout.main.component.structure.body.Body>
-                <app.layout.main.component.structure.box.content.Content>{queryLeadList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-admin-lead-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
+                <app.layout.main.component.structure.box.content.Content>{queryLeadList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-root-company-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
             </app.layout.main.component.structure.body.Body>
         </app.layout.main.component.structure.page.Page>
     )

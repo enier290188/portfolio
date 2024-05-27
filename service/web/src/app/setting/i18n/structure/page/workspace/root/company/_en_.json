@@ -1,9 +1,10 @@
 {
-    "title": "Leads",
+    "title": "Companies",
     "action.refresh": "Refresh",
     "field.name.label": "Name",
     "field.email.label": "Email",
     "field.phone.label": "Phone",
+    "field.is-active.label": "Is Active",
     "field.created-at.label": "Created At",
     "field.updated-at.label": "Updated At"
 }
