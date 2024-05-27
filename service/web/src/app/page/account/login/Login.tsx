@@ -85,10 +85,10 @@ const View = () => {
 
             if (response.status === 200) {
                 const accessToken = response.data.auth.access_token
-                const userModel = response.data.auth.user
-                alertActionAddAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userModel.name ? userModel.name : userModel.email ? userModel.email : '' }) })
+                const userResponse = response.data.auth.user
+                alertActionAddAlert({ type: 'success', message: i18n.getText('login.action.submit.alert.success', { name: userResponse.name ? userResponse.name : userResponse.email ? userResponse.email : '' }) })
                 accessTokenActionUpdateAccessToken(accessToken)
-                userActionLoginUser(userModel)
+                userActionLoginUser(userResponse)
             } else {
                 if ('error' in response.data.detail) {
                     alertActionAddAlert({ type: 'error', message: i18n.getText(`login.action.submit.alert.error.${response.data.detail.error}`) })
