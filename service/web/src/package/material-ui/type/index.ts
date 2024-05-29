@@ -1,4 +1,4 @@
-import { AlertProps, AvatarProps, BoxProps, ButtonProps, ContainerProps, DialogProps, DividerProps, InputProps, MenuItemProps, MenuProps, SelectChangeEvent, TextFieldProps, TypographyProps } from '@mui/material'
+import { AlertProps, AvatarProps, BoxProps, ButtonProps, CheckboxProps, ContainerProps, DialogProps, DividerProps, FormControlLabelProps, InputProps, MenuItemProps, MenuProps, SelectChangeEvent, TextFieldProps, TypographyProps } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import { TransitionProps } from '@mui/material/transitions'
 
@@ -10,11 +10,15 @@ export type { BoxProps }
 
 export type { ButtonProps }
 
+export type { CheckboxProps }
+
 export type { ContainerProps }
 
 export type { DialogProps }
 
 export type { DividerProps }
+
+export type { FormControlLabelProps }
 
 export type { InputProps }
 
