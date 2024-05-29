@@ -16,7 +16,7 @@ const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
     phone: '',
-    isActive: true,
+    isActive: false,
 }
 
 enum EFFECT_STEP {
@@ -102,14 +102,13 @@ const View = () => {
     const handleValidateFieldEmail = React.useCallback(
         (value: TypeForm['email']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.email.validate.required'))
-            }
-            if (128 < value.length) {
-                messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
-            }
-            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
-                messageList.push(i18n.getText('field.email.validate.pattern'))
+            if (0 < value.length) {
+                if (128 < value.length) {
+                    messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
+                }
+                if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
+                    messageList.push(i18n.getText('field.email.validate.pattern'))
+                }
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -119,14 +118,13 @@ const View = () => {
     const handleValidateFieldPhone = React.useCallback(
         (value: TypeForm['phone']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.phone.validate.required'))
-            }
-            if (10 < value.length) {
-                messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
-            }
-            if (!/^(\d{10})$/.test(value)) {
-                messageList.push(i18n.getText('field.phone.validate.pattern'))
+            if (0 < value.length) {
+                if (10 < value.length) {
+                    messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
+                }
+                if (!/^(\d{10})$/.test(value)) {
+                    messageList.push(i18n.getText('field.phone.validate.pattern'))
+                }
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -135,10 +133,8 @@ const View = () => {
 
     const handleValidateFieldIsActive = React.useCallback(
         (value: TypeForm['isActive']) => {
-            console.log(value)
-
             const messageList: string[] = []
-            if (!value) {
+            if (!(value === true || value === false)) {
                 messageList.push(i18n.getText('field.is-active.validate.required'))
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
@@ -316,7 +312,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextEmail
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.email.label')}
                                                 error={!!formUpdate.formState.errors.email}
                                                 helperText={formUpdate.formState.errors.email?.message}
@@ -342,7 +338,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextPhone
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.phone.label')}
                                                 error={!!formUpdate.formState.errors.phone}
                                                 helperText={formUpdate.formState.errors.phone?.message}
@@ -370,6 +366,8 @@ const View = () => {
                                             <app.component.field.checkbox.Checkbox
                                                 required={true}
                                                 label={i18n.getText('field.is-active.label')}
+                                                error={!!formUpdate.formState.errors.isActive}
+                                                helperText={formUpdate.formState.errors.isActive?.message}
                                                 disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
