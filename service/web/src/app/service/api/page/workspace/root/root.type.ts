@@ -12,7 +12,6 @@ export type TypeCompanyGetRequest = {
 export type TypeCompanyCreateRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
-        id: appType.TypeModelCompany['id']
         name: appType.TypeModelCompany['name']
         email: appType.TypeModelCompany['email']
         phone: appType.TypeModelCompany['phone']

@@ -1,10 +1,20 @@
 import { api } from '../../../api.ts'
-import { TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyUpdateRequest } from './root.type.ts'
+import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyUpdateRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({
         resource: `/api/v1/page/workspace/root/company/`,
         accessToken: request.accessToken,
+    })
+}
+
+const company_create = async (request: TypeCompanyCreateRequest) => {
+    return await api.post({
+        resource: `/api/v1/page/workspace/root/company/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.company,
+        },
     })
 }
 
@@ -27,6 +37,7 @@ const company_update = async (request: TypeCompanyUpdateRequest) => {
 
 export const root = {
     company_fetch: company_fetch,
+    company_create: company_create,
     company_get: company_get,
     company_update: company_update,
 }
