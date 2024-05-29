@@ -45,7 +45,7 @@ const View = () => {
 
     const queryClient = query.hook.useQueryClient()
     const queryCompanyGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'],
+        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'],
         queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
             const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: paramCompanyId })
             if (response.status === 200) {
@@ -68,7 +68,7 @@ const View = () => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
+                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], response.data?.item ?? null)
                 queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data?.item ?? null : companyMap)))
                 alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
