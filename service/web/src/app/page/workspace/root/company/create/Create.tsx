@@ -45,31 +45,19 @@ const View = () => {
 
     const queryClient = query.hook.useQueryClient()
     const queryCompanyGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'],
-        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
-            const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: paramCompanyId })
-            if (response.status === 200) {
-                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
-                userActionSyncUser(response.data.auth.user)
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return response.data?.item ?? null
-            } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
-                return null
-            }
-        },
+        queryKey: [`/app/page/workspace/root/company/create/`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => null,
         initialData: null,
     })
     const mutationCompanyCreate = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/create/`, 'mutation', 'db'],
-        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyUpdateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+        mutationKey: [`/app/page/workspace/root/company/create/`, 'mutation', 'db'],
+        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyCreateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
             const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
                 queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
-                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data?.item ?? null : companyMap)))
+                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => (response.data?.item ? [...companyList, response.data?.item] : companyList))
                 alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -227,6 +215,10 @@ const View = () => {
                 break
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
+
+    if (mutationCompanyCreate.data) {
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].update).getTo({ id: mutationCompanyCreate.data.id })} />
+    }
 
     if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
