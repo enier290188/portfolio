@@ -1,34 +1,22 @@
-import { app } from '@./app'
+import { app, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeLeadCreate = {
-    name: string
-    email: string
-    phone: string
-}
-type TypeLead = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    createdAt: string
-    updatedAt: string
-}
-
 type TypeForm = {
     name: string
     email: string
     phone: string
+    isActive: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
     phone: '',
+    isActive: false,
 }
 
 enum EFFECT_STEP {
@@ -40,30 +28,55 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead.create, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.update, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+
+    const contextUser = React.useContext(app.context.user.Context)
+    const userActionSyncUser = contextUser.syncUser
+
+    const { id } = router.hook.useParams()
+    const paramCompanyId = id ?? ''
 
     const queryClient = query.hook.useQueryClient()
-    const queryLeadGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/lead/create/`, 'query', 'db'],
-        queryFn: () => ({
-            name: DEFAULT_VALUES.name,
-            email: DEFAULT_VALUES.email,
-            phone: DEFAULT_VALUES.phone,
-        }),
+    const queryCompanyGet = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: paramCompanyId })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data?.item ?? null
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
+            }
+        },
         initialData: null,
     })
-    const mutationLeadCreate = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/lead/create/`, 'mutation', 'db'],
-        mutationFn: async (lead: TypeLeadCreate) => {
-            return {
-                id: '1',
-                name: lead.name,
-                email: lead.email,
-                phone: lead.phone,
-                createdAt: '',
-                updatedAt: '',
+    const mutationCompanyCreate = query.hook.useMutation({
+        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/create/`, 'mutation', 'db'],
+        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyUpdateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
+                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data?.item ?? null : companyMap)))
+                alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data?.item ?? null
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
             }
         },
     })
@@ -89,14 +102,13 @@ const View = () => {
     const handleValidateFieldEmail = React.useCallback(
         (value: TypeForm['email']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.email.validate.required'))
-            }
-            if (320 < value.length) {
-                messageList.push(i18n.getText('field.email.validate.max-length', { value: 320 }))
-            }
-            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
-                messageList.push(i18n.getText('field.email.validate.pattern'))
+            if (0 < value.length) {
+                if (128 < value.length) {
+                    messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
+                }
+                if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
+                    messageList.push(i18n.getText('field.email.validate.pattern'))
+                }
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -106,14 +118,24 @@ const View = () => {
     const handleValidateFieldPhone = React.useCallback(
         (value: TypeForm['phone']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.phone.validate.required'))
+            if (0 < value.length) {
+                if (10 < value.length) {
+                    messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
+                }
+                if (!/^(\d{10})$/.test(value)) {
+                    messageList.push(i18n.getText('field.phone.validate.pattern'))
+                }
             }
-            if (10 < value.length) {
-                messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
-            }
-            if (!/^(\d{10})$/.test(value)) {
-                messageList.push(i18n.getText('field.phone.validate.pattern'))
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
+    const handleValidateFieldIsActive = React.useCallback(
+        (value: TypeForm['isActive']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.is-active.validate.required'))
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -122,72 +144,72 @@ const View = () => {
 
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
-        await queryLeadGet.refetch()
-    }, [queryLeadGet])
+        await queryCompanyGet.refetch()
+    }, [queryCompanyGet])
 
     const handleActionReset = React.useCallback(async () => {
         formCreate.setValue('name', defaultValuesToReset.name)
         formCreate.setValue('email', defaultValuesToReset.email)
         formCreate.setValue('phone', defaultValuesToReset.phone)
+        formCreate.setValue('isActive', defaultValuesToReset.isActive)
         await formCreate.trigger()
     }, [formCreate, defaultValuesToReset])
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { name, email, phone } = data
-            mutationLeadCreate.mutate(
+            const { name, email, phone, isActive } = data
+
+            mutationCompanyCreate.mutate(
                 {
+                    id: paramCompanyId,
                     name: name,
                     email: email,
                     phone: phone,
+                    is_active: isActive,
                 },
                 {
-                    onSuccess: (leadCreated: TypeLead | null) => {
-                        if (leadCreated) {
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/${leadCreated.id}/`, 'query', 'db'], leadCreated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? [...leadList, leadCreated] : [leadCreated]))
-                            contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    onSuccess: (companyUpdated) => {
+                        if (companyUpdated) {
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
                                 name: name,
                                 email: email,
                                 phone: phone,
+                                isActive: isActive,
                             }))
-                        } else {
-                            contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
-                    },
-                    onError: () => {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                     },
                 },
             )
         },
-        [i18n, contextAlert, queryClient, mutationLeadCreate],
+        [paramCompanyId, mutationCompanyCreate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
-        if (!queryLeadGet.isFetching) {
+        if (!queryCompanyGet.isFetching) {
             setEffectStep(EFFECT_STEP.FILLING)
         }
-    }, [queryLeadGet.isFetching])
+    }, [queryCompanyGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        const name = queryLeadGet.data?.name ?? DEFAULT_VALUES.name
-        const email = queryLeadGet.data?.email ?? DEFAULT_VALUES.email
-        const phone = queryLeadGet.data?.phone ?? DEFAULT_VALUES.phone
+        const name = queryCompanyGet.data?.name ?? DEFAULT_VALUES.name
+        const email = queryCompanyGet.data?.email ?? DEFAULT_VALUES.email
+        const phone = queryCompanyGet.data?.phone ?? DEFAULT_VALUES.phone
+        const isActive = queryCompanyGet.data?.is_active ?? DEFAULT_VALUES.isActive
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
             email: email,
             phone: phone,
+            isActive: isActive,
         }))
         formCreate.setValue('name', name)
         formCreate.setValue('email', email)
         formCreate.setValue('phone', phone)
+        formCreate.setValue('isActive', isActive)
         await formCreate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
-    }, [queryLeadGet.data, formCreate])
+    }, [queryCompanyGet.data, formCreate])
 
     React.useEffect(() => {
         switch (effectStep) {
@@ -206,18 +228,14 @@ const View = () => {
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
 
-    if (mutationLeadCreate.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead[':id'].update).getTo({ id: mutationLeadCreate.data.id })} />
-    }
-
-    if (!queryLeadGet.isFetching && !queryLeadGet.data) {
+    if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
     }
 
     return (
         <app.component.dialog.Dialog>
             <app.layout.main.component.structure.page.Page maxWidth={'sm'}>
-                {queryLeadGet.isFetching || mutationLeadCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+                {queryCompanyGet.isFetching || mutationCompanyCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
                 <app.layout.main.component.structure.head.spaceBetween.Head>
                     <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                         <app.layout.main.component.structure.box.title.Title level={1}>
@@ -226,16 +244,16 @@ const View = () => {
                         </app.layout.main.component.structure.box.title.Title>
                     </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.head.spaceBetween.HeadRight>
-                        <app.component.button.Button space={1} disabled={queryLeadGet.isFetching || mutationLeadCreate.isPending || formCreate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
-                            {queryLeadGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
+                        <app.component.button.Button space={1} disabled={queryCompanyGet.isFetching || mutationCompanyCreate.isPending || formCreate.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                            {queryCompanyGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company).getTo()} variant={'contained'} space={1} disabled={queryCompanyGet.isFetching || mutationCompanyCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
                 </app.layout.main.component.structure.head.spaceBetween.Head>
-                {queryLeadGet.isFetching ? (
+                {queryCompanyGet.isFetching ? (
                     <>
                         <app.component.loading.ProgressLinear />
                         <app.layout.main.component.structure.body.Body>
@@ -272,7 +290,7 @@ const View = () => {
                                                 label={i18n.getText('field.name.label')}
                                                 error={!!formCreate.formState.errors.name}
                                                 helperText={formCreate.formState.errors.name?.message}
-                                                disabled={formCreate.formState.isSubmitting}
+                                                disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting}
                                                 autoFocus={true}
                                                 space={{
                                                     top: 2,
@@ -294,11 +312,11 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextEmail
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.email.label')}
                                                 error={!!formCreate.formState.errors.email}
                                                 helperText={formCreate.formState.errors.email?.message}
-                                                disabled={formCreate.formState.isSubmitting}
+                                                disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
@@ -320,11 +338,37 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextPhone
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.phone.label')}
                                                 error={!!formCreate.formState.errors.phone}
                                                 helperText={formCreate.formState.errors.phone?.message}
-                                                disabled={formCreate.formState.isSubmitting}
+                                                disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'isActive'}
+                                        control={formCreate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldIsActive,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.is-active.label')}
+                                                error={!!formCreate.formState.errors.isActive}
+                                                helperText={formCreate.formState.errors.isActive?.message}
+                                                disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
@@ -337,13 +381,13 @@ const View = () => {
                                         )}
                                     />
                                 </app.layout.main.component.structure.box.content.Content>
-                                {mutationLeadCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+                                {mutationCompanyCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                                 <app.layout.main.component.structure.box.action.Action>
-                                    <app.component.button.ButtonSubmit space={1} disabled={mutationLeadCreate.isPending || formCreate.formState.isSubmitting || formCreate.formState.isValidating || !formCreate.formState.isValid} onClick={formCreate.handleSubmit(handleActionSubmit)}>
-                                        {mutationLeadCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
+                                    <app.component.button.ButtonSubmit space={1} disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting || formCreate.formState.isValidating || !formCreate.formState.isValid} onClick={formCreate.handleSubmit(handleActionSubmit)}>
+                                        {mutationCompanyCreate.isPending || formCreate.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.Save />}
                                         {i18n.getText('action.submit')}
                                     </app.component.button.ButtonSubmit>
-                                    <app.component.button.Button space={1} disabled={mutationLeadCreate.isPending || formCreate.formState.isSubmitting} onClick={handleActionReset}>
+                                    <app.component.button.Button space={1} disabled={mutationCompanyCreate.isPending || formCreate.formState.isSubmitting} onClick={handleActionReset}>
                                         {formCreate.formState.isValidating ? <app.component.loading.ProgressCircular /> : <mui.icon.Restore />}
                                         {i18n.getText('action.reset')}
                                     </app.component.button.Button>
