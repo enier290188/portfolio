@@ -133,6 +133,19 @@ const View = () => {
         [i18n],
     )
 
+    const handleValidateFieldIsActive = React.useCallback(
+        (value: TypeForm['isActive']) => {
+            console.log(value)
+
+            const messageList: string[] = []
+            if (!value) {
+                messageList.push(i18n.getText('field.is-active.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
         await queryCompanyGet.refetch()
@@ -142,6 +155,7 @@ const View = () => {
         formUpdate.setValue('name', defaultValuesToReset.name)
         formUpdate.setValue('email', defaultValuesToReset.email)
         formUpdate.setValue('phone', defaultValuesToReset.phone)
+        formUpdate.setValue('isActive', defaultValuesToReset.isActive)
         await formUpdate.trigger()
     }, [formUpdate, defaultValuesToReset])
 
@@ -332,6 +346,30 @@ const View = () => {
                                                 label={i18n.getText('field.phone.label')}
                                                 error={!!formUpdate.formState.errors.phone}
                                                 helperText={formUpdate.formState.errors.phone?.message}
+                                                disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'isActive'}
+                                        control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldIsActive,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.is-active.label')}
                                                 disabled={mutationCompanyUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
