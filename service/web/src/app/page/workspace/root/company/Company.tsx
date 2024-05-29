@@ -43,9 +43,13 @@ const ViewList = React.memo(() => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return response.data?.items ?? []
+                if (response.data?.items) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.items
+                } else {
+                    return []
+                }
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
                 return []

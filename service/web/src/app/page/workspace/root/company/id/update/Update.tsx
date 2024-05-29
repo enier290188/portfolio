@@ -51,9 +51,13 @@ const View = () => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return response.data?.item ?? null
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
                 return null
@@ -68,12 +72,16 @@ const View = () => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], response.data?.item ?? null)
-                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data?.item ?? null : companyMap)))
-                alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return response.data?.item ?? null
+                if (response.data?.item) {
+                    queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], response.data.item)
+                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data.item : companyMap)))
+                    alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                 return null
