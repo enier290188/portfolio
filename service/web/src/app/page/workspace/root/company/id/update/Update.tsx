@@ -1,34 +1,22 @@
-import { app } from '@./app'
+import { app, appServiceApiPageAccountType, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeCompanyUpdate = {
-    id: string
-    name: string
-    email: string
-    phone: string
-}
-type TypeCompany = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    createdAt: string
-    updatedAt: string
-}
 type TypeForm = {
     name: string
     email: string
     phone: string
+    isActive: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
     phone: '',
+    isActive: true,
 }
 
 enum EFFECT_STEP {
@@ -43,33 +31,51 @@ const View = () => {
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.update, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+
+    const contextUser = React.useContext(app.context.user.Context)
+    const userActionSyncUser = contextUser.syncUser
 
     const { id } = router.hook.useParams()
     const paramCompanyId = id ?? ''
 
     const queryClient = query.hook.useQueryClient()
     const queryCompanyGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/`, 'query', 'db'],
-        queryFn: async () => {
-            return {
-                id: paramCompanyId,
-                name: DEFAULT_VALUES.name,
-                email: DEFAULT_VALUES.email,
-                phone: DEFAULT_VALUES.phone,
+        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: paramCompanyId })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data?.item ?? null
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
             }
         },
         initialData: null,
     })
     const mutationCompanyUpdate = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/company/${paramCompanyId}/update/`, 'mutation', 'db'],
-        mutationFn: async (company: TypeCompanyUpdate) => {
-            return {
-                id: '1',
-                name: company.name,
-                email: company.email,
-                phone: company.phone,
-                createdAt: '',
-                updatedAt: '',
+        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/update/`, 'mutation', 'db'],
+        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyUpdateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
+                alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                return response.data?.item ?? null
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
             }
         },
     })
@@ -98,8 +104,8 @@ const View = () => {
             if (!value) {
                 messageList.push(i18n.getText('field.email.validate.required'))
             }
-            if (320 < value.length) {
-                messageList.push(i18n.getText('field.email.validate.max-length', { value: 320 }))
+            if (128 < value.length) {
+                messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
             }
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
                 messageList.push(i18n.getText('field.email.validate.pattern'))

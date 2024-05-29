@@ -62,7 +62,7 @@ const View = () => {
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], response.data.item)
+                queryClient.setQueryData([`/app/page/account/profile/`, 'query', 'db'], response.data?.item ?? null)
                 alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore

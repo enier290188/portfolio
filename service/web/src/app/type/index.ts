@@ -78,11 +78,12 @@ export type TypeServiceApiPageAccountProfileResponse = {
 }
 
 export type TypeServiceApiPageWorkspaceRootCompanyResponse = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    is_active: boolean
-    created_at: string
-    updated_at: string
+    id: TypeModelCompany['id']
+    name: TypeModelCompany['name']
+    email: TypeModelCompany['email']
+    phone: TypeModelCompany['phone']
+    logo: TypeModelCompany['logo']
+    is_active: TypeModelCompany['is_active']
+    created_at: TypeModelCompany['created_at']
+    updated_at: TypeModelCompany['updated_at']
 }
