@@ -28,7 +28,7 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.update, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.create, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
     const alertActionAddAlert = contextAlert.addAlert
@@ -40,9 +40,6 @@ const View = () => {
     const contextUser = React.useContext(app.context.user.Context)
     const userActionSyncUser = contextUser.syncUser
 
-    const { id } = router.hook.useParams()
-    const paramCompanyId = id ?? ''
-
     const queryClient = query.hook.useQueryClient()
     const queryCompanyGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/company/create/`, 'query', 'db'],
@@ -52,16 +49,22 @@ const View = () => {
     const mutationCompanyCreate = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/root/company/create/`, 'mutation', 'db'],
         mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyCreateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
-            const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
+            const response = await app.service.api.page.workspace.root.company_create({ accessToken: accessToken, company: company })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
-                queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
-                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => (response.data?.item ? [...companyList, response.data?.item] : companyList))
-                alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                return response.data?.item ?? null
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    queryClient.setQueryData([`/app/page/workspace/root/company/${response.data.item.id}/get/`, 'query', 'db'], response.data.item)
+                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => [...companyList, response.data.item])
+                    alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
             } else {
                 alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                 return null
@@ -149,7 +152,6 @@ const View = () => {
 
             mutationCompanyCreate.mutate(
                 {
-                    id: paramCompanyId,
                     name: name,
                     email: email,
                     phone: phone,
@@ -170,7 +172,7 @@ const View = () => {
                 },
             )
         },
-        [paramCompanyId, mutationCompanyCreate],
+        [mutationCompanyCreate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -218,10 +220,6 @@ const View = () => {
 
     if (mutationCompanyCreate.data) {
         return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company[':id'].update).getTo({ id: mutationCompanyCreate.data.id })} />
-    }
-
-    if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
-        return <app.component.navigate.ToAppErrorNotFound />
     }
 
     return (
