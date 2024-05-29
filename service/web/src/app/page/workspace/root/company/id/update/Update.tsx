@@ -1,4 +1,4 @@
-import { app, appServiceApiPageAccountType, appServiceApiPageWorkspaceRootType, appType } from '@./app'
+import { app, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -69,6 +69,7 @@ const View = () => {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
                 queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get`, 'query', 'db'], response.data?.item ?? null)
+                queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data?.item ?? null : companyMap)))
                 alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -146,37 +147,32 @@ const View = () => {
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { name, email, phone } = data
+            const { name, email, phone, isActive } = data
+
             mutationCompanyUpdate.mutate(
                 {
                     id: paramCompanyId,
                     name: name,
                     email: email,
                     phone: phone,
+                    is_active: isActive,
                 },
                 {
-                    onSuccess: (companyUpdated: TypeCompany | null) => {
+                    onSuccess: (companyUpdated) => {
                         if (companyUpdated) {
-                            queryClient.setQueryData([`/app/page/workspace/admin/company/${paramCompanyId}/`, 'query', 'db'], companyUpdated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/company/list/`, 'query', 'db'], (companyList: TypeCompany[] | undefined) => (companyList ? companyList.map((companyMap: TypeCompany) => (companyMap.id === paramCompanyId ? companyUpdated : companyMap)) : []))
-                            contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
                                 name: name,
                                 email: email,
                                 phone: phone,
+                                isActive: isActive,
                             }))
-                        } else {
-                            contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
-                    },
-                    onError: () => {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                     },
                 },
             )
         },
-        [i18n, contextAlert, paramCompanyId, queryClient, mutationCompanyUpdate],
+        [paramCompanyId, mutationCompanyUpdate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -189,15 +185,18 @@ const View = () => {
         const name = queryCompanyGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryCompanyGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryCompanyGet.data?.phone ?? DEFAULT_VALUES.phone
+        const isActive = queryCompanyGet.data?.is_active ?? DEFAULT_VALUES.isActive
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
             email: email,
             phone: phone,
+            isActive: isActive,
         }))
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
         formUpdate.setValue('phone', phone)
+        formUpdate.setValue('isActive', isActive)
         await formUpdate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
     }, [queryCompanyGet.data, formUpdate])
