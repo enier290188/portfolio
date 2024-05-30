@@ -1,21 +1,10 @@
 import { app } from '@./app'
+import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
-
-type TypeLeadRemove = {
-    id: string
-}
-type TypeLead = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    createdAt: string
-    updatedAt: string
-}
 
 type TypeForm = {
     name: string
@@ -37,8 +26,8 @@ enum EFFECT_STEP {
 
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead.id.remove, i18nLanguage), [i18nLanguage])
+    const contextI18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead.id.remove, contextI18nLanguage), [contextI18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
 
@@ -48,28 +37,12 @@ const View = () => {
     const queryClient = query.hook.useQueryClient()
     const queryLeadGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'],
-        queryFn: async () => {
-            return {
-                id: '1',
-                name: DEFAULT_VALUES.name,
-                email: DEFAULT_VALUES.email,
-                phone: DEFAULT_VALUES.phone,
-            }
-        },
+        queryFn: () => awsAmplifyApi.page.workspace.admin.lead.get({ id: paramLeadId }),
         initialData: null,
     })
     const mutationLeadRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/admin/lead/${paramLeadId}/remove/`, 'mutation', 'db'],
-        mutationFn: async (lead: TypeLeadRemove) => {
-            return {
-                id: lead.id,
-                name: DEFAULT_VALUES.name,
-                email: DEFAULT_VALUES.email,
-                phone: DEFAULT_VALUES.phone,
-                createdAt: '',
-                updatedAt: '',
-            }
-        },
+        mutationFn: (lead: awsAmplifyApiType.DeleteLeadInput) => awsAmplifyApi.page.workspace.admin.lead.delete({ lead: lead }),
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -86,10 +59,10 @@ const View = () => {
                 id: paramLeadId,
             },
             {
-                onSuccess: (leadRemoved: TypeLead | null) => {
+                onSuccess: (leadRemoved: awsAmplifyApiType.Lead | null) => {
                     if (leadRemoved) {
                         queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: TypeLead[] | undefined) => (leadList ? leadList.filter((leadFilter: TypeLead) => leadFilter.id !== paramLeadId) : []))
+                        queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: awsAmplifyApiType.Lead[] | undefined) => (leadList ? leadList.filter((leadFilter: awsAmplifyApiType.Lead) => leadFilter.id !== paramLeadId) : []))
                         contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     } else {
                         contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
@@ -136,7 +109,7 @@ const View = () => {
     }, [effectStep, effectStepFetching, effectStepFilling])
 
     if (mutationLeadRemove.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getTo()} />
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()} />
     }
 
     if (!queryLeadGet.isFetching && !queryLeadGet.data) {
@@ -159,7 +132,7 @@ const View = () => {
                             {queryLeadGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
