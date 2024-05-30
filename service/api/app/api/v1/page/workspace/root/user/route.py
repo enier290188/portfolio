@@ -1,10 +1,5 @@
 from typing import Annotated
 
-from fastapi import status
-from fastapi.param_functions import Path, Query
-from fastapi.routing import APIRouter
-from pydantic.types import UUID4
-
 from app.api.v1.page.workspace.root.user import (
     schema as api_schema,
 )
@@ -23,6 +18,10 @@ from app.module.user import (
     exception as user_exception,
     service as user_service,
 )
+from fastapi import status
+from fastapi.param_functions import Path, Query
+from fastapi.routing import APIRouter
+from pydantic.types import UUID4
 
 router = APIRouter(
     prefix='/user',
@@ -104,7 +103,9 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.UserRequestUp
 
 
 @router.delete('/{id}/', status_code=status.HTTP_200_OK, response_model=api_schema.UserItemResponse)
-async def remove(id: Annotated[UUID4, Path()], auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
+async def remove(id: Annotated[UUID4, Path()], request: api_schema.UserRequestRemove, auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
+    __data = dict(**request.model_dump())
+
     user_orm = await user_service.get_by_id(db_async_session, id)
     if user_orm is None:
         raise user_exception.Http404

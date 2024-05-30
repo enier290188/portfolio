@@ -1,13 +1,24 @@
 from typing import Sequence
 
-from pydantic.main import BaseModel
-
 from app.module.auth import (
     schema as auth_schema,
 )
 from app.module.user import (
     schema as user_schema,
 )
+from pydantic.main import BaseModel
+
+
+class UserResponse(user_schema.UserResponse):
+    pass
+
+
+class UserItemsResponse(auth_schema.AuthResponse):
+    items: Sequence[UserResponse]
+
+
+class UserItemResponse(auth_schema.AuthResponse):
+    item: UserResponse
 
 
 class UserRequestCreate(BaseModel):
@@ -32,13 +43,5 @@ class UserRequestUpdate(BaseModel):
     company_id: user_schema.FieldCompanyID
 
 
-class UserResponse(user_schema.UserResponse):
+class UserRequestRemove(BaseModel):
     pass
-
-
-class UserItemsResponse(auth_schema.AuthResponse):
-    items: Sequence[UserResponse]
-
-
-class UserItemResponse(auth_schema.AuthResponse):
-    item: UserResponse
