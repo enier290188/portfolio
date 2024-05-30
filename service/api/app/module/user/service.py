@@ -1,13 +1,18 @@
 from typing import Sequence
 
+from app.module.deal import (
+    model as deal_model,
+)
+from app.module.lead import (
+    model as lead_model,
+)
+from app.module.user import (
+    model as user_model,
+)
 from pydantic.networks import EmailStr
 from pydantic.types import UUID4
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.sql import delete as _delete, insert as _insert, select as _select, update as _update
-
-from app.module.user import (
-    model as user_model,
-)
 
 
 async def fetch(db_async_session: AsyncSession, limit: int = 0, offset: int = 0) -> Sequence[user_model.User]:
@@ -94,6 +99,22 @@ async def remove(db_async_session: AsyncSession, id: UUID4) -> None:
     async with db_async_session:
         await db_async_session.begin()
         try:
+            data = {'user_sale_id': None}
+            query = _update(deal_model.Deal).where(deal_model.Deal.user_sale_id == id).values(**data)
+            await db_async_session.execute(query)
+
+            data = {'user_project_id': None}
+            query = _update(deal_model.Deal).where(deal_model.Deal.user_project_id == id).values(**data)
+            await db_async_session.execute(query)
+
+            data = {'user_sale_id': None}
+            query = _update(lead_model.Lead).where(lead_model.Lead.user_sale_id == id).values(**data)
+            await db_async_session.execute(query)
+
+            data = {'user_project_id': None}
+            query = _update(lead_model.Lead).where(lead_model.Lead.user_project_id == id).values(**data)
+            await db_async_session.execute(query)
+
             query = _delete(user_model.User).where(user_model.User.id == id).returning(user_model.User)
             result = await db_async_session.execute(query)
         except Exception as _:
