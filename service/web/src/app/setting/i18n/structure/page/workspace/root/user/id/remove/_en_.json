@@ -1,0 +1,11 @@
+{
+    "title": "Remove User",
+    "question.alert": "Do you want to remove it?",
+    "field.name.label": "Name",
+    "field.email.label": "Email",
+    "field.phone.label": "Phone",
+    "action.refresh": "Refresh",
+    "action.submit": "Accept",
+    "action.submit.alert.success": "Removed successfully",
+    "action.submit.alert.error": "Sorry, an unexpected error has occurred"
+}

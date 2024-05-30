@@ -2,6 +2,7 @@ import _en_ from './_en_.json'
 import _es_ from './_es_.json'
 import { company } from './company'
 import { dashboard } from './dashboard'
+import { user } from './user'
 
 export const root = {
     root: {
@@ -9,5 +10,6 @@ export const root = {
         _es_: { ..._es_ },
         ...company,
         ...dashboard,
+        ...user,
     },
 }

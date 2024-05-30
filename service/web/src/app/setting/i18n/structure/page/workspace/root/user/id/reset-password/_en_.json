@@ -1,0 +1,11 @@
+{
+    "title": "Reset Password",
+    "question.alert": "Do you want to reset password?",
+    "field.name.label": "Name",
+    "field.email.label": "Email",
+    "field.phone.label": "Phone",
+    "action.refresh": "Refresh",
+    "action.submit": "Accept",
+    "action.submit.alert.success": "Password reset successfully",
+    "action.submit.alert.error": "Sorry, an unexpected error has occurred"
+}

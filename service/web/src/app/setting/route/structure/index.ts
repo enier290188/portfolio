@@ -68,6 +68,28 @@ export const structure: TypeRouteStructure = {
                             },
                         },
                     },
+                    user: {
+                        [value.PATH]: 'user',
+                        [value.TO]: () => [...structure.app.page.workspace.root[value.TO](), structure.app.page.workspace.root.user[value.PATH]],
+                        create: {
+                            [value.PATH]: 'create',
+                            [value.TO]: () => [...structure.app.page.workspace.root.user[value.TO](), structure.app.page.workspace.root.user.create[value.PATH]],
+                        },
+                        ':id': {
+                            update: {
+                                [value.PATH]: 'update',
+                                [value.TO]: ({ id }) => [...structure.app.page.workspace.root.user[value.TO](), id, structure.app.page.workspace.root.user[':id'].update[value.PATH]],
+                            },
+                            resetPassword: {
+                                [value.PATH]: 'reset-password',
+                                [value.TO]: ({ id }) => [...structure.app.page.workspace.root.user[value.TO](), id, structure.app.page.workspace.root.user[':id'].resetPassword[value.PATH]],
+                            },
+                            remove: {
+                                [value.PATH]: 'remove',
+                                [value.TO]: ({ id }) => [...structure.app.page.workspace.root.user[value.TO](), id, structure.app.page.workspace.root.user[':id'].remove[value.PATH]],
+                            },
+                        },
+                    },
                 },
                 admin: {
                     [value.PATH]: 'admin',

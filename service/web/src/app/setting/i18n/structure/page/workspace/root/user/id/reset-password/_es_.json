@@ -1,0 +1,11 @@
+{
+    "title": "Resetear contraseña",
+    "question.alert": "¿Quieres resetear contraseña?",
+    "field.name.label": "Nombre",
+    "field.email.label": "Correo",
+    "field.phone.label": "Teléfono",
+    "action.refresh": "Actualizar",
+    "action.submit": "Eliminar",
+    "action.submit.alert.success": "Contraseña reseteada con éxito",
+    "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado"
+}
