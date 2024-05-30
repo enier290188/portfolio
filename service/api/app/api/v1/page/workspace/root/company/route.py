@@ -89,7 +89,9 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.CompanyReques
 
 
 @router.delete('/{id}/', status_code=status.HTTP_200_OK, response_model=api_schema.CompanyItemResponse)
-async def remove(id: Annotated[UUID4, Path()], auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
+async def remove(id: Annotated[UUID4, Path()], request: api_schema.CompanyRequestRemove, auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
+    __data = dict(**request.model_dump())
+
     company_orm = await company_service.get_by_id(db_async_session, id)
     if company_orm is None:
         raise company_exception.Http404

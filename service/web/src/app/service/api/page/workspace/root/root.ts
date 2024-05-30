@@ -1,5 +1,5 @@
 import { api } from '../../../api.ts'
-import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyUpdateRequest } from './root.type.ts'
+import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({
@@ -35,9 +35,20 @@ const company_update = async (request: TypeCompanyUpdateRequest) => {
     })
 }
 
+const company_remove = async (request: TypeCompanyRemoveRequest) => {
+    return await api.delete({
+        resource: `/api/v1/page/workspace/root/company/${request.company.id}/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.company,
+        },
+    })
+}
+
 export const root = {
     company_fetch: company_fetch,
     company_create: company_create,
     company_get: company_get,
     company_update: company_update,
+    company_remove: company_remove,
 }

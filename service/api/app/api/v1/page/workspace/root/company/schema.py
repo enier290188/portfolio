@@ -33,3 +33,7 @@ class CompanyRequestUpdate(BaseModel):
     email: company_schema.FieldEmail
     phone: company_schema.FieldPhone
     is_active: company_schema.FieldIsActive
+
+
+class CompanyRequestRemove(BaseModel):
+    pass

@@ -66,15 +66,15 @@ const View = () => {
         initialData: null,
     })
     const mutationCompanyRemove = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/update/`, 'mutation', 'db'],
-        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyUpdateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
-            const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
+        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/remove/`, 'mutation', 'db'],
+        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyRemoveRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_remove({ accessToken: accessToken, company: company })
             if (response.status === 200) {
                 accessTokenActionUpdateAccessToken(response.data.auth.access_token)
                 userActionSyncUser(response.data.auth.user)
                 if (response.data?.item) {
-                    queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], response.data.item)
-                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data.item : companyMap)))
+                    queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], null)
+                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.filter((companyMap) => companyMap.id !== company.id))
                     alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -101,28 +101,13 @@ const View = () => {
         async (data: TypeForm) => {
             const { name, email, phone, isActive } = data
 
-            mutationCompanyRemove.mutate(
-                {
-                    id: paramCompanyId,
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    is_active: isActive,
-                },
-                {
-                    onSuccess: (companyUpdated) => {
-                        if (companyUpdated) {
-                            setDefaultValuesToReset((oldState) => ({
-                                ...oldState,
-                                name: name,
-                                email: email,
-                                phone: phone,
-                                isActive: isActive,
-                            }))
-                        }
-                    },
-                },
-            )
+            mutationCompanyRemove.mutate({
+                id: paramCompanyId,
+                name: name,
+                email: email,
+                phone: phone,
+                is_active: isActive,
+            })
         },
         [paramCompanyId, mutationCompanyRemove],
     )
@@ -138,13 +123,6 @@ const View = () => {
         const email = queryCompanyGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryCompanyGet.data?.phone ?? DEFAULT_VALUES.phone
         const isActive = queryCompanyGet.data?.is_active ?? DEFAULT_VALUES.isActive
-        setDefaultValuesToReset((oldState) => ({
-            ...oldState,
-            name: name,
-            email: email,
-            phone: phone,
-            isActive: isActive,
-        }))
         formRemove.setValue('name', name)
         formRemove.setValue('email', email)
         formRemove.setValue('phone', phone)
@@ -169,6 +147,10 @@ const View = () => {
                 break
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
+
+    if (mutationCompanyRemove.data) {
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company).getTo()} />
+    }
 
     if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
