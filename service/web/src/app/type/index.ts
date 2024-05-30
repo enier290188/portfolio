@@ -79,16 +79,20 @@ export type TypeServiceApiPageAccountProfileResponse = {
 
 export type TypeServiceApiPageWorkspaceRootCompanyResponse = {
     id: TypeModelCompany['id']
+    created_at: TypeModelCompany['created_at']
+    updated_at: TypeModelCompany['updated_at']
+
     name: TypeModelCompany['name']
     email: TypeModelCompany['email']
     phone: TypeModelCompany['phone']
     logo: TypeModelCompany['logo']
     is_active: TypeModelCompany['is_active']
-    created_at: TypeModelCompany['created_at']
-    updated_at: TypeModelCompany['updated_at']
 }
 export type TypeServiceApiPageWorkspaceRootUserResponse = {
     id: TypeModelUser['id']
+    created_at: TypeModelUser['created_at']
+    updated_at: TypeModelUser['updated_at']
+
     name: TypeModelUser['name']
     email: TypeModelUser['email']
     phone: TypeModelUser['phone']
@@ -98,6 +102,6 @@ export type TypeServiceApiPageWorkspaceRootUserResponse = {
     has_permission_of_admin: TypeModelUser['has_permission_of_admin']
     has_permission_of_sale: TypeModelUser['has_permission_of_sale']
     has_permission_of_project: TypeModelUser['has_permission_of_project']
-    created_at: TypeModelUser['created_at']
-    updated_at: TypeModelUser['updated_at']
+
+    company_id: TypeModelUser['company_id']
 }
