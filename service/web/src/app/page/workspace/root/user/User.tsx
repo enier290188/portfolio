@@ -143,7 +143,18 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'createdAt',
+                accessorKey: 'is_active',
+                header: i18n.getText('field.is-active.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'basic',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'boolean',
+                },
+            },
+            {
+                accessorKey: 'created_at',
                 header: i18n.getText('field.created-at.label'),
                 enableSorting: true,
                 enableColumnFilter: false,
@@ -155,7 +166,7 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'updatedAt',
+                accessorKey: 'updated_at',
                 header: i18n.getText('field.updated-at.label'),
                 enableSorting: true,
                 enableColumnFilter: false,
