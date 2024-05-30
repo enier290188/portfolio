@@ -1,10 +1,5 @@
 from typing import Annotated
 
-from fastapi import status
-from fastapi.param_functions import Path, Query
-from fastapi.routing import APIRouter
-from pydantic.types import UUID4
-
 from app.api.v1.page.workspace.root.company import (
     schema as api_schema,
 )
@@ -23,6 +18,10 @@ from app.module.user import (
     exception as user_exception,
     service as user_service,
 )
+from fastapi import status
+from fastapi.param_functions import Path, Query
+from fastapi.routing import APIRouter
+from pydantic.types import UUID4
 
 router = APIRouter(
     prefix='/company',
