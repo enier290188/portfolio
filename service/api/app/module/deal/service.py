@@ -36,34 +36,6 @@ async def fetch_by_company_id(db_async_session: AsyncSession, company_id: UUID4,
             return result.scalars().all()
 
 
-async def fetch_by_user_sale_id(db_async_session: AsyncSession, user_sale_id: UUID4, limit: int = 0, offset: int = 0) -> Sequence[deal_model.Deal]:
-    async with db_async_session:
-        await db_async_session.begin()
-        try:
-            query = _select(deal_model.Deal).where(deal_model.Deal.user_sale_id == user_sale_id).order_by(deal_model.Deal.name.asc())
-            if 0 < limit:
-                query = query.limit(limit).offset(offset)
-            result = await db_async_session.execute(query)
-        except Exception as _:
-            raise
-        else:
-            return result.scalars().all()
-
-
-async def fetch_by_user_project_id(db_async_session: AsyncSession, user_project_id: UUID4, limit: int = 0, offset: int = 0) -> Sequence[deal_model.Deal]:
-    async with db_async_session:
-        await db_async_session.begin()
-        try:
-            query = _select(deal_model.Deal).where(deal_model.Deal.user_project_id == user_project_id).order_by(deal_model.Deal.name.asc())
-            if 0 < limit:
-                query = query.limit(limit).offset(offset)
-            result = await db_async_session.execute(query)
-        except Exception as _:
-            raise
-        else:
-            return result.scalars().all()
-
-
 async def create(db_async_session: AsyncSession, data: dict) -> deal_model.Deal | None:
     async with db_async_session:
         await db_async_session.begin()

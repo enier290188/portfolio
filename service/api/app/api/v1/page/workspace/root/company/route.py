@@ -14,10 +14,6 @@ from app.module.company import (
 from app.module.db import (
     dependency as db_dependency,
 )
-from app.module.user import (
-    exception as user_exception,
-    service as user_service,
-)
 from fastapi import status
 from fastapi.param_functions import Path, Query
 from fastapi.routing import APIRouter
@@ -97,12 +93,6 @@ async def remove(id: Annotated[UUID4, Path()], request: api_schema.CompanyReques
 
     if auth_response.auth.user.company_id == id:
         raise auth_exception.Http403UserNotAllowed
-
-    users_by_company_id_orm = await user_service.fetch_by_company_id(db_async_session, id)
-    for user_by_company_id_orm in users_by_company_id_orm:
-        user_orm = await user_service.remove(db_async_session, user_by_company_id_orm.id)
-        if user_orm is None:
-            raise user_exception.Http404
 
     company_orm = await company_service.remove(db_async_session, id)
     if company_orm is None:
