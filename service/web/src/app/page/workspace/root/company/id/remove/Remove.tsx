@@ -1,5 +1,4 @@
-import { app } from '@./app'
-import { awsAmplifyApi, awsAmplifyApiType } from '@./package/aws-amplify-api'
+import { app, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
@@ -10,12 +9,14 @@ type TypeForm = {
     name: string
     email: string
     phone: string
+    isActive: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
     name: '',
     email: '',
     phone: '',
+    isActive: false,
 }
 
 enum EFFECT_STEP {
@@ -26,23 +27,66 @@ enum EFFECT_STEP {
 
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
-    const contextI18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.lead.id.remove, contextI18nLanguage), [contextI18nLanguage])
+    const i18nLanguage = contextI18n.getLanguage()
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.company.id.remove, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+
+    const contextUser = React.useContext(app.context.user.Context)
+    const userActionSyncUser = contextUser.syncUser
 
     const { id } = router.hook.useParams()
-    const paramLeadId = id ?? ''
+    const paramCompanyId = id ?? ''
 
     const queryClient = query.hook.useQueryClient()
-    const queryLeadGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'],
-        queryFn: () => awsAmplifyApi.page.workspace.admin.lead.get({ id: paramLeadId }),
+    const queryCompanyGet = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: paramCompanyId })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
+            }
+        },
         initialData: null,
     })
-    const mutationLeadRemove = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/lead/${paramLeadId}/remove/`, 'mutation', 'db'],
-        mutationFn: (lead: awsAmplifyApiType.DeleteLeadInput) => awsAmplifyApi.page.workspace.admin.lead.delete({ lead: lead }),
+    const mutationCompanyRemove = query.hook.useMutation({
+        mutationKey: [`/app/page/workspace/root/company/${paramCompanyId}/update/`, 'mutation', 'db'],
+        mutationFn: async (company: appServiceApiPageWorkspaceRootType.TypeCompanyUpdateRequest['company']): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_update({ accessToken: accessToken, company: company })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], response.data.item)
+                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.map((companyMap) => (companyMap.id === company.id ? response.data.item : companyMap)))
+                    alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
+            }
+        },
     })
 
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
@@ -50,46 +94,64 @@ const View = () => {
 
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
-        await queryLeadGet.refetch()
-    }, [queryLeadGet])
+        await queryCompanyGet.refetch()
+    }, [queryCompanyGet])
 
-    const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(async () => {
-        mutationLeadRemove.mutate(
-            {
-                id: paramLeadId,
-            },
-            {
-                onSuccess: (leadRemoved: awsAmplifyApiType.Lead | null) => {
-                    if (leadRemoved) {
-                        queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/lead/${paramLeadId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/lead/list/`, 'query', 'db'], (leadList: awsAmplifyApiType.Lead[] | undefined) => (leadList ? leadList.filter((leadFilter: awsAmplifyApiType.Lead) => leadFilter.id !== paramLeadId) : []))
-                        contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
-                    } else {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                    }
+    const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
+        async (data: TypeForm) => {
+            const { name, email, phone, isActive } = data
+
+            mutationCompanyRemove.mutate(
+                {
+                    id: paramCompanyId,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    is_active: isActive,
                 },
-                onError: () => {
-                    contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                {
+                    onSuccess: (companyUpdated) => {
+                        if (companyUpdated) {
+                            setDefaultValuesToReset((oldState) => ({
+                                ...oldState,
+                                name: name,
+                                email: email,
+                                phone: phone,
+                                isActive: isActive,
+                            }))
+                        }
+                    },
                 },
-            },
-        )
-    }, [i18n, contextAlert, paramLeadId, queryClient, mutationLeadRemove])
+            )
+        },
+        [paramCompanyId, mutationCompanyRemove],
+    )
 
     const effectStepFetching = React.useCallback(async () => {
-        if (!queryLeadGet.isFetching) {
+        if (!queryCompanyGet.isFetching) {
             setEffectStep(EFFECT_STEP.FILLING)
         }
-    }, [queryLeadGet.isFetching])
+    }, [queryCompanyGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        const name = queryLeadGet.data?.name ?? DEFAULT_VALUES.name
-        const email = queryLeadGet.data?.email ?? DEFAULT_VALUES.email
-        const phone = queryLeadGet.data?.phone ?? DEFAULT_VALUES.phone
+        const name = queryCompanyGet.data?.name ?? DEFAULT_VALUES.name
+        const email = queryCompanyGet.data?.email ?? DEFAULT_VALUES.email
+        const phone = queryCompanyGet.data?.phone ?? DEFAULT_VALUES.phone
+        const isActive = queryCompanyGet.data?.is_active ?? DEFAULT_VALUES.isActive
+        setDefaultValuesToReset((oldState) => ({
+            ...oldState,
+            name: name,
+            email: email,
+            phone: phone,
+            isActive: isActive,
+        }))
         formRemove.setValue('name', name)
         formRemove.setValue('email', email)
         formRemove.setValue('phone', phone)
+        formRemove.setValue('isActive', isActive)
+        await formRemove.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
-    }, [queryLeadGet.data, formRemove])
+    }, [queryCompanyGet.data, formRemove])
 
     React.useEffect(() => {
         switch (effectStep) {
@@ -108,18 +170,14 @@ const View = () => {
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
 
-    if (mutationLeadRemove.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()} />
-    }
-
-    if (!queryLeadGet.isFetching && !queryLeadGet.data) {
+    if (!queryCompanyGet.isFetching && !queryCompanyGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
     }
 
     return (
         <app.component.dialog.Dialog>
             <app.layout.main.component.structure.page.Page maxWidth={'sm'}>
-                {queryLeadGet.isFetching || mutationLeadRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
+                {queryCompanyGet.isFetching || mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.Backdrop /> : null}
                 <app.layout.main.component.structure.head.spaceBetween.Head>
                     <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                         <app.layout.main.component.structure.box.title.Title level={1}>
@@ -128,16 +186,16 @@ const View = () => {
                         </app.layout.main.component.structure.box.title.Title>
                     </app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.head.spaceBetween.HeadRight>
-                        <app.component.button.Button space={1} disabled={queryLeadGet.isFetching || mutationLeadRemove.isPending || formRemove.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
-                            {queryLeadGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
+                        <app.component.button.Button space={1} disabled={queryCompanyGet.isFetching || mutationCompanyRemove.isPending || formRemove.formState.isSubmitting} onClick={handleActionRefresh} typographyProps={{ variant: 'body2' }}>
+                            {queryCompanyGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.workspace.admin.lead).getTo()} variant={'contained'} space={1} disabled={queryLeadGet.isFetching || mutationLeadRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.company).getTo()} variant={'contained'} space={1} disabled={queryCompanyGet.isFetching || mutationCompanyRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
                 </app.layout.main.component.structure.head.spaceBetween.Head>
-                {queryLeadGet.isFetching ? (
+                {queryCompanyGet.isFetching ? (
                     <>
                         <app.component.loading.ProgressLinear />
                         <app.layout.main.component.structure.body.Body>
@@ -237,11 +295,32 @@ const View = () => {
                                             />
                                         )}
                                     />
+                                    <form.component.Controller
+                                        name={'isActive'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.is-active.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
                                 </app.layout.main.component.structure.box.content.Content>
-                                {mutationLeadRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
+                                {mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                                 <app.layout.main.component.structure.box.action.Action>
-                                    <app.component.button.ButtonSubmit space={1} color={'warning'} disabled={mutationLeadRemove.isPending || formRemove.formState.isSubmitting || formRemove.formState.isValidating || !formRemove.formState.isValid} onClick={formRemove.handleSubmit(handleActionSubmit)}>
-                                        {mutationLeadRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.DoneOutline />}
+                                    <app.component.button.ButtonSubmit space={1} color={'warning'} disabled={mutationCompanyRemove.isPending || formRemove.formState.isSubmitting || formRemove.formState.isValidating || !formRemove.formState.isValid} onClick={formRemove.handleSubmit(handleActionSubmit)}>
+                                        {mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.DoneOutline />}
                                         {i18n.getText('action.submit')}
                                     </app.component.button.ButtonSubmit>
                                 </app.layout.main.component.structure.box.action.Action>
