@@ -424,6 +424,7 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                                                     {app.setting.user.value.GROUP_PROJECT}
                                                 </app.component.typography.Typography>
                                             ) : null}
+                                            {!(cellValueList.includes(app.setting.user.value.GROUP_ROOT) || cellValueList.includes(app.setting.user.value.GROUP_ADMIN) || cellValueList.includes(app.setting.user.value.GROUP_SALE) || cellValueList.includes(app.setting.user.value.GROUP_PROJECT)) ? value : null}
                                         </mui.component.Box>
                                     )
                                 }

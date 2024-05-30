@@ -18,6 +18,10 @@ type TypeTable = {
     email: appType.TypeServiceApiPageWorkspaceRootUserResponse['email']
     phone: appType.TypeServiceApiPageWorkspaceRootUserResponse['phone']
     is_active: appType.TypeServiceApiPageWorkspaceRootUserResponse['is_active']
+    has_permission_of_root: appType.TypeServiceApiPageWorkspaceRootUserResponse['has_permission_of_root']
+    has_permission_of_admin: appType.TypeServiceApiPageWorkspaceRootUserResponse['has_permission_of_admin']
+    has_permission_of_sale: appType.TypeServiceApiPageWorkspaceRootUserResponse['has_permission_of_sale']
+    has_permission_of_project: appType.TypeServiceApiPageWorkspaceRootUserResponse['has_permission_of_project']
     groupList: string[]
     company_id: appType.TypeServiceApiPageWorkspaceRootUserResponse['company_id']
 }
@@ -143,6 +147,50 @@ const ViewList = React.memo(() => {
                 },
             },
             {
+                accessorKey: 'has_permission_of_root',
+                header: i18n.getText('field.has-permission-of-root.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'basic',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'boolean',
+                },
+            },
+            {
+                accessorKey: 'has_permission_of_admin',
+                header: i18n.getText('field.has-permission-of-admin.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'basic',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'boolean',
+                },
+            },
+            {
+                accessorKey: 'has_permission_of_sale',
+                header: i18n.getText('field.has-permission-of-sale.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'basic',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'boolean',
+                },
+            },
+            {
+                accessorKey: 'has_permission_of_project',
+                header: i18n.getText('field.has-permission-of-project.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'basic',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'boolean',
+                },
+            },
+            {
                 accessorKey: 'groupList',
                 header: i18n.getText('field.group-list.label'),
                 enableSorting: false,
@@ -205,6 +253,10 @@ const ViewList = React.memo(() => {
             email: userMap.email,
             phone: userMap.phone,
             is_active: userMap.is_active,
+            has_permission_of_root: userMap.has_permission_of_root,
+            has_permission_of_admin: userMap.has_permission_of_admin,
+            has_permission_of_sale: userMap.has_permission_of_sale,
+            has_permission_of_project: userMap.has_permission_of_project,
             groupList: groupList,
             company_id: userMap.company_id,
         }
