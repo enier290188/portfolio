@@ -14,13 +14,11 @@ type TypeTable = {
     id: appType.TypeServiceApiPageWorkspaceRootUserResponse['id']
     created_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['created_at']
     updated_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['updated_at']
-
     name: appType.TypeServiceApiPageWorkspaceRootUserResponse['name']
     email: appType.TypeServiceApiPageWorkspaceRootUserResponse['email']
     phone: appType.TypeServiceApiPageWorkspaceRootUserResponse['phone']
     is_active: appType.TypeServiceApiPageWorkspaceRootUserResponse['is_active']
     groupList: []
-
     company_id: appType.TypeServiceApiPageWorkspaceRootUserResponse['company_id']
 }
 
