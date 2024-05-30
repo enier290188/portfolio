@@ -37,7 +37,12 @@ const __fetch__ = async (request: TypeFetchRequest): Promise<TypeFetchResponse> 
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const status: TypeFetchResponse['status'] = response.status
+        let status: TypeFetchResponse['status'] = response.status
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (status === 201) {
+            status = 200
+        }
 
         if (status === 401 || status === 403 || status === 404 || status === 409) {
             const data: TypeFetchResponseSuccessError['data'] = await response.json() // parses JSON response into native JavaScript objects
