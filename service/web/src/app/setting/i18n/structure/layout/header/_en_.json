@@ -4,6 +4,7 @@
     "forgot": "Forgot Password",
     "workspace-root.dashboard": "Dashboard",
     "workspace-root.company": "Companies",
+    "workspace-root.user": "Users",
     "workspace-admin.dashboard": "Dashboard",
     "workspace-admin.lead": "Leads",
     "workspace-admin.deal": "Deals",

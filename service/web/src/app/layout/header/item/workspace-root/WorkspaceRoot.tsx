@@ -18,6 +18,10 @@ export const WorkspaceRoot = () => {
                 <mui.icon.Business />
                 {i18n.getText('workspace-root.company')}
             </component.item.link.Link>
+            <component.item.link.Link to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user).getTo()}>
+                <mui.icon.People />
+                {i18n.getText('workspace-root.user')}
+            </component.item.link.Link>
         </>
     )
 }
