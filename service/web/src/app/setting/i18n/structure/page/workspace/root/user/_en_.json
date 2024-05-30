@@ -1,5 +1,6 @@
 {
     "title": "Users",
+    "field.company-name.label": "Company",
     "field.name.label": "Name",
     "field.email.label": "Email",
     "field.phone.label": "Phone",

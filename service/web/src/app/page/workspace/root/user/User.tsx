@@ -14,6 +14,7 @@ type TypeTable = {
     id: appType.TypeServiceApiPageWorkspaceRootUserResponse['id']
     created_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['created_at']
     updated_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['updated_at']
+    companyName: appType.TypeServiceApiPageWorkspaceRootCompanyResponse['name']
     name: appType.TypeServiceApiPageWorkspaceRootUserResponse['name']
     email: appType.TypeServiceApiPageWorkspaceRootUserResponse['email']
     phone: appType.TypeServiceApiPageWorkspaceRootUserResponse['phone']
@@ -43,6 +44,27 @@ const ViewList = React.memo(() => {
     const userId = user?.id ?? ''
     const userActionSyncUser = contextUser.syncUser
 
+    const queryCompanyList = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
+        queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]> => {
+            const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.items) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.items
+                } else {
+                    return []
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return []
+            }
+        },
+        initialData: [],
+    })
     const queryUserList = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/user/list/`, 'query', 'db'],
         queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootUserResponse[]> => {
@@ -66,8 +88,9 @@ const ViewList = React.memo(() => {
     })
 
     const handleActionRefresh = React.useCallback(async () => {
+        await queryCompanyList.refetch()
         await queryUserList.refetch()
-    }, [queryUserList])
+    }, [queryCompanyList, queryUserList])
 
     const tableColumns = React.useMemo<tableType.ColumnDef<TypeTable>[]>(
         () => [
@@ -100,6 +123,17 @@ const ViewList = React.memo(() => {
                 enableColumnFilter: false,
                 meta: {
                     width: 184,
+                },
+            },
+            {
+                accessorKey: 'companyName',
+                header: i18n.getText('field.company-name.label'),
+                enableSorting: true,
+                enableColumnFilter: true,
+                sortingFn: 'alphanumericCaseSensitive',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'text',
                 },
             },
             {
@@ -231,36 +265,48 @@ const ViewList = React.memo(() => {
         [i18n, userId],
     )
 
-    const tableData: TypeTable[] = queryUserList.data.slice().map((userMap) => {
-        const groupList: string[] = []
-        if (userMap.has_permission_of_root) {
-            groupList.push(app.setting.user.value.GROUP_ROOT)
+    const tableData = React.useMemo<TypeTable[]>(() => {
+        const companyData: { [id: string]: { id: string; name: string } } = {}
+        for (const index in queryCompanyList.data) {
+            const companyFor = queryCompanyList.data[index]
+            companyData[companyFor.id] = {
+                id: companyFor.id,
+                name: companyFor.name,
+            }
         }
-        if (userMap.has_permission_of_admin) {
-            groupList.push(app.setting.user.value.GROUP_ADMIN)
-        }
-        if (userMap.has_permission_of_sale) {
-            groupList.push(app.setting.user.value.GROUP_SALE)
-        }
-        if (userMap.has_permission_of_project) {
-            groupList.push(app.setting.user.value.GROUP_PROJECT)
-        }
-        return {
-            id: userMap.id,
-            created_at: userMap.created_at,
-            updated_at: userMap.updated_at,
-            name: userMap.name,
-            email: userMap.email,
-            phone: userMap.phone,
-            is_active: userMap.is_active,
-            has_permission_of_root: userMap.has_permission_of_root,
-            has_permission_of_admin: userMap.has_permission_of_admin,
-            has_permission_of_sale: userMap.has_permission_of_sale,
-            has_permission_of_project: userMap.has_permission_of_project,
-            groupList: groupList,
-            company_id: userMap.company_id,
-        }
-    })
+        return [...queryUserList.data.slice()].map((userMap) => {
+            const userGroupList: string[] = []
+            if (userMap.has_permission_of_root) {
+                userGroupList.push(app.setting.user.value.GROUP_ROOT)
+            }
+            if (userMap.has_permission_of_admin) {
+                userGroupList.push(app.setting.user.value.GROUP_ADMIN)
+            }
+            if (userMap.has_permission_of_sale) {
+                userGroupList.push(app.setting.user.value.GROUP_SALE)
+            }
+            if (userMap.has_permission_of_project) {
+                userGroupList.push(app.setting.user.value.GROUP_PROJECT)
+            }
+            const company = companyData[`${userMap.company_id}`]
+            return {
+                id: userMap.id,
+                companyName: company?.name ?? '',
+                created_at: userMap.created_at,
+                updated_at: userMap.updated_at,
+                name: userMap.name,
+                email: userMap.email,
+                phone: userMap.phone,
+                is_active: userMap.is_active,
+                has_permission_of_root: userMap.has_permission_of_root,
+                has_permission_of_admin: userMap.has_permission_of_admin,
+                has_permission_of_sale: userMap.has_permission_of_sale,
+                has_permission_of_project: userMap.has_permission_of_project,
+                groupList: userGroupList,
+                company_id: userMap.company_id,
+            }
+        })
+    }, [queryCompanyList.data, queryUserList.data])
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'lg'}>
