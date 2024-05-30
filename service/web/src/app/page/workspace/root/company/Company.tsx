@@ -139,7 +139,7 @@ const ViewList = React.memo(() => {
             {
                 accessorKey: 'created_at',
                 header: i18n.getText('field.created-at.label'),
-                enableSorting: true,
+                enableSorting: false,
                 enableColumnFilter: false,
                 sortingFn: 'datetime',
                 meta: {
@@ -151,7 +151,7 @@ const ViewList = React.memo(() => {
             {
                 accessorKey: 'updated_at',
                 header: i18n.getText('field.updated-at.label'),
-                enableSorting: true,
+                enableSorting: false,
                 enableColumnFilter: false,
                 sortingFn: 'datetime',
                 meta: {

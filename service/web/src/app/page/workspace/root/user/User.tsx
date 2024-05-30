@@ -18,7 +18,7 @@ type TypeTable = {
     email: appType.TypeServiceApiPageWorkspaceRootUserResponse['email']
     phone: appType.TypeServiceApiPageWorkspaceRootUserResponse['phone']
     is_active: appType.TypeServiceApiPageWorkspaceRootUserResponse['is_active']
-    groupList: []
+    groupList: string[]
     company_id: appType.TypeServiceApiPageWorkspaceRootUserResponse['company_id']
 }
 
@@ -132,17 +132,6 @@ const ViewList = React.memo(() => {
                 },
             },
             {
-                accessorKey: 'groupList',
-                header: i18n.getText('field.group-list.label'),
-                enableSorting: false,
-                enableColumnFilter: false,
-                sortingFn: 'alphanumericCaseSensitive',
-                filterFn: 'includesString',
-                meta: {
-                    type: 'userGroupList',
-                },
-            },
-            {
                 accessorKey: 'is_active',
                 header: i18n.getText('field.is-active.label'),
                 enableSorting: true,
@@ -154,9 +143,22 @@ const ViewList = React.memo(() => {
                 },
             },
             {
+                accessorKey: 'groupList',
+                header: i18n.getText('field.group-list.label'),
+                enableSorting: false,
+                enableColumnFilter: false,
+                sortingFn: 'alphanumericCaseSensitive',
+                filterFn: 'includesString',
+                meta: {
+                    type: 'userGroupList',
+                    width: 180,
+                    expander: true,
+                },
+            },
+            {
                 accessorKey: 'created_at',
                 header: i18n.getText('field.created-at.label'),
-                enableSorting: true,
+                enableSorting: false,
                 enableColumnFilter: false,
                 sortingFn: 'datetime',
                 meta: {
@@ -168,7 +170,7 @@ const ViewList = React.memo(() => {
             {
                 accessorKey: 'updated_at',
                 header: i18n.getText('field.updated-at.label'),
-                enableSorting: true,
+                enableSorting: false,
                 enableColumnFilter: false,
                 sortingFn: 'datetime',
                 meta: {
@@ -181,7 +183,32 @@ const ViewList = React.memo(() => {
         [i18n, userId],
     )
 
-    const tableData: TypeTable[] = queryUserList.data.slice()
+    const tableData: TypeTable[] = queryUserList.data.slice().map((userMap) => {
+        const groupList: string[] = []
+        if (userMap.has_permission_of_root) {
+            groupList.push(app.setting.user.value.GROUP_ROOT)
+        }
+        if (userMap.has_permission_of_admin) {
+            groupList.push(app.setting.user.value.GROUP_ADMIN)
+        }
+        if (userMap.has_permission_of_sale) {
+            groupList.push(app.setting.user.value.GROUP_SALE)
+        }
+        if (userMap.has_permission_of_project) {
+            groupList.push(app.setting.user.value.GROUP_PROJECT)
+        }
+        return {
+            id: userMap.id,
+            created_at: userMap.created_at,
+            updated_at: userMap.updated_at,
+            name: userMap.name,
+            email: userMap.email,
+            phone: userMap.phone,
+            is_active: userMap.is_active,
+            groupList: groupList,
+            company_id: userMap.company_id,
+        }
+    })
 
     return (
         <app.layout.main.component.structure.page.Page maxWidth={'lg'}>

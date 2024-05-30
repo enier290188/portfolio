@@ -398,21 +398,34 @@ const LayoutTableBody = <TData extends tanstackReactTableType.RowData>({ table }
                                 break
                             }
                             case 'userGroupList': {
-                                const cellValue = cell.getValue()
-
+                                const cellValueList = cell.getValue()
                                 value = <app.component.typography.Typography component={'div'} variant={'body1'}>{`-`}</app.component.typography.Typography>
 
-                                if (cellValue instanceof Array) {
-                                    const userGroupList = app.setting.user.value.USER_GROUP_LIST
-                                    for (const userGroup of userGroupList) {
-                                        if (cellValue.includes(userGroup)) {
-                                            value = (
+                                if (cellValueList instanceof Array) {
+                                    value = (
+                                        <mui.component.Box component={'div'}>
+                                            {cellValueList.includes(app.setting.user.value.GROUP_ROOT) ? (
                                                 <app.component.typography.Typography component={'div'} variant={'body1'}>
-                                                    {userGroup}
+                                                    {app.setting.user.value.GROUP_ROOT}
                                                 </app.component.typography.Typography>
-                                            )
-                                        }
-                                    }
+                                            ) : null}
+                                            {cellValueList.includes(app.setting.user.value.GROUP_ADMIN) ? (
+                                                <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                                    {app.setting.user.value.GROUP_ADMIN}
+                                                </app.component.typography.Typography>
+                                            ) : null}
+                                            {cellValueList.includes(app.setting.user.value.GROUP_SALE) ? (
+                                                <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                                    {app.setting.user.value.GROUP_SALE}
+                                                </app.component.typography.Typography>
+                                            ) : null}
+                                            {cellValueList.includes(app.setting.user.value.GROUP_PROJECT) ? (
+                                                <app.component.typography.Typography component={'div'} variant={'body1'}>
+                                                    {app.setting.user.value.GROUP_PROJECT}
+                                                </app.component.typography.Typography>
+                                            ) : null}
+                                        </mui.component.Box>
+                                    )
                                 }
                                 break
                             }
