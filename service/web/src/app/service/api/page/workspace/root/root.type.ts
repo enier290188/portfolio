@@ -40,3 +40,12 @@ export type TypeCompanyRemoveRequest = {
         is_active: appType.TypeModelCompany['is_active']
     }
 }
+
+export type TypeUserFetchRequest = {
+    accessToken: appType.TypeSettingAccessToken
+}
+
+export type TypeUserGetRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    id: appType.TypeModelUser['id']
+}

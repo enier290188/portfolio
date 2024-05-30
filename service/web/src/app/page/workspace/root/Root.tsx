@@ -4,6 +4,7 @@ import React from 'react'
 
 const Dashboard = React.lazy(() => import('./dashboard'))
 const Company = React.lazy(() => import('./company'))
+const User = React.lazy(() => import('./user'))
 
 export const Root = () => {
     return (
@@ -23,6 +24,14 @@ export const Root = () => {
                     element={
                         <React.Suspense fallback={<app.component.loading.Suspense />}>
                             <Company />
+                        </React.Suspense>
+                    }
+                />
+                <router.component.Route
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.root.user).getPath()}*`}
+                    element={
+                        <React.Suspense fallback={<app.component.loading.Suspense />}>
+                            <User />
                         </React.Suspense>
                     }
                 />

@@ -1,4 +1,4 @@
-import { app } from '@./app'
+import { app, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
@@ -10,28 +10,53 @@ const RouteIdUpdate = React.lazy(() => import('./id/update'))
 const RouteIdResetPassword = React.lazy(() => import('./id/reset-password'))
 const RouteIdRemove = React.lazy(() => import('./id/remove'))
 
-type TypeUser = {
-    id: string
-    name: string
-    email: string
-    phone: string
+type TypeTable = {
+    id: appType.TypeServiceApiPageWorkspaceRootUserResponse['id']
+    created_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['created_at']
+    updated_at: appType.TypeServiceApiPageWorkspaceRootUserResponse['updated_at']
+    name: appType.TypeServiceApiPageWorkspaceRootUserResponse['name']
+    email: appType.TypeServiceApiPageWorkspaceRootUserResponse['email']
+    phone: appType.TypeServiceApiPageWorkspaceRootUserResponse['phone']
+    is_active: appType.TypeServiceApiPageWorkspaceRootUserResponse['is_active']
     groupList: []
-    createdAt: string
-    updatedAt: string
 }
 
 const ViewList = React.memo(() => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.setting.user, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.user, i18nLanguage), [i18nLanguage])
+
+    const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
     const user = contextUser.getUser()
     const userId = user?.id ?? ''
+    const userActionSyncUser = contextUser.syncUser
 
     const queryUserList = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'],
-        queryFn: () => [],
+        queryKey: [`/app/page/workspace/root/user/list/`, 'query', 'db'],
+        queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootUserResponse[]> => {
+            const response = await app.service.api.page.workspace.root.user_fetch({ accessToken: accessToken })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.items) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.items
+                } else {
+                    return []
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return []
+            }
+        },
         initialData: [],
     })
 
@@ -39,24 +64,24 @@ const ViewList = React.memo(() => {
         await queryUserList.refetch()
     }, [queryUserList])
 
-    const tableColumns = React.useMemo<tableType.ColumnDef<TypeUser>[]>(
+    const tableColumns = React.useMemo<tableType.ColumnDef<TypeTable>[]>(
         () => [
             {
                 accessorKey: app.component.crud.TableColumnAccessorKeyAction,
                 header: () => (
-                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
+                    <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user.create).getTo()} space={0} typographyProps={{ variant: 'body2' }}>
                         <mui.icon.AddCircle sx={{ m: `0 !important` }} />
                     </app.component.button.ButtonLink>
                 ),
                 cell: ({ row }) => (
                     <>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].update).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].update).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Edit sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].resetPassword).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].resetPassword).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 1, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.LockReset sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].remove).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].remove).getTo({ id: row.id })} disabled={userId === row.id} space={{ top: 0, right: 2, bottom: 0, left: 0 }} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.DeleteForever sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                         {row.getCanExpand() ? (
@@ -144,10 +169,10 @@ const ViewList = React.memo(() => {
         [i18n, userId],
     )
 
-    const tableData: TypeUser[] = queryUserList.data.slice()
+    const tableData: TypeTable[] = queryUserList.data.slice()
 
     return (
-        <>
+        <app.layout.main.component.structure.page.Page maxWidth={'lg'}>
             <app.layout.main.component.structure.head.spaceBetween.Head>
                 <app.layout.main.component.structure.head.spaceBetween.HeadLeft>
                     <app.layout.main.component.structure.box.title.Title level={1}>
@@ -164,9 +189,9 @@ const ViewList = React.memo(() => {
             </app.layout.main.component.structure.head.spaceBetween.Head>
             {queryUserList.isFetching ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
             <app.layout.main.component.structure.body.Body>
-                <app.layout.main.component.structure.box.content.Content>{queryUserList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-admin-setting-user-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
+                <app.layout.main.component.structure.box.content.Content>{queryUserList.isFetching ? <app.component.loading.Text /> : <app.component.crud.Table tableKey={`${userId}-page-workspace-root-user-list`} columns={tableColumns} data={tableData} />}</app.layout.main.component.structure.box.content.Content>
             </app.layout.main.component.structure.body.Body>
-        </>
+        </app.layout.main.component.structure.page.Page>
     )
 })
 ViewList.displayName = 'ViewList'
@@ -177,7 +202,7 @@ export const User = () => {
             <router.component.Route path={``}>
                 <router.component.Route index element={<ViewList />} />
                 <router.component.Route
-                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user.create).getPath()}*`}
+                    path={`${app.setting.route.getNode(app.setting.route.app.page.workspace.root.user.create).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -188,7 +213,7 @@ export const User = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].update).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].update).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -199,7 +224,7 @@ export const User = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].resetPassword).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].resetPassword).getPath()}*`}
                     element={
                         <>
                             <ViewList />
@@ -210,7 +235,7 @@ export const User = () => {
                     }
                 />
                 <router.component.Route
-                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].remove).getPath()}*`}
+                    path={`:id/${app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].remove).getPath()}*`}
                     element={
                         <>
                             <ViewList />

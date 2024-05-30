@@ -1,11 +1,12 @@
 {
     "title": "Users",
-    "action.refresh": "Refresh",
     "field.name.label": "Name",
     "field.email.label": "Email",
     "field.phone.label": "Phone",
+    "field.is-active.label": "Is Active",
     "field.group-list.label": "Groups",
-    "field.cognito-status.label": "Status",
     "field.created-at.label": "Created At",
-    "field.updated-at.label": "Updated At"
+    "field.updated-at.label": "Updated At",
+    "action.fetch.alert.error": "Sorry, an unexpected error has occurred",
+    "action.refresh": "Refresh"
 }
