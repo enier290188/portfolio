@@ -386,6 +386,7 @@ const View = () => {
                         <app.layout.main.component.structure.body.Body alignItems={'center'}>
                             <mui.component.Box component={'form'} width={'100%'} maxWidth={'375px'} my={4} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
                                 <app.layout.main.component.structure.box.content.Content>
+                                    <app.component.field.autocomplete.Autocomplete />
                                     <form.component.Controller
                                         name={'name'}
                                         control={formUpdate.control}

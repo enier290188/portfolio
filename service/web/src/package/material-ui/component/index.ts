@@ -1,4 +1,4 @@
-import { Alert, Autocomplete, Avatar, Backdrop, Box, Button, Checkbox, CircularProgress, Container, CssBaseline, Dialog, Divider, FormControlLabel, FormHelperText, Input, InputAdornment, InputLabel, LinearProgress, Menu, MenuItem, MenuList, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, Zoom } from '@mui/material'
+import { Alert, Autocomplete, Avatar, Backdrop, Box, Button, Checkbox, CircularProgress, Container, CssBaseline, Dialog, Divider, FormControlLabel, FormHelperText, InputAdornment, InputLabel, LinearProgress, Menu, MenuItem, MenuList, Pagination, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, Zoom } from '@mui/material'
 
 export const component = {
     Alert,
@@ -15,7 +15,6 @@ export const component = {
     Divider,
     FormControlLabel,
     FormHelperText,
-    Input,
     InputAdornment,
     InputLabel,
     LinearProgress,

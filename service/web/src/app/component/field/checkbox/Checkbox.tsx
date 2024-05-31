@@ -1,7 +1,7 @@
 import { app } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
-import { CheckboxProps } from './Checkbox.type.tsx'
+import { CheckboxProps } from './Checkbox.type.ts'
 
 export const Checkbox = ({ required = true, label = '', color = 'primary', size = 'small', error = false, helperText = '', disabled = false, autoFocus = false, checkboxProps, space = 0, field }: CheckboxProps) => {
     const [spaceTop, spaceRight, spaceBottom, spaceLeft] = app.hook.useComponentSpace(space)

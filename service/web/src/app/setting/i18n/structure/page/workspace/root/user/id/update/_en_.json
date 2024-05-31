@@ -1,5 +1,6 @@
 {
     "title": "Update User",
+    "field.company.label": "Company",
     "field.name.label": "Name",
     "field.name.validate.required": "- It is required.",
     "field.name.validate.max-length": "- Should be less than {value} characters.",
