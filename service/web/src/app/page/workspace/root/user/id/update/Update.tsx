@@ -113,8 +113,8 @@ const View = () => {
             if (!value) {
                 messageList.push(i18n.getText('field.email.validate.required'))
             }
-            if (180 < value.length) {
-                messageList.push(i18n.getText('field.email.validate.max-length', { value: 180 }))
+            if (128 < value.length) {
+                messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
             }
             if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
                 messageList.push(i18n.getText('field.email.validate.pattern'))
@@ -321,11 +321,11 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextEmail
-                                                required={false}
+                                                required={true}
                                                 label={i18n.getText('field.email.label')}
                                                 error={!!formUpdate.formState.errors.email}
                                                 helperText={formUpdate.formState.errors.email?.message}
-                                                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                disabled={true}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
