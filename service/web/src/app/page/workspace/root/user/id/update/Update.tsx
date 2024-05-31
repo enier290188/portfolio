@@ -53,6 +53,28 @@ const View = () => {
     const { id } = router.hook.useParams()
     const paramUserId = id ?? ''
 
+    const queryCompanyList = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
+        queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]> => {
+            const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.items) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.items
+                } else {
+                    return []
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return []
+            }
+        },
+        initialData: [],
+    })
+
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/user/${paramUserId}/get/`, 'query', 'db'],
@@ -207,8 +229,9 @@ const View = () => {
 
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
+        await queryCompanyList.refetch()
         await queryUserGet.refetch()
-    }, [queryUserGet])
+    }, [queryCompanyList, queryUserGet])
 
     const handleActionReset = React.useCallback(async () => {
         formUpdate.setValue('companyId', defaultValuesToReset.companyId)
@@ -324,6 +347,8 @@ const View = () => {
     if (!queryUserGet.isFetching && !queryUserGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
     }
+
+    console.log(queryCompanyList.data)
 
     return (
         <app.component.dialog.Dialog>
