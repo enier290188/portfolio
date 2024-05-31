@@ -6,6 +6,7 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeForm = {
+    companyId: null | string
     name: string
     email: string
     phone: string
@@ -17,6 +18,7 @@ type TypeForm = {
 }
 
 const DEFAULT_VALUES: TypeForm = {
+    companyId: null,
     name: '',
     email: '',
     phone: '',
@@ -209,6 +211,7 @@ const View = () => {
     }, [queryUserGet])
 
     const handleActionReset = React.useCallback(async () => {
+        formUpdate.setValue('companyId', defaultValuesToReset.companyId)
         formUpdate.setValue('name', defaultValuesToReset.name)
         formUpdate.setValue('email', defaultValuesToReset.email)
         formUpdate.setValue('phone', defaultValuesToReset.phone)
@@ -222,7 +225,7 @@ const View = () => {
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
+            const { companyId, name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
 
             mutationUserUpdate.mutate(
                 {
@@ -235,12 +238,14 @@ const View = () => {
                     has_permission_of_admin: hasPermissionOfAdmin,
                     has_permission_of_sale: hasPermissionOfSale,
                     has_permission_of_project: hasPermissionOfProject,
+                    company_id: companyId,
                 },
                 {
                     onSuccess: (userUpdated) => {
                         if (userUpdated) {
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
+                                companyId: companyId,
                                 name: name,
                                 email: email,
                                 phone: phone,
@@ -265,6 +270,7 @@ const View = () => {
     }, [queryUserGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
+        const companyId = queryUserGet.data?.company_id ?? DEFAULT_VALUES.companyId
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
@@ -275,6 +281,7 @@ const View = () => {
         const hasPermissionOfProject = queryUserGet.data?.has_permission_of_project ?? DEFAULT_VALUES.hasPermissionOfProject
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
+            companyId: companyId,
             name: name,
             email: email,
             phone: phone,
@@ -284,6 +291,7 @@ const View = () => {
             hasPermissionOfSale: hasPermissionOfSale,
             hasPermissionOfProject: hasPermissionOfProject,
         }))
+        formUpdate.setValue('companyId', companyId)
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
         formUpdate.setValue('phone', phone)

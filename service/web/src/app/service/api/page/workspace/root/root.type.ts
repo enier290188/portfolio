@@ -62,5 +62,6 @@ export type TypeUserUpdateRequest = {
         has_permission_of_admin: appType.TypeModelUser['has_permission_of_admin']
         has_permission_of_sale: appType.TypeModelUser['has_permission_of_sale']
         has_permission_of_project: appType.TypeModelUser['has_permission_of_project']
+        company_id: appType.TypeModelUser['company_id']
     }
 }
