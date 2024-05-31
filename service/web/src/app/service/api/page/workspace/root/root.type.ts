@@ -58,5 +58,9 @@ export type TypeUserUpdateRequest = {
         email: appType.TypeModelUser['email']
         phone: appType.TypeModelUser['phone']
         is_active: appType.TypeModelUser['is_active']
+        has_permission_of_root: appType.TypeModelUser['has_permission_of_root']
+        has_permission_of_admin: appType.TypeModelUser['has_permission_of_admin']
+        has_permission_of_sale: appType.TypeModelUser['has_permission_of_sale']
+        has_permission_of_project: appType.TypeModelUser['has_permission_of_project']
     }
 }

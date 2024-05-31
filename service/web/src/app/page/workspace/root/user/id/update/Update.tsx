@@ -10,6 +10,10 @@ type TypeForm = {
     email: string
     phone: string
     isActive: boolean
+    hasPermissionOfRoot: boolean
+    hasPermissionOfAdmin: boolean
+    hasPermissionOfSale: boolean
+    hasPermissionOfProject: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
@@ -17,6 +21,10 @@ const DEFAULT_VALUES: TypeForm = {
     email: '',
     phone: '',
     isActive: false,
+    hasPermissionOfRoot: false,
+    hasPermissionOfAdmin: false,
+    hasPermissionOfSale: false,
+    hasPermissionOfProject: false,
 }
 
 enum EFFECT_STEP {
@@ -151,6 +159,50 @@ const View = () => {
         [i18n],
     )
 
+    const handleValidateFieldHasPermissionOfRoot = React.useCallback(
+        (value: TypeForm['hasPermissionOfRoot']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.has-permission-of-root.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
+    const handleValidateFieldHasPermissionOfAdmin = React.useCallback(
+        (value: TypeForm['hasPermissionOfAdmin']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.has-permission-of-admin.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
+    const handleValidateFieldHasPermissionOfSale = React.useCallback(
+        (value: TypeForm['hasPermissionOfSale']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.has-permission-of-sale.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
+    const handleValidateFieldHasPermissionOfProject = React.useCallback(
+        (value: TypeForm['hasPermissionOfProject']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.has-permission-of-project.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
         await queryUserGet.refetch()
@@ -161,12 +213,16 @@ const View = () => {
         formUpdate.setValue('email', defaultValuesToReset.email)
         formUpdate.setValue('phone', defaultValuesToReset.phone)
         formUpdate.setValue('isActive', defaultValuesToReset.isActive)
+        formUpdate.setValue('hasPermissionOfRoot', defaultValuesToReset.hasPermissionOfRoot)
+        formUpdate.setValue('hasPermissionOfAdmin', defaultValuesToReset.hasPermissionOfAdmin)
+        formUpdate.setValue('hasPermissionOfSale', defaultValuesToReset.hasPermissionOfSale)
+        formUpdate.setValue('hasPermissionOfProject', defaultValuesToReset.hasPermissionOfProject)
         await formUpdate.trigger()
     }, [formUpdate, defaultValuesToReset])
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { name, email, phone, isActive } = data
+            const { name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
 
             mutationUserUpdate.mutate(
                 {
@@ -175,6 +231,10 @@ const View = () => {
                     email: email,
                     phone: phone,
                     is_active: isActive,
+                    has_permission_of_root: hasPermissionOfRoot,
+                    has_permission_of_admin: hasPermissionOfAdmin,
+                    has_permission_of_sale: hasPermissionOfSale,
+                    has_permission_of_project: hasPermissionOfProject,
                 },
                 {
                     onSuccess: (userUpdated) => {
@@ -185,6 +245,10 @@ const View = () => {
                                 email: email,
                                 phone: phone,
                                 isActive: isActive,
+                                hasPermissionOfRoot: hasPermissionOfRoot,
+                                hasPermissionOfAdmin: hasPermissionOfAdmin,
+                                hasPermissionOfSale: hasPermissionOfSale,
+                                hasPermissionOfProject: hasPermissionOfProject,
                             }))
                         }
                     },
@@ -205,17 +269,29 @@ const View = () => {
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
         const isActive = queryUserGet.data?.is_active ?? DEFAULT_VALUES.isActive
+        const hasPermissionOfRoot = queryUserGet.data?.has_permission_of_root ?? DEFAULT_VALUES.hasPermissionOfRoot
+        const hasPermissionOfAdmin = queryUserGet.data?.has_permission_of_admin ?? DEFAULT_VALUES.hasPermissionOfAdmin
+        const hasPermissionOfSale = queryUserGet.data?.has_permission_of_sale ?? DEFAULT_VALUES.hasPermissionOfSale
+        const hasPermissionOfProject = queryUserGet.data?.has_permission_of_project ?? DEFAULT_VALUES.hasPermissionOfProject
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
             email: email,
             phone: phone,
             isActive: isActive,
+            hasPermissionOfRoot: hasPermissionOfRoot,
+            hasPermissionOfAdmin: hasPermissionOfAdmin,
+            hasPermissionOfSale: hasPermissionOfSale,
+            hasPermissionOfProject: hasPermissionOfProject,
         }))
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
         formUpdate.setValue('phone', phone)
         formUpdate.setValue('isActive', isActive)
+        formUpdate.setValue('hasPermissionOfRoot', hasPermissionOfRoot)
+        formUpdate.setValue('hasPermissionOfAdmin', hasPermissionOfAdmin)
+        formUpdate.setValue('hasPermissionOfSale', hasPermissionOfSale)
+        formUpdate.setValue('hasPermissionOfProject', hasPermissionOfProject)
         await formUpdate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
     }, [queryUserGet.data, formUpdate])
@@ -377,6 +453,110 @@ const View = () => {
                                                 label={i18n.getText('field.is-active.label')}
                                                 error={!!formUpdate.formState.errors.isActive}
                                                 helperText={formUpdate.formState.errors.isActive?.message}
+                                                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfRoot'}
+                                        control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldHasPermissionOfRoot,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.has-permission-of-root.label')}
+                                                error={!!formUpdate.formState.errors.hasPermissionOfRoot}
+                                                helperText={formUpdate.formState.errors.hasPermissionOfRoot?.message}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfAdmin'}
+                                        control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldHasPermissionOfAdmin,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.has-permission-of-admin.label')}
+                                                error={!!formUpdate.formState.errors.hasPermissionOfAdmin}
+                                                helperText={formUpdate.formState.errors.hasPermissionOfAdmin?.message}
+                                                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfSale'}
+                                        control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldHasPermissionOfSale,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.has-permission-of-sale.label')}
+                                                error={!!formUpdate.formState.errors.hasPermissionOfSale}
+                                                helperText={formUpdate.formState.errors.hasPermissionOfSale?.message}
+                                                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfProject'}
+                                        control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldHasPermissionOfProject,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.has-permission-of-project.label')}
+                                                error={!!formUpdate.formState.errors.hasPermissionOfProject}
+                                                helperText={formUpdate.formState.errors.hasPermissionOfProject?.message}
                                                 disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
