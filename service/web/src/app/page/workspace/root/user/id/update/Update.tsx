@@ -6,7 +6,14 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeForm = {
-    companyId: null | string
+    company: {
+        id: string
+        label: string
+    } | null
+    companyList: {
+        id: string
+        label: string
+    }[]
     name: string
     email: string
     phone: string
@@ -18,7 +25,8 @@ type TypeForm = {
 }
 
 const DEFAULT_VALUES: TypeForm = {
-    companyId: null,
+    company: null,
+    companyList: [],
     name: '',
     email: '',
     phone: '',
@@ -234,7 +242,8 @@ const View = () => {
     }, [queryCompanyList, queryUserGet])
 
     const handleActionReset = React.useCallback(async () => {
-        formUpdate.setValue('companyId', defaultValuesToReset.companyId)
+        formUpdate.setValue('company', defaultValuesToReset.company)
+        formUpdate.setValue('companyList', defaultValuesToReset.companyList)
         formUpdate.setValue('name', defaultValuesToReset.name)
         formUpdate.setValue('email', defaultValuesToReset.email)
         formUpdate.setValue('phone', defaultValuesToReset.phone)
@@ -248,7 +257,7 @@ const View = () => {
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { companyId, name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
+            const { company, name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
 
             mutationUserUpdate.mutate(
                 {
@@ -261,14 +270,14 @@ const View = () => {
                     has_permission_of_admin: hasPermissionOfAdmin,
                     has_permission_of_sale: hasPermissionOfSale,
                     has_permission_of_project: hasPermissionOfProject,
-                    company_id: companyId,
+                    company_id: company?.id ?? null,
                 },
                 {
                     onSuccess: (userUpdated) => {
                         if (userUpdated) {
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
-                                companyId: companyId,
+                                company: company,
                                 name: name,
                                 email: email,
                                 phone: phone,
@@ -293,7 +302,21 @@ const View = () => {
     }, [queryUserGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        const companyId = queryUserGet.data?.company_id ?? DEFAULT_VALUES.companyId
+        const company = queryUserGet.data?.company_id
+            ? {
+                  id: queryUserGet.data.company_id,
+                  label: '',
+              }
+            : DEFAULT_VALUES.company
+        const companyList = queryCompanyList.data.map((companyMap) => {
+            if (company && company.id === companyMap.id) {
+                company.label = companyMap.name
+            }
+            return {
+                id: companyMap.id,
+                label: companyMap.name,
+            }
+        })
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
@@ -304,7 +327,8 @@ const View = () => {
         const hasPermissionOfProject = queryUserGet.data?.has_permission_of_project ?? DEFAULT_VALUES.hasPermissionOfProject
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
-            companyId: companyId,
+            company: company,
+            companyList: companyList,
             name: name,
             email: email,
             phone: phone,
@@ -314,7 +338,7 @@ const View = () => {
             hasPermissionOfSale: hasPermissionOfSale,
             hasPermissionOfProject: hasPermissionOfProject,
         }))
-        formUpdate.setValue('companyId', companyId)
+        formUpdate.setValue('company', company)
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
         formUpdate.setValue('phone', phone)
@@ -325,7 +349,7 @@ const View = () => {
         formUpdate.setValue('hasPermissionOfProject', hasPermissionOfProject)
         await formUpdate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
-    }, [queryUserGet.data, formUpdate])
+    }, [queryCompanyList.data, queryUserGet.data, formUpdate])
 
     React.useEffect(() => {
         switch (effectStep) {
@@ -347,8 +371,6 @@ const View = () => {
     if (!queryUserGet.isFetching && !queryUserGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
     }
-
-    console.log(queryCompanyList.data)
 
     return (
         <app.component.dialog.Dialog>
@@ -386,7 +408,34 @@ const View = () => {
                         <app.layout.main.component.structure.body.Body alignItems={'center'}>
                             <mui.component.Box component={'form'} width={'100%'} maxWidth={'375px'} my={4} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
                                 <app.layout.main.component.structure.box.content.Content>
-                                    <app.component.field.autocomplete.Autocomplete />
+                                    <form.component.Controller
+                                        name={'company'}
+                                        control={formUpdate.control}
+                                        render={({ field }) => (
+                                            <app.component.field.autocomplete.Autocomplete
+                                                required={true}
+                                                InputProps={{
+                                                    startAdornment: (
+                                                        <mui.component.InputAdornment position={'end'}>
+                                                            <mui.icon.Description />
+                                                        </mui.component.InputAdornment>
+                                                    ),
+                                                }}
+                                                label={i18n.getText('field.company.label')}
+                                                error={!!formUpdate.formState.errors.name}
+                                                helperText={formUpdate.formState.errors.name?.message}
+                                                disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
+                                                autoFocus={true}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
                                     <form.component.Controller
                                         name={'name'}
                                         control={formUpdate.control}
