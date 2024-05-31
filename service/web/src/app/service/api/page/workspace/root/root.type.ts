@@ -49,3 +49,14 @@ export type TypeUserGetRequest = {
     accessToken: appType.TypeSettingAccessToken
     id: appType.TypeModelUser['id']
 }
+
+export type TypeUserUpdateRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        id: appType.TypeModelUser['id']
+        name: appType.TypeModelUser['name']
+        email: appType.TypeModelUser['email']
+        phone: appType.TypeModelUser['phone']
+        is_active: appType.TypeModelUser['is_active']
+    }
+}
