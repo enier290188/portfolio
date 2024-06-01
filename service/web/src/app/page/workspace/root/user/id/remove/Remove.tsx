@@ -1,32 +1,32 @@
-import { app } from '@./app'
+import { app, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeUserRemove = {
-    id: string
-}
-type TypeUser = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    createdAt: string
-    updatedAt: string
-}
-
 type TypeForm = {
+    companyId: null | string
     name: string
     email: string
     phone: string
+    isActive: boolean
+    hasPermissionOfRoot: boolean
+    hasPermissionOfAdmin: boolean
+    hasPermissionOfSale: boolean
+    hasPermissionOfProject: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
+    companyId: null,
     name: '',
     email: '',
     phone: '',
+    isActive: false,
+    hasPermissionOfRoot: false,
+    hasPermissionOfAdmin: false,
+    hasPermissionOfSale: false,
+    hasPermissionOfProject: false,
 }
 
 enum EFFECT_STEP {
@@ -38,40 +38,63 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.setting.user.id.remove, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.user.id.remove, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
 
     const contextUser = React.useContext(app.context.user.Context)
-    const user = contextUser.getUser()
-    const userId = user?.id ?? ''
+    const userActionSyncUser = contextUser.syncUser
 
     const { id } = router.hook.useParams()
     const paramUserId = id ?? ''
 
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'],
-        queryFn: async () => {
-            return {
-                id: '1',
-                name: DEFAULT_VALUES.name,
-                email: DEFAULT_VALUES.email,
-                phone: DEFAULT_VALUES.phone,
+        queryKey: [`/app/page/workspace/root/user/${paramUserId}/get/`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootUserResponse> => {
+            const response = await app.service.api.page.workspace.root.user_get({ accessToken: accessToken, id: paramUserId })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
             }
         },
         initialData: null,
     })
     const mutationUserRemove = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/remove/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserRemove) => {
-            return {
-                id: user.id,
-                name: DEFAULT_VALUES.name,
-                email: DEFAULT_VALUES.email,
-                phone: DEFAULT_VALUES.phone,
-                createdAt: '',
-                updatedAt: '',
+        mutationKey: [`/app/page/workspace/root/user/${paramUserId}/remove/`, 'mutation', 'db'],
+        mutationFn: async (user: appServiceApiPageWorkspaceRootType.TypeUserRemoveRequest['user']): Promise<null | appType.TypeServiceApiPageWorkspaceRootUserResponse> => {
+            const response = await app.service.api.page.workspace.root.user_remove({ accessToken: accessToken, user: user })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    queryClient.setQueryData([`/app/page/workspace/root/user/${paramUserId}/get/`, 'query', 'db'], null)
+                    queryClient.setQueryData([`/app/page/workspace/root/user/list/`, 'query', 'db'], (userList: appType.TypeServiceApiPageWorkspaceRootUserResponse[]) => userList.filter((userMap) => userMap.id !== user.id))
+                    alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
             }
         },
     })
@@ -84,27 +107,15 @@ const View = () => {
         await queryUserGet.refetch()
     }, [queryUserGet])
 
-    const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(async () => {
-        mutationUserRemove.mutate(
-            {
+    const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        async (_data: TypeForm) => {
+            mutationUserRemove.mutate({
                 id: paramUserId,
-            },
-            {
-                onSuccess: (userRemoved: TypeUser | null) => {
-                    if (userRemoved) {
-                        queryClient.invalidateQueries({ queryKey: [`/app/page/workspace/admin/setting/user/${paramUserId}/`, 'query', 'db'] })
-                        queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: TypeUser[] | undefined) => (userList ? userList.filter((userFilter: TypeUser) => userFilter.id !== paramUserId) : []))
-                        contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
-                    } else {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                    }
-                },
-                onError: () => {
-                    contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
-                },
-            },
-        )
-    }, [i18n, contextAlert, paramUserId, queryClient, mutationUserRemove])
+            })
+        },
+        [paramUserId, mutationUserRemove],
+    )
 
     const effectStepFetching = React.useCallback(async () => {
         if (!queryUserGet.isFetching) {
@@ -116,9 +127,12 @@ const View = () => {
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
+        const isActive = queryUserGet.data?.is_active ?? DEFAULT_VALUES.isActive
         formRemove.setValue('name', name)
         formRemove.setValue('email', email)
         formRemove.setValue('phone', phone)
+        formRemove.setValue('isActive', isActive)
+        await formRemove.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
     }, [queryUserGet.data, formRemove])
 
@@ -139,16 +153,16 @@ const View = () => {
         }
     }, [effectStep, effectStepFetching, effectStepFilling])
 
-    if (userId === paramUserId) {
-        return <app.component.navigate.ToAppErrorForbidden />
-    }
-
     if (mutationUserRemove.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()} />
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user).getTo()} />
     }
 
     if (!queryUserGet.isFetching && !queryUserGet.data) {
         return <app.component.navigate.ToAppErrorNotFound />
+    }
+
+    if (queryUserGet.data && queryUserGet.data.has_permission_of_root) {
+        return <app.component.navigate.ToAppErrorForbidden />
     }
 
     return (
@@ -167,7 +181,7 @@ const View = () => {
                             {queryUserGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserRemove.isPending || formRemove.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
@@ -258,6 +272,27 @@ const View = () => {
                                             <app.component.field.text.TextPhone
                                                 required={false}
                                                 label={i18n.getText('field.phone.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'isActive'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.is-active.label')}
                                                 error={false}
                                                 helperText={''}
                                                 disabled={true}

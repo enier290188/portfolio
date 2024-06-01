@@ -34,10 +34,6 @@ export type TypeCompanyRemoveRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
         id: appType.TypeModelCompany['id']
-        name: appType.TypeModelCompany['name']
-        email: appType.TypeModelCompany['email']
-        phone: appType.TypeModelCompany['phone']
-        is_active: appType.TypeModelCompany['is_active']
     }
 }
 
@@ -63,5 +59,12 @@ export type TypeUserUpdateRequest = {
         has_permission_of_sale: appType.TypeModelUser['has_permission_of_sale']
         has_permission_of_project: appType.TypeModelUser['has_permission_of_project']
         company_id: appType.TypeModelUser['company_id']
+    }
+}
+
+export type TypeUserRemoveRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        id: appType.TypeModelUser['id']
     }
 }

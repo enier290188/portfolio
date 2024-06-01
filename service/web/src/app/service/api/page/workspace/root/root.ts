@@ -1,5 +1,5 @@
 import { api } from '../../../api.ts'
-import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserUpdateRequest } from './root.type.ts'
+import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserRemoveRequest, TypeUserUpdateRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({
@@ -69,6 +69,16 @@ const user_update = async (request: TypeUserUpdateRequest) => {
     })
 }
 
+const user_remove = async (request: TypeUserRemoveRequest) => {
+    return await api.delete({
+        resource: `/api/v1/page/workspace/root/user/${request.user.id}/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.user,
+        },
+    })
+}
+
 export const root = {
     company_fetch: company_fetch,
     company_create: company_create,
@@ -78,4 +88,5 @@ export const root = {
     user_fetch: user_fetch,
     user_get: user_get,
     user_update: user_update,
+    user_remove: user_remove,
 }
