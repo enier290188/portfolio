@@ -392,6 +392,10 @@ const View = () => {
         return <app.component.navigate.ToAppErrorNotFound />
     }
 
+    if (queryUserGet.data && queryUserGet.data.has_permission_of_root) {
+        return <app.component.navigate.ToAppErrorForbidden />
+    }
+
     return (
         <app.component.dialog.Dialog>
             <app.layout.main.component.structure.page.Page maxWidth={'sm'}>
