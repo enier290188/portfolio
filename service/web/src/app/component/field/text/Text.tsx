@@ -26,7 +26,24 @@ export const Text = ({ type = 'text', required = true, autoComplete = 'off', Inp
 
     return (
         <mui.component.Box component={'div'} sx={sxContent}>
-            <mui.component.TextField type={type} required={required} autoComplete={autoComplete} InputProps={InputProps} label={label} variant={variant} color={color} size={size} fullWidth={fullWidth} error={error} helperText={<span dangerouslySetInnerHTML={{ __html: helperText ?? '' }} />} disabled={disabled} autoFocus={autoFocus} {...textFieldPropsRest} {...field} />
+            <mui.component.TextField
+                /* */
+                {...field}
+                type={type}
+                required={required}
+                autoComplete={autoComplete}
+                InputProps={InputProps}
+                label={label}
+                variant={variant}
+                color={color}
+                size={size}
+                fullWidth={fullWidth}
+                error={error}
+                helperText={<span dangerouslySetInnerHTML={{ __html: helperText ?? '' }} />}
+                disabled={disabled}
+                autoFocus={autoFocus}
+                {...textFieldPropsRest}
+            />
         </mui.component.Box>
     )
 }
