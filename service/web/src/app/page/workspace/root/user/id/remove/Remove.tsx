@@ -53,28 +53,6 @@ const View = () => {
     const { id } = router.hook.useParams()
     const paramUserId = id ?? ''
 
-    const queryCompanyList = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
-        queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]> => {
-            const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
-            if (response.status === 200) {
-                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
-                userActionSyncUser(response.data.auth.user)
-                if (response.data?.items) {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    return response.data.items
-                } else {
-                    return []
-                }
-            } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
-                return []
-            }
-        },
-        initialData: [],
-    })
-
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/user/${paramUserId}/get/`, 'query', 'db'],
@@ -96,6 +74,28 @@ const View = () => {
             }
         },
         initialData: null,
+    })
+    const queryCompanyGet = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/${queryUserGet.data?.company_id ?? '-'}/get/`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootCompanyResponse> => {
+            const response = await app.service.api.page.workspace.root.company_get({ accessToken: accessToken, id: queryUserGet.data?.company_id ?? '' })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return null
+            }
+        },
+        initialData: null,
+        enabled: !!queryUserGet.data?.company_id,
     })
     const mutationUserRemove = query.hook.useMutation({
         mutationKey: [`/app/page/workspace/root/user/${paramUserId}/remove/`, 'mutation', 'db'],
@@ -124,31 +124,17 @@ const View = () => {
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
     const [effectStep, setEffectStep] = React.useState<EFFECT_STEP>(EFFECT_STEP.FETCHING)
 
-    const watchFieldCompanyId = formRemove.watch('companyId')
-
     const autocompleteSelectedFieldCompanyId = React.useMemo(
         () =>
-            watchFieldCompanyId
+            queryCompanyGet.data
                 ? {
-                      id: watchFieldCompanyId,
-                      label: '',
+                      id: queryCompanyGet.data.id,
+                      label: queryCompanyGet.data.name,
                   }
                 : null,
-        [watchFieldCompanyId],
+        [queryCompanyGet.data],
     )
-    const autocompleteOptionsFieldCompanyId = React.useMemo(
-        () =>
-            queryCompanyList.data.map((companyMap) => {
-                if (autocompleteSelectedFieldCompanyId?.id === companyMap.id) {
-                    autocompleteSelectedFieldCompanyId.label = companyMap.name
-                }
-                return {
-                    id: companyMap.id,
-                    label: companyMap.name,
-                }
-            }),
-        [queryCompanyList.data, autocompleteSelectedFieldCompanyId],
-    )
+    const autocompleteOptionsFieldCompanyId = React.useMemo(() => (autocompleteSelectedFieldCompanyId ? [autocompleteSelectedFieldCompanyId] : []), [autocompleteSelectedFieldCompanyId])
 
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
@@ -289,7 +275,7 @@ const View = () => {
                                                 label={i18n.getText('field.company-id.label')}
                                                 error={false}
                                                 helperText={''}
-                                                disabled={false}
+                                                disabled={true}
                                                 autoFocus={false}
                                                 space={{
                                                     top: 2,
