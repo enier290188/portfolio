@@ -6,17 +6,27 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeForm = {
+    companyId: null | string
     name: string
     email: string
     phone: string
     isActive: boolean
+    hasPermissionOfRoot: boolean
+    hasPermissionOfAdmin: boolean
+    hasPermissionOfSale: boolean
+    hasPermissionOfProject: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
+    companyId: null,
     name: '',
     email: '',
     phone: '',
     isActive: false,
+    hasPermissionOfRoot: false,
+    hasPermissionOfAdmin: false,
+    hasPermissionOfSale: false,
+    hasPermissionOfProject: false,
 }
 
 enum EFFECT_STEP {
@@ -281,8 +291,92 @@ const View = () => {
                                         control={formRemove.control}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.is-active.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfRoot'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={false}
+                                                label={i18n.getText('field.has-permission-of-root.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfAdmin'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={false}
+                                                label={i18n.getText('field.has-permission-of-admin.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfSale'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={false}
+                                                label={i18n.getText('field.has-permission-of-sale.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={true}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'hasPermissionOfProject'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={false}
+                                                label={i18n.getText('field.has-permission-of-project.label')}
                                                 error={false}
                                                 helperText={''}
                                                 disabled={true}
