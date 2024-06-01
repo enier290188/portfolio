@@ -6,14 +6,7 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeForm = {
-    company: {
-        id: string
-        label: string
-    } | null
-    companyList: {
-        id: string
-        label: string
-    }[]
+    companyId: null | string
     name: string
     email: string
     phone: string
@@ -25,8 +18,7 @@ type TypeForm = {
 }
 
 const DEFAULT_VALUES: TypeForm = {
-    company: null,
-    companyList: [],
+    companyId: null,
     name: '',
     email: '',
     phone: '',
@@ -132,6 +124,50 @@ const View = () => {
     const formUpdate = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
     const [defaultValuesToReset, setDefaultValuesToReset] = React.useState<TypeForm>(DEFAULT_VALUES)
     const [effectStep, setEffectStep] = React.useState<EFFECT_STEP>(EFFECT_STEP.FETCHING)
+
+    const watchFieldCompanyId = formUpdate.watch('companyId')
+
+    const autocompleteSelectedFieldCompanyId = React.useMemo(
+        () =>
+            watchFieldCompanyId
+                ? {
+                      id: watchFieldCompanyId,
+                      label: '',
+                  }
+                : null,
+        [watchFieldCompanyId],
+    )
+    const autocompleteOptionsFieldCompanyId = React.useMemo(
+        () =>
+            queryCompanyList.data.map((companyMap) => {
+                if (autocompleteSelectedFieldCompanyId?.id === companyMap.id) {
+                    autocompleteSelectedFieldCompanyId.label = companyMap.name
+                }
+                return {
+                    id: companyMap.id,
+                    label: companyMap.name,
+                }
+            }),
+        [queryCompanyList.data, autocompleteSelectedFieldCompanyId],
+    )
+    const autocompleteOnChangeFieldCompanyId = React.useCallback(
+        async (value: typeof autocompleteSelectedFieldCompanyId) => {
+            formUpdate.setValue('companyId', value?.id ?? null)
+            await formUpdate.trigger(['companyId'])
+        },
+        [formUpdate],
+    )
+
+    const handleValidateFieldCompanyId = React.useCallback(
+        (value: TypeForm['companyId']) => {
+            const messageList: string[] = []
+            if (!value) {
+                messageList.push(i18n.getText('field.company-id.validate.required'))
+            }
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
 
     const handleValidateFieldName = React.useCallback(
         (value: TypeForm['name']) => {
@@ -242,8 +278,7 @@ const View = () => {
     }, [queryCompanyList, queryUserGet])
 
     const handleActionReset = React.useCallback(async () => {
-        formUpdate.setValue('company', defaultValuesToReset.company)
-        formUpdate.setValue('companyList', defaultValuesToReset.companyList)
+        formUpdate.setValue('companyId', defaultValuesToReset.companyId)
         formUpdate.setValue('name', defaultValuesToReset.name)
         formUpdate.setValue('email', defaultValuesToReset.email)
         formUpdate.setValue('phone', defaultValuesToReset.phone)
@@ -257,7 +292,7 @@ const View = () => {
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { company, name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
+            const { companyId, name, email, phone, isActive, hasPermissionOfRoot, hasPermissionOfAdmin, hasPermissionOfSale, hasPermissionOfProject } = data
 
             mutationUserUpdate.mutate(
                 {
@@ -270,14 +305,14 @@ const View = () => {
                     has_permission_of_admin: hasPermissionOfAdmin,
                     has_permission_of_sale: hasPermissionOfSale,
                     has_permission_of_project: hasPermissionOfProject,
-                    company_id: company?.id ?? null,
+                    company_id: companyId ?? null,
                 },
                 {
                     onSuccess: (userUpdated) => {
                         if (userUpdated) {
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
-                                company: company,
+                                companyId: companyId,
                                 name: name,
                                 email: email,
                                 phone: phone,
@@ -302,21 +337,7 @@ const View = () => {
     }, [queryUserGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
-        const company = queryUserGet.data?.company_id
-            ? {
-                  id: queryUserGet.data.company_id,
-                  label: '',
-              }
-            : DEFAULT_VALUES.company
-        const companyList = queryCompanyList.data.map((companyMap) => {
-            if (company && company.id === companyMap.id) {
-                company.label = companyMap.name
-            }
-            return {
-                id: companyMap.id,
-                label: companyMap.name,
-            }
-        })
+        const companyId = queryUserGet.data?.company_id ?? DEFAULT_VALUES.companyId
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
@@ -327,8 +348,7 @@ const View = () => {
         const hasPermissionOfProject = queryUserGet.data?.has_permission_of_project ?? DEFAULT_VALUES.hasPermissionOfProject
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
-            company: company,
-            companyList: companyList,
+            companyId: companyId,
             name: name,
             email: email,
             phone: phone,
@@ -338,7 +358,7 @@ const View = () => {
             hasPermissionOfSale: hasPermissionOfSale,
             hasPermissionOfProject: hasPermissionOfProject,
         }))
-        formUpdate.setValue('company', company)
+        formUpdate.setValue('companyId', companyId)
         formUpdate.setValue('name', name)
         formUpdate.setValue('email', email)
         formUpdate.setValue('phone', phone)
@@ -349,7 +369,7 @@ const View = () => {
         formUpdate.setValue('hasPermissionOfProject', hasPermissionOfProject)
         await formUpdate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
-    }, [queryCompanyList.data, queryUserGet.data, formUpdate])
+    }, [queryUserGet.data, formUpdate])
 
     React.useEffect(() => {
         switch (effectStep) {
@@ -409,21 +429,26 @@ const View = () => {
                             <mui.component.Box component={'form'} width={'100%'} maxWidth={'375px'} my={4} noValidate={true} autoComplete={'off'} onSubmit={(event) => event.preventDefault()}>
                                 <app.layout.main.component.structure.box.content.Content>
                                     <form.component.Controller
-                                        name={'company'}
+                                        name={'companyId'}
                                         control={formUpdate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldCompanyId,
+                                            },
+                                        }}
                                         render={({ field }) => (
                                             <app.component.field.autocomplete.Autocomplete
                                                 required={true}
                                                 InputProps={{
                                                     startAdornment: (
                                                         <mui.component.InputAdornment position={'end'}>
-                                                            <mui.icon.Description />
+                                                            <mui.icon.Business />
                                                         </mui.component.InputAdornment>
                                                     ),
                                                 }}
-                                                label={i18n.getText('field.company.label')}
-                                                error={!!formUpdate.formState.errors.name}
-                                                helperText={formUpdate.formState.errors.name?.message}
+                                                label={i18n.getText('field.company-id.label')}
+                                                error={!!formUpdate.formState.errors.companyId}
+                                                helperText={formUpdate.formState.errors.companyId?.message}
                                                 disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
                                                 autoFocus={true}
                                                 space={{
@@ -433,6 +458,9 @@ const View = () => {
                                                     left: 1,
                                                 }}
                                                 field={field}
+                                                selected={autocompleteSelectedFieldCompanyId}
+                                                options={autocompleteOptionsFieldCompanyId}
+                                                onChange={autocompleteOnChangeFieldCompanyId}
                                             />
                                         )}
                                     />

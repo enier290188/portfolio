@@ -1,6 +1,7 @@
 {
     "title": "Modificar Usuario",
-    "field.company.label": "Compañía",
+    "field.company-id.label": "Compañía",
+    "field.company-id.validate.required": "- Es requerido.",
     "field.name.label": "Nombre",
     "field.name.validate.required": "- Es requerido.",
     "field.name.validate.max-length": "- Debe tener menos de {value} caracteres.",
