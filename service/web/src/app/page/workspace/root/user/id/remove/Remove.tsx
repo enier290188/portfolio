@@ -6,27 +6,17 @@ import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
 type TypeForm = {
-    companyId: null | string
     name: string
     email: string
     phone: string
     isActive: boolean
-    hasPermissionOfRoot: boolean
-    hasPermissionOfAdmin: boolean
-    hasPermissionOfSale: boolean
-    hasPermissionOfProject: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
-    companyId: null,
     name: '',
     email: '',
     phone: '',
     isActive: false,
-    hasPermissionOfRoot: false,
-    hasPermissionOfAdmin: false,
-    hasPermissionOfSale: false,
-    hasPermissionOfProject: false,
 }
 
 enum EFFECT_STEP {
