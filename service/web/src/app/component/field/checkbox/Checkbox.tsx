@@ -42,6 +42,7 @@ export const Checkbox = ({ required = true, label = '', color = 'primary', size 
                 control={
                     <mui.component.Checkbox
                         /* */
+                        {...field}
                         icon={<mui.icon.RadioButtonUnchecked />}
                         checkedIcon={<mui.icon.RadioButtonChecked />}
                         required={required}
@@ -51,7 +52,6 @@ export const Checkbox = ({ required = true, label = '', color = 'primary', size 
                         disableRipple={false}
                         autoFocus={autoFocus}
                         {...checkboxPropsRest}
-                        {...field}
                     />
                 }
                 sx={{
