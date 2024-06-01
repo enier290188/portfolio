@@ -98,15 +98,10 @@ const View = () => {
     }, [queryCompanyGet])
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
-        async (data: TypeForm) => {
-            const { name, email, phone, isActive } = data
-
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        async (_data: TypeForm) => {
             mutationCompanyRemove.mutate({
                 id: paramCompanyId,
-                name: name,
-                email: email,
-                phone: phone,
-                is_active: isActive,
             })
         },
         [paramCompanyId, mutationCompanyRemove],
