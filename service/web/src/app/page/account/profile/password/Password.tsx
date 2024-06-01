@@ -93,8 +93,8 @@ const View = () => {
     const [defaultValuesToReset, setDefaultValuesToReset] = React.useState<TypeForm>(DEFAULT_VALUES)
     const [effectStep, setEffectStep] = React.useState<EFFECT_STEP>(EFFECT_STEP.FETCHING)
 
-    const watchValueFieldPasswordNew = formUpdate.watch('passwordNew')
-    const refValueFieldPasswordNew = React.useRef<null | string>(null)
+    const watchFieldPasswordNew = formUpdate.watch('passwordNew')
+    const refFieldPasswordNew = React.useRef<null | string>(null)
 
     const handleValidateFieldPasswordCurrent = React.useCallback(
         (value: TypeForm['passwordCurrent']) => {
@@ -226,14 +226,14 @@ const View = () => {
     }, [formUpdate])
 
     const effectStepDefault = React.useCallback(async () => {
-        if (refValueFieldPasswordNew.current === null) {
-            refValueFieldPasswordNew.current = watchValueFieldPasswordNew
+        if (refFieldPasswordNew.current === null) {
+            refFieldPasswordNew.current = watchFieldPasswordNew
         }
-        if (watchValueFieldPasswordNew !== refValueFieldPasswordNew.current) {
+        if (watchFieldPasswordNew !== refFieldPasswordNew.current) {
             await formUpdate.trigger(['passwordConfirm'])
-            refValueFieldPasswordNew.current = watchValueFieldPasswordNew
+            refFieldPasswordNew.current = watchFieldPasswordNew
         }
-    }, [formUpdate, watchValueFieldPasswordNew])
+    }, [formUpdate, watchFieldPasswordNew])
 
     React.useEffect(() => {
         switch (effectStep) {
