@@ -277,7 +277,7 @@ const View = () => {
                                         control={formRemove.control}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.is-active.label')}
                                                 error={false}
                                                 helperText={''}
