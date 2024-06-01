@@ -16,4 +16,13 @@ export type AutocompleteProps = {
     textFieldProps?: muiType.TextFieldProps
     space?: appType.TypeSettingThemeComponentSpace
     field: object
+    selected: null | {
+        id: string
+        label: string
+    }
+    options: {
+        id: string
+        label: string
+    }[]
+    onChange: (value: null | { id: string; label: string }) => void
 }

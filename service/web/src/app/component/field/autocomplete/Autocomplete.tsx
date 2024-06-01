@@ -3,7 +3,7 @@ import { mui, muiType } from '@./package/material-ui'
 import React from 'react'
 import { AutocompleteProps } from './Autocomplete.type.ts'
 
-export const Autocomplete = ({ required = true, InputProps, label = '', variant = 'outlined', color = 'primary', size = 'small', fullWidth = true, error = false, helperText = '', disabled = false, autoFocus = false, textFieldProps, space = 0, field }: AutocompleteProps) => {
+export const Autocomplete = ({ required = true, InputProps, label = '', variant = 'outlined', color = 'primary', size = 'small', fullWidth = true, error = false, helperText = '', disabled = false, autoFocus = false, textFieldProps, space = 0, field, selected, options, onChange }: AutocompleteProps) => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
     const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.component.field.autocomplete, i18nLanguage), [i18nLanguage])
@@ -28,27 +28,47 @@ export const Autocomplete = ({ required = true, InputProps, label = '', variant 
         /* empty */
     }
 
-    console.log(field)
-
     return (
         <mui.component.Box component={'div'} sx={sxContent}>
             <mui.component.Autocomplete
-                //
+                /* */
+                {...field}
                 multiple={false}
                 size={size}
                 fullWidth={fullWidth}
                 disabled={disabled}
                 disablePortal={true}
+                disableClearable={false}
                 disableCloseOnSelect={false}
                 autoHighlight={true}
                 clearText={''}
                 openText={''}
                 closeText={''}
-                options={[]}
-                noOptionsText={<>{i18n.getText('no-options')}</>}
+                value={selected}
+                options={options}
+                isOptionEqualToValue={(option, value) => {
+                    return !!(option?.id && value?.id && option.id === value.id)
+                }}
+                getOptionLabel={(option) => {
+                    return option?.label ?? ''
+                }}
+                renderOption={(props, optionSelected) => {
+                    return (
+                        <li {...props} key={optionSelected.id}>
+                            <mui.component.Typography component={'p'} variant={'body1'} m={0} p={0}>
+                                {optionSelected?.label ?? ''}
+                            </mui.component.Typography>
+                        </li>
+                    )
+                }}
+                noOptionsText={
+                    <mui.component.Typography component={'p'} variant={'body1'} m={0} p={0}>
+                        {i18n.getText('no-options')}
+                    </mui.component.Typography>
+                }
                 renderInput={(params) => (
                     <mui.component.TextField
-                        //
+                        /* */
                         {...params}
                         type={'text'}
                         required={required}
@@ -66,7 +86,7 @@ export const Autocomplete = ({ required = true, InputProps, label = '', variant 
                         {...textFieldPropsRest}
                     />
                 )}
-                {...field}
+                onChange={(_, value) => onChange(value)}
             />
         </mui.component.Box>
     )
