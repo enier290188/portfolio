@@ -41,6 +41,14 @@ Http401UserMustBelongToACompany = HTTPException(
     headers={'WWW-Authenticate': 'Bearer'},
 )
 
+Http401UserBelongsToACompanyInactive = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail={
+        'error': 'UserBelongsToACompanyInactive'
+    },
+    headers={'WWW-Authenticate': 'Bearer'},
+)
+
 Http403UserHasNotPermissionOfRoot = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
     detail={

@@ -19,6 +19,7 @@
     "login.action.submit.alert.error.UserInactive": "El usuario está deshabilitado. Por favor, informe al administrador de la aplicación",
     "login.action.submit.alert.error.UserMustBelongToAGroup": "El usuario debe pertenecer a un grupo. Por favor, informe al administrador de la aplicación",
     "login.action.submit.alert.error.UserMustBelongToACompany": "El usuario debe pertenecer a una compañía. Por favor, informe al administrador de la aplicación",
+    "login.action.submit.alert.error.UserBelongsToACompanyInactive": "El usuario pertenecer a una compañía deshabilitada. Por favor, informe al administrador de la aplicación",
     "new-password.title": "Nueva contraseña requerida",
     "new-password.field.password.label": "Nueva contraseña",
     "new-password.field.password.validate.required": "- Nueva contraseña es requerido.",

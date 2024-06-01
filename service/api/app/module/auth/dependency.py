@@ -32,6 +32,12 @@ async def __get_user_orm(db_async_session: AsyncSession, sub: str) -> user_model
         raise auth_exception.Http401UserInactive
     if user_orm.company_id is None and not user_orm.has_permission_of_root:
         raise auth_exception.Http401UserMustBelongToACompany
+    if user_orm.company_id:
+        company_orm = await auth_service.get_company_by_id(db_async_session, user_orm.company_id)
+        if company_orm is None:
+            raise auth_exception.Http401UserMustBelongToACompany
+        if not company_orm.is_active:
+            raise auth_exception.Http401UserBelongsToACompanyInactive
     return user_orm
 
 

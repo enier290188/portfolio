@@ -1,11 +1,5 @@
 from typing import Annotated
 
-from fastapi import status
-from fastapi.param_functions import Depends
-from fastapi.responses import Response
-from fastapi.routing import APIRouter
-from fastapi.security.oauth2 import OAuth2PasswordRequestForm
-
 from app.api.v1.page.account import (
     schema as api_schema,
 )
@@ -22,6 +16,11 @@ from app.module.user import (
     exception as user_exception,
     service as user_service,
 )
+from fastapi import status
+from fastapi.param_functions import Depends
+from fastapi.responses import Response
+from fastapi.routing import APIRouter
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix='/account',
@@ -45,6 +44,12 @@ async def login(response: Response, request: Annotated[OAuth2PasswordRequestForm
         raise auth_exception.Http401UserMustBelongToAGroup
     if user_orm.company_id is None and not user_orm.has_permission_of_root:
         raise auth_exception.Http401UserMustBelongToACompany
+    if user_orm.company_id:
+        company_orm = await auth_service.get_company_by_id(db_async_session, user_orm.company_id)
+        if company_orm is None:
+            raise auth_exception.Http401UserMustBelongToACompany
+        if not company_orm.is_active:
+            raise auth_exception.Http401UserBelongsToACompanyInactive
 
     sub: str = str(user_orm.id)
 

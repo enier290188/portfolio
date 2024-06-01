@@ -1,12 +1,15 @@
-from pydantic.networks import EmailStr
-from pydantic.types import UUID4
-from sqlalchemy.ext.asyncio.session import AsyncSession
-
+from app.module.company import (
+    model as company_model,
+    service as company_service,
+)
 from app.module.user import (
     hashing as user_hashing,
     model as user_model,
     service as user_service,
 )
+from pydantic.networks import EmailStr
+from pydantic.types import UUID4
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 async def get_user_by_id(db_async_session: AsyncSession, id: UUID4) -> user_model.User | None:
@@ -25,6 +28,15 @@ async def get_user_by_email(db_async_session: AsyncSession, email: EmailStr) -> 
         return None
     else:
         return user_orm
+
+
+async def get_company_by_id(db_async_session: AsyncSession, id: UUID4) -> company_model.Company | None:
+    try:
+        company_orm = await company_service.get_by_id(db_async_session, id)
+    except (Exception,) as _:
+        return None
+    else:
+        return company_orm
 
 
 def verify_user_password_plain(password_plain: str, password_hash: str) -> bool:
