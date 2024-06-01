@@ -3,12 +3,10 @@ import { appType } from '@./app'
 export type TypeCompanyFetchRequest = {
     accessToken: appType.TypeSettingAccessToken
 }
-
 export type TypeCompanyGetRequest = {
     accessToken: appType.TypeSettingAccessToken
     id: appType.TypeModelCompany['id']
 }
-
 export type TypeCompanyCreateRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
@@ -18,7 +16,6 @@ export type TypeCompanyCreateRequest = {
         is_active: appType.TypeModelCompany['is_active']
     }
 }
-
 export type TypeCompanyUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
@@ -29,7 +26,6 @@ export type TypeCompanyUpdateRequest = {
         is_active: appType.TypeModelCompany['is_active']
     }
 }
-
 export type TypeCompanyRemoveRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
@@ -40,12 +36,10 @@ export type TypeCompanyRemoveRequest = {
 export type TypeUserFetchRequest = {
     accessToken: appType.TypeSettingAccessToken
 }
-
 export type TypeUserGetRequest = {
     accessToken: appType.TypeSettingAccessToken
     id: appType.TypeModelUser['id']
 }
-
 export type TypeUserUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {
@@ -61,7 +55,6 @@ export type TypeUserUpdateRequest = {
         company_id: appType.TypeModelUser['company_id']
     }
 }
-
 export type TypeUserRemoveRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {

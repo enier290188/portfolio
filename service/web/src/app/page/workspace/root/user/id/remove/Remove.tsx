@@ -53,6 +53,28 @@ const View = () => {
     const { id } = router.hook.useParams()
     const paramUserId = id ?? ''
 
+    const queryCompanyList = query.hook.useQuery({
+        queryKey: [`/app/page/workspace/root/company/list/`, 'query', 'db'],
+        queryFn: async (): Promise<appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]> => {
+            const response = await app.service.api.page.workspace.root.company_fetch({ accessToken: accessToken })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.items) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.items
+                } else {
+                    return []
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.fetch.alert.error') })
+                return []
+            }
+        },
+        initialData: [],
+    })
+
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
         queryKey: [`/app/page/workspace/root/user/${paramUserId}/get/`, 'query', 'db'],
@@ -102,6 +124,32 @@ const View = () => {
     const formRemove = form.hook.useForm<TypeForm>({ defaultValues: DEFAULT_VALUES, mode: 'onChange' })
     const [effectStep, setEffectStep] = React.useState<EFFECT_STEP>(EFFECT_STEP.FETCHING)
 
+    const watchFieldCompanyId = formRemove.watch('companyId')
+
+    const autocompleteSelectedFieldCompanyId = React.useMemo(
+        () =>
+            watchFieldCompanyId
+                ? {
+                      id: watchFieldCompanyId,
+                      label: '',
+                  }
+                : null,
+        [watchFieldCompanyId],
+    )
+    const autocompleteOptionsFieldCompanyId = React.useMemo(
+        () =>
+            queryCompanyList.data.map((companyMap) => {
+                if (autocompleteSelectedFieldCompanyId?.id === companyMap.id) {
+                    autocompleteSelectedFieldCompanyId.label = companyMap.name
+                }
+                return {
+                    id: companyMap.id,
+                    label: companyMap.name,
+                }
+            }),
+        [queryCompanyList.data, autocompleteSelectedFieldCompanyId],
+    )
+
     const handleActionRefresh = React.useCallback(async () => {
         setEffectStep(EFFECT_STEP.FETCHING)
         await queryUserGet.refetch()
@@ -124,14 +172,24 @@ const View = () => {
     }, [queryUserGet.isFetching])
 
     const effectStepFilling = React.useCallback(async () => {
+        const companyId = queryUserGet.data?.company_id ?? DEFAULT_VALUES.companyId
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
         const isActive = queryUserGet.data?.is_active ?? DEFAULT_VALUES.isActive
+        const hasPermissionOfRoot = queryUserGet.data?.has_permission_of_root ?? DEFAULT_VALUES.hasPermissionOfRoot
+        const hasPermissionOfAdmin = queryUserGet.data?.has_permission_of_admin ?? DEFAULT_VALUES.hasPermissionOfAdmin
+        const hasPermissionOfSale = queryUserGet.data?.has_permission_of_sale ?? DEFAULT_VALUES.hasPermissionOfSale
+        const hasPermissionOfProject = queryUserGet.data?.has_permission_of_project ?? DEFAULT_VALUES.hasPermissionOfProject
+        formRemove.setValue('companyId', companyId)
         formRemove.setValue('name', name)
         formRemove.setValue('email', email)
         formRemove.setValue('phone', phone)
         formRemove.setValue('isActive', isActive)
+        formRemove.setValue('hasPermissionOfRoot', hasPermissionOfRoot)
+        formRemove.setValue('hasPermissionOfAdmin', hasPermissionOfAdmin)
+        formRemove.setValue('hasPermissionOfSale', hasPermissionOfSale)
+        formRemove.setValue('hasPermissionOfProject', hasPermissionOfProject)
         await formRemove.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
     }, [queryUserGet.data, formRemove])
@@ -215,6 +273,37 @@ const View = () => {
                                     </app.component.alert.Alert>
                                 </app.layout.main.component.structure.box.content.Content>
                                 <app.layout.main.component.structure.box.content.Content>
+                                    <form.component.Controller
+                                        name={'companyId'}
+                                        control={formRemove.control}
+                                        render={({ field }) => (
+                                            <app.component.field.autocomplete.Autocomplete
+                                                required={false}
+                                                InputProps={{
+                                                    startAdornment: (
+                                                        <mui.component.InputAdornment position={'end'}>
+                                                            <mui.icon.Business />
+                                                        </mui.component.InputAdornment>
+                                                    ),
+                                                }}
+                                                label={i18n.getText('field.company-id.label')}
+                                                error={false}
+                                                helperText={''}
+                                                disabled={false}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                                selected={autocompleteSelectedFieldCompanyId}
+                                                options={autocompleteOptionsFieldCompanyId}
+                                                onChange={() => null}
+                                            />
+                                        )}
+                                    />
                                     <form.component.Controller
                                         name={'name'}
                                         control={formRemove.control}
