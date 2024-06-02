@@ -1,5 +1,5 @@
 import { api } from '../../../api.ts'
-import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserRemoveRequest, TypeUserUpdateRequest } from './root.type.ts'
+import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserRemoveRequest, TypeUserResetPasswordRequest, TypeUserUpdateRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({
@@ -69,6 +69,16 @@ const user_update = async (request: TypeUserUpdateRequest) => {
     })
 }
 
+const user_reset_password = async (request: TypeUserResetPasswordRequest) => {
+    return await api.patch({
+        resource: `/api/v1/page/workspace/root/user/${request.user.id}/reset-password/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.user,
+        },
+    })
+}
+
 const user_remove = async (request: TypeUserRemoveRequest) => {
     return await api.delete({
         resource: `/api/v1/page/workspace/root/user/${request.user.id}/`,
@@ -88,5 +98,6 @@ export const root = {
     user_fetch: user_fetch,
     user_get: user_get,
     user_update: user_update,
+    user_reset_password: user_reset_password,
     user_remove: user_remove,
 }

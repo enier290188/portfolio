@@ -491,7 +491,7 @@ const View = () => {
                                                 error={!!formUpdate.formState.errors.name}
                                                 helperText={formUpdate.formState.errors.name?.message}
                                                 disabled={mutationUserUpdate.isPending || formUpdate.formState.isSubmitting}
-                                                autoFocus={true}
+                                                autoFocus={false}
                                                 space={{
                                                     top: 2,
                                                     right: 1,

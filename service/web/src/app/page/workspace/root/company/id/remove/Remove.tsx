@@ -74,7 +74,7 @@ const View = () => {
                 userActionSyncUser(response.data.auth.user)
                 if (response.data?.item) {
                     queryClient.setQueryData([`/app/page/workspace/root/company/${paramCompanyId}/get/`, 'query', 'db'], null)
-                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.filter((companyMap) => companyMap.id !== company.id))
+                    queryClient.setQueryData([`/app/page/workspace/root/company/list/`, 'query', 'db'], (companyList: appType.TypeServiceApiPageWorkspaceRootCompanyResponse[]) => companyList.filter((companyFilter) => companyFilter.id !== company.id))
                     alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -297,7 +297,7 @@ const View = () => {
                                 {mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressLinear /> : <app.component.divider.Divider />}
                                 <app.layout.main.component.structure.box.action.Action>
                                     <app.component.button.ButtonSubmit space={1} color={'warning'} disabled={mutationCompanyRemove.isPending || formRemove.formState.isSubmitting || formRemove.formState.isValidating || !formRemove.formState.isValid} onClick={formRemove.handleSubmit(handleActionSubmit)}>
-                                        {mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.DoneOutline />}
+                                        {mutationCompanyRemove.isPending || formRemove.formState.isSubmitting ? <app.component.loading.ProgressCircular /> : <mui.icon.DeleteForever />}
                                         {i18n.getText('action.submit')}
                                     </app.component.button.ButtonSubmit>
                                 </app.layout.main.component.structure.box.action.Action>

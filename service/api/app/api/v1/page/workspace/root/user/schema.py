@@ -43,5 +43,9 @@ class UserRequestUpdate(BaseModel):
     company_id: user_schema.FieldCompanyID
 
 
+class UserRequestResetPassword(BaseModel):
+    pass
+
+
 class UserRequestRemove(BaseModel):
     pass

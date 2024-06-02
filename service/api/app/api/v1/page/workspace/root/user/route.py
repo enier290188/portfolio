@@ -102,6 +102,23 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.UserRequestUp
     )
 
 
+@router.patch('/{id}/reset-password/', status_code=status.HTTP_200_OK, response_model=api_schema.UserItemResponse)
+async def reset_password(id: Annotated[UUID4, Path()], request: api_schema.UserRequestResetPassword, auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
+    __data = dict(**request.model_dump())
+
+    user_orm = await user_service.get_by_id(db_async_session, id)
+    if user_orm is None:
+        raise user_exception.Http404
+
+    if auth_response.auth.user.id == id:
+        raise auth_exception.Http403UserNotAllowed
+
+    return api_schema.UserItemResponse(
+        **dict(auth_response),
+        item=api_schema.UserResponse(**dict(user_orm.__dict__)),
+    )
+
+
 @router.delete('/{id}/', status_code=status.HTTP_200_OK, response_model=api_schema.UserItemResponse)
 async def remove(id: Annotated[UUID4, Path()], request: api_schema.UserRequestRemove, auth_response: auth_dependency.DependAuthRoot, db_async_session: db_dependency.DependDBAsyncSession):
     __data = dict(**request.model_dump())

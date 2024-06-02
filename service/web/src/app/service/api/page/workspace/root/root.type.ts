@@ -55,6 +55,12 @@ export type TypeUserUpdateRequest = {
         company_id: appType.TypeModelUser['company_id']
     }
 }
+export type TypeUserResetPasswordRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        id: appType.TypeModelUser['id']
+    }
+}
 export type TypeUserRemoveRequest = {
     accessToken: appType.TypeSettingAccessToken
     user: {

@@ -7,7 +7,7 @@
     "field.is-active.label": "Is Active",
     "action.fetch.alert.error": "Sorry, an unexpected error has occurred",
     "action.refresh": "Refresh",
-    "action.submit": "Accept",
+    "action.submit": "Remove",
     "action.submit.alert.success": "Removed successfully",
     "action.submit.alert.error": "Sorry, an unexpected error has occurred"
 }
