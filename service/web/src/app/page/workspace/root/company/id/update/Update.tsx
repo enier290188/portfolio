@@ -372,7 +372,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.is-active.label')}
                                                 error={!!formUpdate.formState.errors.isActive}
                                                 helperText={formUpdate.formState.errors.isActive?.message}
