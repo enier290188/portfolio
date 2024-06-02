@@ -83,9 +83,7 @@ async def update(id: Annotated[UUID4, Path()], request: api_schema.UserRequestUp
         raise user_exception.Http404
 
     if auth_response.auth.user.id == id:
-        data_is_active: bool = data.get('is_active', False)
-        if not data_is_active:
-            raise auth_exception.Http403UserNotAllowedToUpdateAttribute
+        raise auth_exception.Http403UserNotAllowed
 
     data_company_id: str = data.get('company_id', '')
     company_orm = await company_service.get_by_id(db_async_session, data_company_id)
@@ -112,6 +110,10 @@ async def reset_password(id: Annotated[UUID4, Path()], request: api_schema.UserR
 
     if auth_response.auth.user.id == id:
         raise auth_exception.Http403UserNotAllowed
+
+    user_orm = await user_service.update(db_async_session, id, {})
+    if user_orm is None:
+        raise user_exception.Http404
 
     return api_schema.UserItemResponse(
         **dict(auth_response),
