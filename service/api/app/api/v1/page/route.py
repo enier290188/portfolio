@@ -1,11 +1,10 @@
-from fastapi.routing import APIRouter
-
 from app.api.v1.page.account import (
     route as account_route,
 )
 from app.api.v1.page.workspace import (
     route as workspace_route,
 )
+from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/page',

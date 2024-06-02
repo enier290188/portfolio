@@ -1,7 +1,3 @@
-from fastapi.applications import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-
 from app.api import (
     route as api_route,
 )
@@ -11,6 +7,9 @@ from app.config import (
 from app.module.db import (
     service as db_service,
 )
+from fastapi.applications import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 __setting = setting.get_setting()
 

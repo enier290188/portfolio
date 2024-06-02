@@ -1,13 +1,12 @@
 from typing import Annotated
 
+from app.config import (
+    setting,
+)
 from fastapi.param_functions import Depends
 from psycopg.client_cursor import AsyncClientCursor
 from sqlalchemy.ext.asyncio.engine import AsyncEngine, create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
-
-from app.config import (
-    setting,
-)
 
 __setting = setting.get_setting()
 

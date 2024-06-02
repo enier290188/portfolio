@@ -1,5 +1,3 @@
-from fastapi.routing import APIRouter
-
 from app.api.v1.sync.account import (
     schema as api_schema,
 )
@@ -7,6 +5,7 @@ from app.module.auth import (
     dependency as auth_dependency,
     exception as auth_exception,
 )
+from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/account',

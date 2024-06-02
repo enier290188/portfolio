@@ -1,11 +1,10 @@
-from fastapi.routing import APIRouter
-
 from app.api.v1.page.workspace.root.company import (
     route as company_route,
 )
 from app.api.v1.page.workspace.root.user import (
     route as user_route,
 )
+from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/root',

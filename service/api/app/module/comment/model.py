@@ -1,10 +1,9 @@
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm.base import Mapped
-from sqlalchemy.sql.sqltypes import String
-
 from app.module.db import (
     model as db_model,
 )
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm.base import Mapped
+from sqlalchemy.sql.sqltypes import String
 
 
 class Comment(db_model.SQLAlchemyDeclarativeBase):

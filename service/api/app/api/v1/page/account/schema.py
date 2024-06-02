@@ -1,10 +1,6 @@
 from datetime import datetime
 from typing import Annotated
 
-from pydantic.fields import Field
-from pydantic.main import BaseModel
-from pydantic.types import UUID4
-
 from app.module.auth import (
     schema as auth_schema,
 )
@@ -14,6 +10,9 @@ from app.module.db import (
 from app.module.user import (
     schema as user_schema,
 )
+from pydantic.fields import Field
+from pydantic.main import BaseModel
+from pydantic.types import UUID4
 
 
 class LoginResponse(BaseModel):

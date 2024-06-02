@@ -1,12 +1,11 @@
 from typing import Optional
 
-from fastapi.requests import Request
-from fastapi.security.oauth2 import OAuth2PasswordBearer
-from fastapi.security.utils import get_authorization_scheme_param
-
 from app.module.auth import (
     exception as auth_exception,
 )
+from fastapi.requests import Request
+from fastapi.security.oauth2 import OAuth2PasswordBearer
+from fastapi.security.utils import get_authorization_scheme_param
 
 
 class __OAuth2PasswordBearerScheme(OAuth2PasswordBearer):

@@ -1,8 +1,7 @@
-from fastapi.routing import APIRouter
-
 from app.api.v1.sync.account import (
     route as account_route,
 )
+from fastapi.routing import APIRouter
 
 router = APIRouter(
     prefix='/sync',
