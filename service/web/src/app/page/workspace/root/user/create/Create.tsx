@@ -1,35 +1,32 @@
-import { app } from '@./app'
+import { app, appServiceApiPageWorkspaceRootType, appType } from '@./app'
 import { mui } from '@./package/material-ui'
 import { form, formType } from '@./package/react-hook-form'
 import { router } from '@./package/react-router'
 import { query } from '@./package/tanstack-react-query'
 import React from 'react'
 
-type TypeUserCreate = {
-    name: string
-    email: string
-    phone: string
-    groupList: string[]
-}
-type TypeUser = {
-    id: string
-    name: string
-    email: string
-    phone: string
-    createdAt: string
-    updatedAt: string
-}
-
 type TypeForm = {
+    companyId: null | string
     name: string
     email: string
     phone: string
+    isActive: boolean
+    hasPermissionOfRoot: boolean
+    hasPermissionOfAdmin: boolean
+    hasPermissionOfSale: boolean
+    hasPermissionOfProject: boolean
 }
 
 const DEFAULT_VALUES: TypeForm = {
+    companyId: null,
     name: '',
     email: '',
     phone: '',
+    isActive: false,
+    hasPermissionOfRoot: false,
+    hasPermissionOfAdmin: false,
+    hasPermissionOfSale: false,
+    hasPermissionOfProject: false,
 }
 
 enum EFFECT_STEP {
@@ -41,30 +38,46 @@ enum EFFECT_STEP {
 const View = () => {
     const contextI18n = React.useContext(app.context.i18n.Context)
     const i18nLanguage = contextI18n.getLanguage()
-    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.admin.setting.user.create, i18nLanguage), [i18nLanguage])
+    const i18n = React.useMemo(() => app.setting.i18n.getNode(app.setting.i18n.app.page.workspace.root.user.create, i18nLanguage), [i18nLanguage])
 
     const contextAlert = React.useContext(app.context.alert.Context)
+    const alertActionAddAlert = contextAlert.addAlert
+
+    const contextAccessToken = React.useContext(app.context.accessToken.Context)
+    const accessToken = contextAccessToken.getAccessToken()
+    const accessTokenActionUpdateAccessToken = contextAccessToken.updateAccessToken
+
+    const contextUser = React.useContext(app.context.user.Context)
+    const userActionSyncUser = contextUser.syncUser
 
     const queryClient = query.hook.useQueryClient()
     const queryUserGet = query.hook.useQuery({
-        queryKey: [`/app/page/workspace/admin/setting/user/create/`, 'query', 'db'],
-        queryFn: () => ({
-            name: DEFAULT_VALUES.name,
-            email: DEFAULT_VALUES.email,
-            phone: DEFAULT_VALUES.phone,
-        }),
+        queryKey: [`/app/page/workspace/root/user/create/`, 'query', 'db'],
+        queryFn: async (): Promise<null | appType.TypeServiceApiPageWorkspaceRootUserResponse> => null,
         initialData: null,
     })
     const mutationUserCreate = query.hook.useMutation({
-        mutationKey: [`/app/page/workspace/admin/setting/user/create/`, 'mutation', 'db'],
-        mutationFn: async (user: TypeUserCreate) => {
-            return {
-                id: '1',
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                createdAt: '',
-                updatedAt: '',
+        mutationKey: [`/app/page/workspace/root/user/create/`, 'mutation', 'db'],
+        mutationFn: async (user: appServiceApiPageWorkspaceRootType.TypeUserCreateRequest['user']): Promise<null | appType.TypeServiceApiPageWorkspaceRootUserResponse> => {
+            const response = await app.service.api.page.workspace.root.user_create({ accessToken: accessToken, user: user })
+            if (response.status === 200) {
+                accessTokenActionUpdateAccessToken(response.data.auth.access_token)
+                userActionSyncUser(response.data.auth.user)
+                if (response.data?.item) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    queryClient.setQueryData([`/app/page/workspace/root/user/${response.data.item.id}/get/`, 'query', 'db'], response.data.item)
+                    queryClient.setQueryData([`/app/page/workspace/root/user/list/`, 'query', 'db'], (userList: appType.TypeServiceApiPageWorkspaceRootUserResponse[]) => [...userList, response.data.item])
+                    alertActionAddAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return response.data.item
+                } else {
+                    return null
+                }
+            } else {
+                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                return null
             }
         },
     })
@@ -90,14 +103,13 @@ const View = () => {
     const handleValidateFieldEmail = React.useCallback(
         (value: TypeForm['email']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.email.validate.required'))
-            }
-            if (320 < value.length) {
-                messageList.push(i18n.getText('field.email.validate.max-length', { value: 320 }))
-            }
-            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
-                messageList.push(i18n.getText('field.email.validate.pattern'))
+            if (0 < value.length) {
+                if (128 < value.length) {
+                    messageList.push(i18n.getText('field.email.validate.max-length', { value: 128 }))
+                }
+                if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value)) {
+                    messageList.push(i18n.getText('field.email.validate.pattern'))
+                }
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -107,14 +119,24 @@ const View = () => {
     const handleValidateFieldPhone = React.useCallback(
         (value: TypeForm['phone']) => {
             const messageList: string[] = []
-            if (!value) {
-                messageList.push(i18n.getText('field.phone.validate.required'))
+            if (0 < value.length) {
+                if (10 < value.length) {
+                    messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
+                }
+                if (!/^(\d{10})$/.test(value)) {
+                    messageList.push(i18n.getText('field.phone.validate.pattern'))
+                }
             }
-            if (10 < value.length) {
-                messageList.push(i18n.getText('field.phone.validate.max-length', { value: 10 }))
-            }
-            if (!/^(\d{10})$/.test(value)) {
-                messageList.push(i18n.getText('field.phone.validate.pattern'))
+            return 0 < messageList.length ? messageList.join('<br/>') : true
+        },
+        [i18n],
+    )
+
+    const handleValidateFieldIsActive = React.useCallback(
+        (value: TypeForm['isActive']) => {
+            const messageList: string[] = []
+            if (!(value === true || value === false)) {
+                messageList.push(i18n.getText('field.is-active.validate.required'))
             }
             return 0 < messageList.length ? messageList.join('<br/>') : true
         },
@@ -130,42 +152,37 @@ const View = () => {
         formCreate.setValue('name', defaultValuesToReset.name)
         formCreate.setValue('email', defaultValuesToReset.email)
         formCreate.setValue('phone', defaultValuesToReset.phone)
+        formCreate.setValue('isActive', defaultValuesToReset.isActive)
         await formCreate.trigger()
     }, [formCreate, defaultValuesToReset])
 
     const handleActionSubmit: formType.SubmitHandler<TypeForm> = React.useCallback(
         async (data: TypeForm) => {
-            const { name, email, phone } = data
+            const { name, email, phone, isActive } = data
+
             mutationUserCreate.mutate(
                 {
                     name: name,
                     email: email,
                     phone: phone,
-                    groupList: ['Admin', 'Sale', 'Project'],
+                    is_active: isActive,
                 },
                 {
-                    onSuccess: (userCreated: TypeUser | null) => {
-                        if (userCreated) {
-                            queryClient.setQueryData([`/app/page/workspace/admin/setting/user/${userCreated.id}/`, 'query', 'db'], userCreated)
-                            queryClient.setQueryData([`/app/page/workspace/admin/setting/user/list/`, 'query', 'db'], (userList: TypeUser[] | undefined) => (userList ? [...userList, userCreated] : [userCreated]))
-                            contextAlert.addAlert({ type: 'success', message: i18n.getText('action.submit.alert.success') })
+                    onSuccess: (userUpdated) => {
+                        if (userUpdated) {
                             setDefaultValuesToReset((oldState) => ({
                                 ...oldState,
                                 name: name,
                                 email: email,
                                 phone: phone,
+                                isActive: isActive,
                             }))
-                        } else {
-                            contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                         }
-                    },
-                    onError: () => {
-                        contextAlert.addAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
                     },
                 },
             )
         },
-        [i18n, contextAlert, queryClient, mutationUserCreate],
+        [mutationUserCreate],
     )
 
     const effectStepFetching = React.useCallback(async () => {
@@ -178,15 +195,18 @@ const View = () => {
         const name = queryUserGet.data?.name ?? DEFAULT_VALUES.name
         const email = queryUserGet.data?.email ?? DEFAULT_VALUES.email
         const phone = queryUserGet.data?.phone ?? DEFAULT_VALUES.phone
+        const isActive = queryUserGet.data?.is_active ?? DEFAULT_VALUES.isActive
         setDefaultValuesToReset((oldState) => ({
             ...oldState,
             name: name,
             email: email,
             phone: phone,
+            isActive: isActive,
         }))
         formCreate.setValue('name', name)
         formCreate.setValue('email', email)
         formCreate.setValue('phone', phone)
+        formCreate.setValue('isActive', isActive)
         await formCreate.trigger()
         setEffectStep(EFFECT_STEP.DEFAULT)
     }, [queryUserGet.data, formCreate])
@@ -209,11 +229,7 @@ const View = () => {
     }, [effectStep, effectStepFetching, effectStepFilling])
 
     if (mutationUserCreate.data) {
-        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user[':id'].update).getTo({ id: mutationUserCreate.data.id })} />
-    }
-
-    if (!queryUserGet.isFetching && !queryUserGet.data) {
-        return <app.component.navigate.ToAppErrorNotFound />
+        return <app.component.navigate.To to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user[':id'].update).getTo({ id: mutationUserCreate.data.id })} />
     }
 
     return (
@@ -232,7 +248,7 @@ const View = () => {
                             {queryUserGet.isFetching ? <app.component.loading.ProgressCircular /> : <mui.icon.Update />}
                             {i18n.getText('action.refresh')}
                         </app.component.button.Button>
-                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.admin.setting.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
+                        <app.component.button.ButtonLink to={app.setting.route.getNode(app.setting.route.app.page.workspace.root.user).getTo()} variant={'contained'} space={1} disabled={queryUserGet.isFetching || mutationUserCreate.isPending || formCreate.formState.isSubmitting} typographyProps={{ variant: 'body2' }}>
                             <mui.icon.Close sx={{ m: `0 !important` }} />
                         </app.component.button.ButtonLink>
                     </app.layout.main.component.structure.head.spaceBetween.HeadRight>
@@ -296,7 +312,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextEmail
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.email.label')}
                                                 error={!!formCreate.formState.errors.email}
                                                 helperText={formCreate.formState.errors.email?.message}
@@ -322,10 +338,36 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.text.TextPhone
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.phone.label')}
                                                 error={!!formCreate.formState.errors.phone}
                                                 helperText={formCreate.formState.errors.phone?.message}
+                                                disabled={mutationUserCreate.isPending || formCreate.formState.isSubmitting}
+                                                autoFocus={false}
+                                                space={{
+                                                    top: 2,
+                                                    right: 1,
+                                                    bottom: 1,
+                                                    left: 1,
+                                                }}
+                                                field={field}
+                                            />
+                                        )}
+                                    />
+                                    <form.component.Controller
+                                        name={'isActive'}
+                                        control={formCreate.control}
+                                        rules={{
+                                            validate: {
+                                                handleValidateFieldIsActive,
+                                            },
+                                        }}
+                                        render={({ field }) => (
+                                            <app.component.field.checkbox.Checkbox
+                                                required={true}
+                                                label={i18n.getText('field.is-active.label')}
+                                                error={!!formCreate.formState.errors.isActive}
+                                                helperText={formCreate.formState.errors.isActive?.message}
                                                 disabled={mutationUserCreate.isPending || formCreate.formState.isSubmitting}
                                                 autoFocus={false}
                                                 space={{
