@@ -98,7 +98,11 @@ const View = () => {
                     return null
                 }
             } else {
-                alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                if (response.data.detail.error === 'EmailAlreadyExists') {
+                    alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error.EmailAlreadyExists') })
+                } else {
+                    alertActionAddAlert({ type: 'error', message: i18n.getText('action.submit.alert.error') })
+                }
                 return null
             }
         },
@@ -545,7 +549,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.is-active.label')}
                                                 error={!!formCreate.formState.errors.isActive}
                                                 helperText={formCreate.formState.errors.isActive?.message}
@@ -571,7 +575,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-root.label')}
                                                 error={!!formCreate.formState.errors.hasPermissionOfRoot}
                                                 helperText={formCreate.formState.errors.hasPermissionOfRoot?.message}
@@ -597,7 +601,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-admin.label')}
                                                 error={!!formCreate.formState.errors.hasPermissionOfAdmin}
                                                 helperText={formCreate.formState.errors.hasPermissionOfAdmin?.message}
@@ -623,7 +627,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-sale.label')}
                                                 error={!!formCreate.formState.errors.hasPermissionOfSale}
                                                 helperText={formCreate.formState.errors.hasPermissionOfSale?.message}
@@ -649,7 +653,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-project.label')}
                                                 error={!!formCreate.formState.errors.hasPermissionOfProject}
                                                 helperText={formCreate.formState.errors.hasPermissionOfProject?.message}

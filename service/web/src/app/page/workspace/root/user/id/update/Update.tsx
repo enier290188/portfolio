@@ -564,7 +564,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.is-active.label')}
                                                 error={!!formUpdate.formState.errors.isActive}
                                                 helperText={formUpdate.formState.errors.isActive?.message}
@@ -590,7 +590,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-root.label')}
                                                 error={!!formUpdate.formState.errors.hasPermissionOfRoot}
                                                 helperText={formUpdate.formState.errors.hasPermissionOfRoot?.message}
@@ -616,7 +616,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-admin.label')}
                                                 error={!!formUpdate.formState.errors.hasPermissionOfAdmin}
                                                 helperText={formUpdate.formState.errors.hasPermissionOfAdmin?.message}
@@ -642,7 +642,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-sale.label')}
                                                 error={!!formUpdate.formState.errors.hasPermissionOfSale}
                                                 helperText={formUpdate.formState.errors.hasPermissionOfSale?.message}
@@ -668,7 +668,7 @@ const View = () => {
                                         }}
                                         render={({ field }) => (
                                             <app.component.field.checkbox.Checkbox
-                                                required={true}
+                                                required={false}
                                                 label={i18n.getText('field.has-permission-of-project.label')}
                                                 error={!!formUpdate.formState.errors.hasPermissionOfProject}
                                                 helperText={formUpdate.formState.errors.hasPermissionOfProject?.message}

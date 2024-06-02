@@ -27,5 +27,6 @@
     "action.submit": "Guardar",
     "action.submit.alert.success": "Guardado con éxito",
     "action.submit.alert.error": "Lo sentimos, se ha producido un error inesperado",
+    "action.submit.alert.error.EmailAlreadyExists": "El correo electrónico ya existe. No puedes utilizar este correo electrónico para crear un nuevo usuario",
     "action.reset": "Reinicializar"
 }

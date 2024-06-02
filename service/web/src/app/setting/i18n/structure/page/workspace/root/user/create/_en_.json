@@ -27,5 +27,6 @@
     "action.submit": "Save",
     "action.submit.alert.success": "Saved successfully",
     "action.submit.alert.error": "Sorry, an unexpected error has occurred",
+    "action.submit.alert.error.EmailAlreadyExists": "The email already exists. You cannot use this email to create a new user",
     "action.reset": "Reset"
 }
