@@ -3,10 +3,6 @@ import { appType } from '@./app'
 export type TypeCompanyFetchRequest = {
     accessToken: appType.TypeSettingAccessToken
 }
-export type TypeCompanyGetRequest = {
-    accessToken: appType.TypeSettingAccessToken
-    id: appType.TypeModelCompany['id']
-}
 export type TypeCompanyCreateRequest = {
     accessToken: appType.TypeSettingAccessToken
     company: {
@@ -15,6 +11,10 @@ export type TypeCompanyCreateRequest = {
         phone: appType.TypeModelCompany['phone']
         is_active: appType.TypeModelCompany['is_active']
     }
+}
+export type TypeCompanyGetRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    id: appType.TypeModelCompany['id']
 }
 export type TypeCompanyUpdateRequest = {
     accessToken: appType.TypeSettingAccessToken
@@ -35,6 +35,20 @@ export type TypeCompanyRemoveRequest = {
 
 export type TypeUserFetchRequest = {
     accessToken: appType.TypeSettingAccessToken
+}
+export type TypeUserCreateRequest = {
+    accessToken: appType.TypeSettingAccessToken
+    user: {
+        name: appType.TypeModelUser['name']
+        email: appType.TypeModelUser['email']
+        phone: appType.TypeModelUser['phone']
+        is_active: appType.TypeModelUser['is_active']
+        has_permission_of_root: appType.TypeModelUser['has_permission_of_root']
+        has_permission_of_admin: appType.TypeModelUser['has_permission_of_admin']
+        has_permission_of_sale: appType.TypeModelUser['has_permission_of_sale']
+        has_permission_of_project: appType.TypeModelUser['has_permission_of_project']
+        company_id: appType.TypeModelUser['company_id']
+    }
 }
 export type TypeUserGetRequest = {
     accessToken: appType.TypeSettingAccessToken

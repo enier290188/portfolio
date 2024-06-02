@@ -1,5 +1,5 @@
 import { api } from '../../../api.ts'
-import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserRemoveRequest, TypeUserResetPasswordRequest, TypeUserUpdateRequest } from './root.type.ts'
+import { TypeCompanyCreateRequest, TypeCompanyFetchRequest, TypeCompanyGetRequest, TypeCompanyRemoveRequest, TypeCompanyUpdateRequest, TypeUserCreateRequest, TypeUserFetchRequest, TypeUserGetRequest, TypeUserRemoveRequest, TypeUserResetPasswordRequest, TypeUserUpdateRequest } from './root.type.ts'
 
 const company_fetch = async (request: TypeCompanyFetchRequest) => {
     return await api.get({
@@ -52,6 +52,17 @@ const user_fetch = async (request: TypeUserFetchRequest) => {
     })
 }
 
+const user_create = async (request: TypeUserCreateRequest) => {
+    return await api.post({
+        resource: `/api/v1/page/workspace/root/user/`,
+        accessToken: request.accessToken,
+        body: {
+            ...request.user,
+            password: '@Abc@12345@', // `A${Math.random().toString(36).slice(2)}@${Math.random().toString(36).toUpperCase().slice(2)}0`
+        },
+    })
+}
+
 const user_get = async (request: TypeUserGetRequest) => {
     return await api.get({
         resource: `/api/v1/page/workspace/root/user/${request.id}/`,
@@ -96,6 +107,7 @@ export const root = {
     company_update: company_update,
     company_remove: company_remove,
     user_fetch: user_fetch,
+    user_create: user_create,
     user_get: user_get,
     user_update: user_update,
     user_reset_password: user_reset_password,
