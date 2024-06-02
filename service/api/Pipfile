@@ -8,7 +8,7 @@ name = "pypi"
 fastapi = { version = "==0.111.0" }
 pydantic = { version = "==2.7.2", extras = ["email"] }
 pydantic-settings = { version = "==2.2.1" }
-uvicorn = { version = "==0.30.0" }
+uvicorn = { version = "==0.30.1" }
 gunicorn = { version = "==22.0.0" }
 ##### Auth #####
 python-multipart = { version = "==0.0.9" }
