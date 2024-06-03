@@ -20,7 +20,7 @@ class __OAuth2PasswordBearerScheme(OAuth2PasswordBearer):
         return param
 
 
-__oauth2_password_bearer_scheme: __OAuth2PasswordBearerScheme = __OAuth2PasswordBearerScheme(tokenUrl='/api/v1/auth/login/')
+__oauth2_password_bearer_scheme: __OAuth2PasswordBearerScheme = __OAuth2PasswordBearerScheme(tokenUrl='/api/v1/page/account/login/')
 
 
 def get_oauth2_password_bearer_scheme() -> __OAuth2PasswordBearerScheme:
