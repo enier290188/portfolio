@@ -711,8 +711,8 @@ const LayoutTablePagination = <TData extends tanstackReactTableType.RowData>({ t
 
 export const Table = <TData extends tanstackReactTableType.RowData & { id: string }>({ tableKey, columns, data, options }: { tableKey: string; columns: tanstackReactTableType.ColumnDef<TData>[]; data: TData[]; options?: { pagination?: { pageIndex: number; pageSize: number; pageSizeOptions: number[] }; sorting?: { id: string; desc: boolean } } }) => {
     const PAGINATION_PAGE_INDEX = 0
-    const PAGINATION_PAGE_SIZE_OPTIONS = [5, 10, 15, 20, 25]
-    const PAGINATION_PAGE_SIZE = PAGINATION_PAGE_SIZE_OPTIONS[1]
+    const PAGINATION_PAGE_SIZE_OPTIONS = [10, 15, 20, 25, 30]
+    const PAGINATION_PAGE_SIZE = PAGINATION_PAGE_SIZE_OPTIONS[0]
 
     const initialPaginationState: tanstackReactTableType.PaginationState = { pageIndex: PAGINATION_PAGE_INDEX, pageSize: PAGINATION_PAGE_SIZE }
     const initialExpandedState: tanstackReactTableType.ExpandedState = {}
