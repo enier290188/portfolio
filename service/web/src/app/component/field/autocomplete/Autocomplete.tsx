@@ -1,5 +1,11 @@
 import { app } from '@./app'
 import { mui, muiType } from '@./package/material-ui'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import match from 'autosuggest-highlight/match'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import parse from 'autosuggest-highlight/parse'
 import React from 'react'
 import { AutocompleteProps } from './Autocomplete.type.ts'
 
@@ -52,17 +58,23 @@ export const Autocomplete = ({ required = true, InputProps, label = '', variant 
                 getOptionLabel={(option) => {
                     return option?.label ?? ''
                 }}
-                renderOption={(props, optionSelected) => {
+                renderOption={(props, option, { inputValue }) => {
+                    const matches: number[][] = match(option.label, inputValue, { findAllOccurrences: true, insideWords: true })
+                    const parts: { text: string; highlight: boolean }[] = parse(option.label, matches)
                     return (
-                        <li {...props} key={optionSelected.id}>
-                            <mui.component.Typography component={'p'} variant={'body1'} m={0} p={0}>
-                                {optionSelected?.label ?? ''}
+                        <li {...props} key={option.id}>
+                            <mui.component.Typography component={'p'} variant={'body2'} m={0} p={0}>
+                                {parts.map((part, index: number) => (
+                                    <span key={index} style={{ fontWeight: part.highlight ? 900 : 'inherit' }}>
+                                        {part.text}
+                                    </span>
+                                ))}
                             </mui.component.Typography>
                         </li>
                     )
                 }}
                 noOptionsText={
-                    <mui.component.Typography component={'p'} variant={'body1'} m={0} p={0}>
+                    <mui.component.Typography component={'p'} variant={'body2'} m={0} p={0}>
                         {i18n.getText('no-options')}
                     </mui.component.Typography>
                 }
