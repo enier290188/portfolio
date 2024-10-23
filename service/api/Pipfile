@@ -25,4 +25,4 @@ pytest = { version = "==8.2.1" }
 
 [requires]
 python_version = "3.12"
-python_full_version = "3.12.1"
+python_full_version = "3.12.7"

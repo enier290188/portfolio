@@ -15,7 +15,7 @@ ifdef DC_PROJECT_NAME
 ifdef DC_PROJECT_STAGE
 ifeq ($(DC_PROJECT_STAGE), development)
 	cd ../service/web && npm install -g npm@latest && npm install
-	cd ../service/api && export PIPENV_VENV_IN_PROJECT=1 && pipenv --python 3.12.1 --clear install --dev && source .venv/bin/activate && pip install --upgrade pip
+	cd ../service/api && export PIPENV_VENV_IN_PROJECT=1 && pipenv --python 3.12.7 --clear install --dev && source .venv/bin/activate && pip install --upgrade pip
 	DC_PROJECT_NAME=$(DC_PROJECT_NAME) DC_PROJECT_STAGE=$(DC_PROJECT_STAGE) docker compose --project-name project-$(DC_PROJECT_NAME)-$(DC_PROJECT_STAGE) --file ./stage/$(DC_PROJECT_STAGE)/docker-compose.yaml --env-file ./stage/$(DC_PROJECT_STAGE)/env/.env up --build --force-recreate --detach
 	DC_PROJECT_NAME=$(DC_PROJECT_NAME) DC_PROJECT_STAGE=$(DC_PROJECT_STAGE) docker compose --project-name project-$(DC_PROJECT_NAME)-$(DC_PROJECT_STAGE) --file ./stage/$(DC_PROJECT_STAGE)/docker-compose.yaml --env-file ./stage/$(DC_PROJECT_STAGE)/env/.env watch --no-up --quiet
 endif
