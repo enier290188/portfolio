@@ -17,7 +17,7 @@ services:
         condition: service_healthy
         restart: true
         required: true
-    image: nginx:1.26.0-alpine
+    image: nginx:1.27.2-alpine
     restart: unless-stopped
     environment:
       - NGINX_HOST=${DC_SERVICE_WEB_LOAD_BALANCER_HOST}
@@ -98,7 +98,7 @@ services:
         condition: service_healthy
         restart: true
         required: true
-    image: nginx:1.26.0-alpine
+    image: nginx:1.27.2-alpine
     restart: unless-stopped
     environment:
       - NGINX_HOST=${DC_SERVICE_API_LOAD_BALANCER_HOST}
