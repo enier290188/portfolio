@@ -5,23 +5,23 @@ name = "pypi"
 
 [packages]
 ##### App #####
-fastapi = { version = "==0.111.0" }
-pydantic = { version = "==2.7.2", extras = ["email"] }
-pydantic-settings = { version = "==2.2.1" }
-uvicorn = { version = "==0.30.1" }
-gunicorn = { version = "==22.0.0" }
+fastapi = { version = "==0.115.5" }
+pydantic = { version = "==2.10.2", extras = ["email"] }
+pydantic-settings = { version = "==2.6.1" }
+uvicorn = { version = "==0.32.1" }
+gunicorn = { version = "==23.0.0" }
 ##### Auth #####
-python-multipart = { version = "==0.0.9" }
+python-multipart = { version = "==0.0.17" }
 python-jose = { version = "==3.3.0", extras = ["cryptography"] }
 passlib = { version = "==1.7.4" }
 ##### DB #####
-sqlalchemy = { version = "==2.0.30", extras = ["asyncio"] }
-alembic = { version = "==1.13.1" }
-psycopg = { version = "==3.1.19", extras = ["binary", "pool"] }
+sqlalchemy = { version = "==2.0.36", extras = ["asyncio"] }
+alembic = { version = "==1.14.0" }
+psycopg = { version = "==3.2.3", extras = ["binary", "pool"] }
 
 [dev-packages]
 ##### Test #####
-pytest = { version = "==8.2.1" }
+pytest = { version = "==8.3.3" }
 
 [requires]
 python_version = "3.12"
