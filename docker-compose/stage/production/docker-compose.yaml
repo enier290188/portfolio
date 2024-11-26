@@ -216,15 +216,21 @@ secrets:
 networks:
   network-entry-point-and-web-load-balancer:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point-and-web-load-balancer
+    driver: bridge
   network-web-load-balancer-and-web:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web-load-balancer-and-web
+    driver: bridge
   network-web-and-api-load-balancer:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web-and-api-load-balancer
+    driver: bridge
   network-api-load-balancer-and-api:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api-load-balancer-and-api
+    driver: bridge
   network-api-and-db:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api-and-db
+    driver: bridge
 
 volumes:
   volume-db:
     name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+    driver: local

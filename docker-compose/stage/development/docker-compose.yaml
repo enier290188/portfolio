@@ -156,7 +156,9 @@ secrets:
 networks:
   network:
     name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
+    driver: bridge
 
 volumes:
   volume-db:
     name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+    driver: local
