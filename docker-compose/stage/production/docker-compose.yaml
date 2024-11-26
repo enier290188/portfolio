@@ -187,7 +187,7 @@ services:
       retries: 10
       start_period: 0s
       start_interval: 0s
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     restart: unless-stopped
     environment:
       - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}
