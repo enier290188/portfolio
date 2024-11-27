@@ -79,7 +79,7 @@ RUN <<EOF
     npx vite build --outDir dist --assetsDir asset --assetsInlineLimit 4096
 EOF
 
-FROM nginx:1.26.0-alpine AS stage-production
+FROM nginx:1.27.2-alpine AS stage-production
 RUN <<EOF
     apk --update --no-cache add libc6-compat curl
 EOF
