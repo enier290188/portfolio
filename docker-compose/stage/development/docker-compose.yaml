@@ -162,3 +162,7 @@ volumes:
   volume-db:
     name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./service/db/volume
