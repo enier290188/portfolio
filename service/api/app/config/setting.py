@@ -26,39 +26,18 @@ class __Setting(BaseSettings):
 
     ##################################################
     ##################################################
-    # service-web
-    ##################################################
-    SERVICE_WEB_PROTOCOL: str = Field(default='')
-    SERVICE_WEB_DOMAIN: str = Field(default='')
-    SERVICE_WEB_PORT: int = Field(default=0)
-
-    ##################################################
-    ##################################################
-    # service-api
-    ##################################################
-    SERVICE_API_PROTOCOL: str = Field(default='')
-    SERVICE_API_DOMAIN: str = Field(default='')
-    SERVICE_API_HOST: str = Field(default='')
-    SERVICE_API_PORT_EXTERNAL: int = Field(default=0)
-
-    ##################################################
-    ##################################################
     # service-api-middleware
     ##################################################
+    SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST: str = Field(default='')
+
     # noinspection PyPep8Naming
     @computed_field
     @property
     def SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS(self) -> Sequence[str] | None:
         allowed_origins = []
-        if self.SERVICE_WEB_PROTOCOL and self.SERVICE_WEB_DOMAIN and self.SERVICE_WEB_PORT:
-            allowed_origins.append(
-                '{protocol}://{host}:{port}'.format(
-                    protocol=self.SERVICE_WEB_PROTOCOL,
-                    host=self.SERVICE_WEB_DOMAIN,
-                    port=self.SERVICE_WEB_PORT
-                )
-            )
-        return allowed_origins
+        if self.SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST:
+            allowed_origins.extend(self.SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST.split('||'))
+        return list(set(allowed_origins))
 
     SERVICE_API_MIDDLEWARE_CORS_ALLOW_METHODS: Sequence[str] = Field(default=['GET', 'POST', 'PATCH', 'DELETE'])
     SERVICE_API_MIDDLEWARE_CORS_ALLOW_HEADERS: Sequence[str] = Field(default=['Content-Type', 'Authorization'])
@@ -67,16 +46,16 @@ class __Setting(BaseSettings):
     SERVICE_API_MIDDLEWARE_CORS_EXPOSE_HEADERS: Sequence[str] = Field(default=[])
     SERVICE_API_MIDDLEWARE_CORS_MAX_AGE: int = Field(default=600)
 
+    SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST: str = Field(default='')
+
     # noinspection PyPep8Naming
     @computed_field
     @property
     def SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS(self) -> Sequence[str] | None:
         allowed_hosts = []
-        if self.SERVICE_API_DOMAIN:
-            allowed_hosts.append(self.SERVICE_API_DOMAIN)
-        if self.SERVICE_API_HOST:
-            allowed_hosts.append(self.SERVICE_API_HOST)
-        return allowed_hosts
+        if self.SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST:
+            allowed_hosts.extend(self.SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST.split('||'))
+        return list(set(allowed_hosts))
 
     SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_WWW_REDIRECT: bool = Field(default=True)
 

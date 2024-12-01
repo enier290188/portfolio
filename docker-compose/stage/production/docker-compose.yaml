@@ -30,8 +30,8 @@ services:
     ports:
       - ${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
     networks:
-      - network-entry-point-and-web-load-balancer
-      - network-web-load-balancer-and-web
+      - network-entry-point
+      - network
     volumes:
       - ./service/web-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.local"
@@ -70,14 +70,13 @@ services:
         - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
         - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
         - SERVICE_WEB_PORT_INTERNAL=${DC_SERVICE_WEB_PORT_INTERNAL}
-        - SERVICE_API_PROTOCOL=${DC_SERVICE_API_PROTOCOL}
-        - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
+        - SERVICE_API_PROTOCOL=${DC_SERVICE_API_LOAD_BALANCER_PROTOCOL}
+        - SERVICE_API_DOMAIN=${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
         - SERVICE_API_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}
     ports:
       - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
     networks:
-      - network-web-load-balancer-and-web
-      - network-web-and-api-load-balancer
+      - network
     volumes:
       - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
   service-api-load-balancer:
@@ -111,8 +110,8 @@ services:
     ports:
       - ${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
     networks:
-      - network-web-and-api-load-balancer
-      - network-api-load-balancer-and-api
+      - network-entry-point
+      - network
     volumes:
       - ./service/api-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.local"
@@ -153,9 +152,8 @@ services:
         - SERVICE_API_PORT_INTERNAL=${DC_SERVICE_API_PORT_INTERNAL}
         - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
         - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
-        - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
-        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
-        - SERVICE_WEB_PORT=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
+        - SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST=${DC_SERVICE_WEB_LOAD_BALANCER_PROTOCOL}://${DC_SERVICE_WEB_LOAD_BALANCER_DOMAIN}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
+        - SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST=${DC_SERVICE_API_HOST}||${DC_SERVICE_API_LOAD_BALANCER_HOST}||${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
         - SERVICE_DB_HOST=${DC_SERVICE_DB_HOST}
         - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
         - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
@@ -172,8 +170,7 @@ services:
       - source: service_db_password
         target: SERVICE_DB_PASSWORD_FILE
     networks:
-      - network-api-load-balancer-and-api
-      - network-api-and-db
+      - network
   service-db:
     deploy:
       mode: replicated
@@ -199,7 +196,7 @@ services:
     secrets:
       - service_db_password
     networks:
-      - network-api-and-db
+      - network
     volumes:
       - volume-db:/var/lib/postgresql/data:rw
 
@@ -214,20 +211,11 @@ secrets:
     file: ./secret/.secret.SERVICE_DB_PASSWORD
 
 networks:
-  network-entry-point-and-web-load-balancer:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point-and-web-load-balancer
+  network-entry-point:
+    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point
     driver: bridge
-  network-web-load-balancer-and-web:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web-load-balancer-and-web
-    driver: bridge
-  network-web-and-api-load-balancer:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web-and-api-load-balancer
-    driver: bridge
-  network-api-load-balancer-and-api:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api-load-balancer-and-api
-    driver: bridge
-  network-api-and-db:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api-and-db
+  network:
+    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
     driver: bridge
 
 volumes:
