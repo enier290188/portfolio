@@ -2,7 +2,7 @@ import { TypeFetchDefaultDeleteRequest, TypeFetchDefaultGetRequest, TypeFetchDef
 
 const SERVICE_API_PROTOCOL = import.meta.env.VITE_SERVICE_API_PROTOCOL
 const SERVICE_API_DOMAIN = import.meta.env.VITE_SERVICE_API_DOMAIN
-const SERVICE_API_PORT_EXTERNAL = import.meta.env.VITE_SERVICE_API_PORT_EXTERNAL
+const SERVICE_API_PORT = import.meta.env.VITE_SERVICE_API_PORT
 
 const __fetch_something_went_wrong__ = (): TypeFetchResponseError => {
     return {
@@ -18,7 +18,7 @@ const __fetch_something_went_wrong__ = (): TypeFetchResponseError => {
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 const __fetch__ = async (request: TypeFetchRequest): Promise<TypeFetchResponse> => {
     try {
-        const input: string = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT_EXTERNAL}${request.resource}`
+        const input: string = `${SERVICE_API_PROTOCOL}://${SERVICE_API_DOMAIN}:${SERVICE_API_PORT}${request.resource}`
         // Default options are marked with *
         const init: RequestInit = {}
         init.method = request.options.method // *GET, POST, PATCH, DELETE

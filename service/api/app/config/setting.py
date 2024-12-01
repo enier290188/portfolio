@@ -30,7 +30,7 @@ class __Setting(BaseSettings):
     ##################################################
     SERVICE_WEB_PROTOCOL: str = Field(default='')
     SERVICE_WEB_DOMAIN: str = Field(default='')
-    SERVICE_WEB_PORT_EXTERNAL: int = Field(default=0)
+    SERVICE_WEB_PORT: int = Field(default=0)
 
     ##################################################
     ##################################################
@@ -50,12 +50,12 @@ class __Setting(BaseSettings):
     @property
     def SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS(self) -> Sequence[str] | None:
         allowed_origins = []
-        if self.SERVICE_WEB_PROTOCOL and self.SERVICE_WEB_DOMAIN and self.SERVICE_WEB_PORT_EXTERNAL:
+        if self.SERVICE_WEB_PROTOCOL and self.SERVICE_WEB_DOMAIN and self.SERVICE_WEB_PORT:
             allowed_origins.append(
                 '{protocol}://{host}:{port}'.format(
                     protocol=self.SERVICE_WEB_PROTOCOL,
                     host=self.SERVICE_WEB_DOMAIN,
-                    port=self.SERVICE_WEB_PORT_EXTERNAL
+                    port=self.SERVICE_WEB_PORT
                 )
             )
         return allowed_origins
