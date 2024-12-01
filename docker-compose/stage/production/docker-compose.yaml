@@ -6,7 +6,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: curl -f https://${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
+      test: curl --fail https://${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
       interval: 1s
       timeout: 1s
       retries: 10
@@ -44,7 +44,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: curl -f http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
+      test: curl --fail http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
       interval: 1s
       timeout: 1s
       retries: 10
@@ -65,14 +65,14 @@ services:
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
+        - SERVICE_WEB_HOST=${DC_SERVICE_WEB_HOST}
         - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
         - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
-        - SERVICE_WEB_HOST=${DC_SERVICE_WEB_HOST}
         - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
         - SERVICE_WEB_PORT_INTERNAL=${DC_SERVICE_WEB_PORT_INTERNAL}
         - SERVICE_API_PROTOCOL=${DC_SERVICE_API_PROTOCOL}
         - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
-        - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}
+        - SERVICE_API_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}
     ports:
       - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
     networks:
@@ -87,7 +87,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: curl -f https://${DC_SERVICE_API_LOAD_BALANCER_HOST}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
+      test: curl --fail https://${DC_SERVICE_API_LOAD_BALANCER_HOST}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 0
       interval: 1s
       timeout: 1s
       retries: 10
@@ -146,17 +146,17 @@ services:
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
-        - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
-        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
-        - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
+        - SERVICE_API_HOST=${DC_SERVICE_API_HOST}
         - SERVICE_API_PROTOCOL=${DC_SERVICE_API_PROTOCOL}
         - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
-        - SERVICE_API_HOST=${DC_SERVICE_API_HOST}
         - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_PORT_EXTERNAL}
         - SERVICE_API_PORT_INTERNAL=${DC_SERVICE_API_PORT_INTERNAL}
         - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
         - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
-        - SERVICE_DB_HOST=service-db
+        - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
+        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
+        - SERVICE_WEB_PORT=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
+        - SERVICE_DB_HOST=${DC_SERVICE_DB_HOST}
         - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
         - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
         - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
@@ -181,7 +181,7 @@ services:
       placement:
         max_replicas_per_node: 1
     healthcheck:
-      test: pg_isready -q -d ${DC_SERVICE_DB_DATABASE} -U ${DC_SERVICE_DB_USER}
+      test: pg_isready --host=${DC_SERVICE_DB_HOST} --port=${DC_SERVICE_DB_PORT_INTERNAL} --dbname=${DC_SERVICE_DB_DATABASE} --username=${DC_SERVICE_DB_USER}
       interval: 1s
       timeout: 1s
       retries: 10
@@ -234,7 +234,12 @@ volumes:
   volume-db:
     name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
     driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./service/db/volume
+
+#volumes:
+#  volume-db:
+#    name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: ./service/db/volume
