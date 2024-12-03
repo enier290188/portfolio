@@ -5,7 +5,8 @@ ARG PYTHON_VERSION=3.12.7
 
 FROM python:${PYTHON_VERSION}-alpine AS stage-development
 RUN <<EOF
-    apk --update --no-cache add libc6-compat curl gcc libc-dev libffi-dev
+    apk update && apk upgrade --no-cache
+    apk add --no-cache curl gcc libc-dev libffi-dev
     pip install --upgrade pip
 EOF
 
@@ -58,7 +59,8 @@ CMD uvicorn app.main:app --host $SERVICE_API_HOST --port $SERVICE_API_PORT_INTER
 
 FROM python:${PYTHON_VERSION}-alpine AS stage-production-base
 RUN <<EOF
-    apk --update --no-cache add libc6-compat curl gcc libc-dev libffi-dev
+    apk update && apk upgrade --no-cache
+    apk add --no-cache curl gcc libc-dev libffi-dev
     pip install --upgrade pip
     addgroup --system --gid 10001 nonroot
     adduser --system --uid 10001 nonroot --disabled-password --no-create-home

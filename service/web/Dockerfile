@@ -5,7 +5,8 @@ ARG NODE_VERSION=22.11.0
 
 FROM node:${NODE_VERSION}-alpine AS stage-development
 RUN <<EOF
-    apk --update --no-cache add libc6-compat curl
+    apk update && apk upgrade --no-cache
+    apk add --no-cache curl
     npm install -g npm@latest
 EOF
 
@@ -41,7 +42,8 @@ CMD npx vite dev --host $SERVICE_WEB_HOST --port $SERVICE_WEB_PORT_INTERNAL --co
 
 FROM node:${NODE_VERSION}-alpine AS stage-production-base
 RUN <<EOF
-    apk --update --no-cache add libc6-compat curl
+    apk update && apk upgrade --no-cache
+    apk add --no-cache curl
     npm install -g npm@latest
     addgroup --system --gid 10001 nonroot
     adduser --system --uid 10001 nonroot --disabled-password --no-create-home
@@ -86,7 +88,8 @@ EOF
 
 FROM nginx:1.27.2-alpine AS stage-production
 RUN <<EOF
-    apk --update --no-cache add libc6-compat curl
+    apk update && apk upgrade --no-cache
+    apk add --no-cache curl
 EOF
 
 ARG SERVICE_WEB_HOST
