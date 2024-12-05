@@ -124,7 +124,7 @@ services:
             placement:
                 max_replicas_per_node: 1
         healthcheck:
-            test: curl -f http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
+            test: curl --fail http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
             interval: 1s
             timeout: 1s
             retries: 10
