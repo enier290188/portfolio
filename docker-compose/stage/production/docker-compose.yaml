@@ -1,228 +1,228 @@
 services:
-  service-web-load-balancer:
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        max_replicas_per_node: 1
-    healthcheck:
-      test: curl --fail https://${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 0s
-      start_interval: 0s
-    depends_on:
-      service-web:
-        condition: service_healthy
-        restart: true
-        required: true
-    image: nginx:1.27.2-alpine
-    restart: unless-stopped
-    environment:
-      - NGINX_HOST=${DC_SERVICE_WEB_LOAD_BALANCER_HOST}
-      - NGINX_PORT=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
-      - NGINX_SERVER_REPLICAS={
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-1:${DC_SERVICE_WEB_PORT_INTERNAL};
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-2:${DC_SERVICE_WEB_PORT_INTERNAL};
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-3:${DC_SERVICE_WEB_PORT_INTERNAL};
-        }
-    ports:
-      - ${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
-    networks:
-      - network-entry-point
-      - network
-    volumes:
-      - ./service/web-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
-      # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.local"
-      - ./service/web-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
-      - ./service/web-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
-  service-web:
-    deploy:
-      mode: replicated
-      replicas: 3
-      placement:
-        max_replicas_per_node: 1
-    healthcheck:
-      test: curl --fail http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 0s
-      start_interval: 0s
-    depends_on:
-      service-api-load-balancer:
-        condition: service_healthy
-        restart: true
-        required: true
-    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
-    restart: unless-stopped
-    build:
-      platforms:
-        - linux/arm64/v8
-        - linux/amd64
-      context: ../../../service/web/
-      dockerfile: Dockerfile
-      target: stage-${DC_PROJECT_STAGE}
-      args:
-        - SERVICE_WEB_HOST=${DC_SERVICE_WEB_HOST}
-        - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
-        - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
-        - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
-        - SERVICE_WEB_PORT_INTERNAL=${DC_SERVICE_WEB_PORT_INTERNAL}
-        - SERVICE_API_PROTOCOL=${DC_SERVICE_API_LOAD_BALANCER_PROTOCOL}
-        - SERVICE_API_DOMAIN=${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
-        - SERVICE_API_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}
-    ports:
-      - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
-    networks:
-      - network
-    volumes:
-      - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
-  service-api-load-balancer:
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        max_replicas_per_node: 1
-    healthcheck:
-      test: curl --fail https://${DC_SERVICE_API_LOAD_BALANCER_HOST}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 0s
-      start_interval: 0s
-    depends_on:
-      service-api:
-        condition: service_healthy
-        restart: true
-        required: true
-    image: nginx:1.27.2-alpine
-    restart: unless-stopped
-    environment:
-      - NGINX_HOST=${DC_SERVICE_API_LOAD_BALANCER_HOST}
-      - NGINX_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
-      - NGINX_SERVER_REPLICAS={
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-1:${DC_SERVICE_API_PORT_INTERNAL};
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-2:${DC_SERVICE_API_PORT_INTERNAL};
-        server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-3:${DC_SERVICE_API_PORT_INTERNAL};
-        }
-    ports:
-      - ${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
-    networks:
-      - network-entry-point
-      - network
-    volumes:
-      - ./service/api-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
-      # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.local"
-      - ./service/api-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
-      - ./service/api-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
-  service-api:
-    deploy:
-      mode: replicated
-      replicas: 3
-      placement:
-        max_replicas_per_node: 1
-    healthcheck:
-      test: curl -f http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 0s
-      start_interval: 0s
-    depends_on:
-      service-db:
-        condition: service_healthy
-        restart: true
-        required: true
-    image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api:0.1.0
-    restart: unless-stopped
-    build:
-      platforms:
-        - linux/arm64/v8
-        - linux/amd64
-      context: ../../../service/api/
-      dockerfile: Dockerfile
-      target: stage-${DC_PROJECT_STAGE}
-      args:
-        - SERVICE_API_HOST=${DC_SERVICE_API_HOST}
-        - SERVICE_API_PROTOCOL=${DC_SERVICE_API_PROTOCOL}
-        - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
-        - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_PORT_EXTERNAL}
-        - SERVICE_API_PORT_INTERNAL=${DC_SERVICE_API_PORT_INTERNAL}
-        - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
-        - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
-        - SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST=${DC_SERVICE_WEB_LOAD_BALANCER_PROTOCOL}://${DC_SERVICE_WEB_LOAD_BALANCER_DOMAIN}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
-        - SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST=${DC_SERVICE_API_HOST}||${DC_SERVICE_API_LOAD_BALANCER_HOST}||${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
-        - SERVICE_DB_HOST=${DC_SERVICE_DB_HOST}
-        - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
-        - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
-        - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
-    ports:
-      - ${DC_SERVICE_API_PORT_EXTERNAL}:${DC_SERVICE_API_PORT_INTERNAL}
-    secrets:
-      - source: service_api_auth_jwt_key
-        target: SERVICE_API_AUTH_JWT_KEY_FILE
-      - source: service_api_auth_jwt_algorithm
-        target: SERVICE_API_AUTH_JWT_ALGORITHM_FILE
-      - source: service_api_user_root_password
-        target: SERVICE_API_USER_ROOT_PASSWORD_FILE
-      - source: service_db_password
-        target: SERVICE_DB_PASSWORD_FILE
-    networks:
-      - network
-  service-db:
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        max_replicas_per_node: 1
-    healthcheck:
-      test: pg_isready --host=${DC_SERVICE_DB_HOST} --port=${DC_SERVICE_DB_PORT_INTERNAL} --dbname=${DC_SERVICE_DB_DATABASE} --username=${DC_SERVICE_DB_USER}
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 0s
-      start_interval: 0s
-    image: postgres:17.2-alpine
-    restart: unless-stopped
-    environment:
-      - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}/
-      - POSTGRES_DB=${DC_SERVICE_DB_DATABASE}
-      - POSTGRES_USER=${DC_SERVICE_DB_USER}
-      - POSTGRES_PASSWORD_FILE=/run/secrets/service_db_password
-    ports:
-      - ${DC_SERVICE_DB_PORT_EXTERNAL}:${DC_SERVICE_DB_PORT_INTERNAL}
-    secrets:
-      - service_db_password
-    networks:
-      - network
-    volumes:
-      - volume-db:/var/lib/postgresql/data/:rw
+    service-web-load-balancer:
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                max_replicas_per_node: 1
+        healthcheck:
+            test: curl --fail https://${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
+            interval: 1s
+            timeout: 1s
+            retries: 10
+            start_period: 0s
+            start_interval: 0s
+        depends_on:
+            service-web:
+                condition: service_healthy
+                restart: true
+                required: true
+        image: nginx:1.27.2-alpine
+        restart: unless-stopped
+        environment:
+            - NGINX_HOST=${DC_SERVICE_WEB_LOAD_BALANCER_HOST}
+            - NGINX_PORT=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
+            - NGINX_SERVER_REPLICAS={
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-1:${DC_SERVICE_WEB_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-2:${DC_SERVICE_WEB_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-3:${DC_SERVICE_WEB_PORT_INTERNAL};
+                }
+        ports:
+            - ${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
+        networks:
+            - network-entry-point
+            - network
+        volumes:
+            - ./service/web-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.local"
+            - ./service/web-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
+            - ./service/web-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
+    service-web:
+        deploy:
+            mode: replicated
+            replicas: 3
+            placement:
+                max_replicas_per_node: 1
+        healthcheck:
+            test: curl --fail http://${DC_SERVICE_WEB_HOST}:${DC_SERVICE_WEB_PORT_INTERNAL} || exit 1
+            interval: 1s
+            timeout: 1s
+            retries: 10
+            start_period: 0s
+            start_interval: 0s
+        depends_on:
+            service-api-load-balancer:
+                condition: service_healthy
+                restart: true
+                required: true
+        image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
+        restart: unless-stopped
+        build:
+            platforms:
+                - linux/arm64/v8
+                - linux/amd64
+            context: ../../../service/web/
+            dockerfile: Dockerfile
+            target: stage-${DC_PROJECT_STAGE}
+            args:
+                - SERVICE_WEB_HOST=${DC_SERVICE_WEB_HOST}
+                - SERVICE_WEB_PROTOCOL=${DC_SERVICE_WEB_PROTOCOL}
+                - SERVICE_WEB_DOMAIN=${DC_SERVICE_WEB_DOMAIN}
+                - SERVICE_WEB_PORT_EXTERNAL=${DC_SERVICE_WEB_PORT_EXTERNAL}
+                - SERVICE_WEB_PORT_INTERNAL=${DC_SERVICE_WEB_PORT_INTERNAL}
+                - SERVICE_API_PROTOCOL=${DC_SERVICE_API_LOAD_BALANCER_PROTOCOL}
+                - SERVICE_API_DOMAIN=${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
+                - SERVICE_API_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}
+        ports:
+            - ${DC_SERVICE_WEB_PORT_EXTERNAL}:${DC_SERVICE_WEB_PORT_INTERNAL}
+        networks:
+            - network
+        volumes:
+            - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    service-api-load-balancer:
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                max_replicas_per_node: 1
+        healthcheck:
+            test: curl --fail https://${DC_SERVICE_API_LOAD_BALANCER_HOST}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL} --insecure || exit 1
+            interval: 1s
+            timeout: 1s
+            retries: 10
+            start_period: 0s
+            start_interval: 0s
+        depends_on:
+            service-api:
+                condition: service_healthy
+                restart: true
+                required: true
+        image: nginx:1.27.2-alpine
+        restart: unless-stopped
+        environment:
+            - NGINX_HOST=${DC_SERVICE_API_LOAD_BALANCER_HOST}
+            - NGINX_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
+            - NGINX_SERVER_REPLICAS={
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-1:${DC_SERVICE_API_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-2:${DC_SERVICE_API_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-3:${DC_SERVICE_API_PORT_INTERNAL};
+                }
+        ports:
+            - ${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
+        networks:
+            - network-entry-point
+            - network
+        volumes:
+            - ./service/api-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.local"
+            - ./service/api-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
+            - ./service/api-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
+    service-api:
+        deploy:
+            mode: replicated
+            replicas: 3
+            placement:
+                max_replicas_per_node: 1
+        healthcheck:
+            test: curl -f http://${DC_SERVICE_API_HOST}:${DC_SERVICE_API_PORT_INTERNAL} || exit 1
+            interval: 1s
+            timeout: 1s
+            retries: 10
+            start_period: 0s
+            start_interval: 0s
+        depends_on:
+            service-db:
+                condition: service_healthy
+                restart: true
+                required: true
+        image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api:0.1.0
+        restart: unless-stopped
+        build:
+            platforms:
+                - linux/arm64/v8
+                - linux/amd64
+            context: ../../../service/api/
+            dockerfile: Dockerfile
+            target: stage-${DC_PROJECT_STAGE}
+            args:
+                - SERVICE_API_HOST=${DC_SERVICE_API_HOST}
+                - SERVICE_API_PROTOCOL=${DC_SERVICE_API_PROTOCOL}
+                - SERVICE_API_DOMAIN=${DC_SERVICE_API_DOMAIN}
+                - SERVICE_API_PORT_EXTERNAL=${DC_SERVICE_API_PORT_EXTERNAL}
+                - SERVICE_API_PORT_INTERNAL=${DC_SERVICE_API_PORT_INTERNAL}
+                - SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=${DC_SERVICE_API_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES}
+                - SERVICE_API_USER_ROOT_EMAIL=${DC_SERVICE_API_USER_ROOT_EMAIL}
+                - SERVICE_API_MIDDLEWARE_CORS_ALLOW_ORIGINS_STRING_AS_LIST=${DC_SERVICE_WEB_LOAD_BALANCER_PROTOCOL}://${DC_SERVICE_WEB_LOAD_BALANCER_DOMAIN}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}
+                - SERVICE_API_MIDDLEWARE_TRUSTEDHOST_ALLOWED_HOSTS_STRING_AS_LIST=${DC_SERVICE_API_HOST}||${DC_SERVICE_API_LOAD_BALANCER_HOST}||${DC_SERVICE_API_LOAD_BALANCER_DOMAIN}
+                - SERVICE_DB_HOST=${DC_SERVICE_DB_HOST}
+                - SERVICE_DB_PORT=${DC_SERVICE_DB_PORT_INTERNAL}
+                - SERVICE_DB_DATABASE=${DC_SERVICE_DB_DATABASE}
+                - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
+        ports:
+            - ${DC_SERVICE_API_PORT_EXTERNAL}:${DC_SERVICE_API_PORT_INTERNAL}
+        secrets:
+            -   source: service_api_auth_jwt_key
+                target: SERVICE_API_AUTH_JWT_KEY_FILE
+            -   source: service_api_auth_jwt_algorithm
+                target: SERVICE_API_AUTH_JWT_ALGORITHM_FILE
+            -   source: service_api_user_root_password
+                target: SERVICE_API_USER_ROOT_PASSWORD_FILE
+            -   source: service_db_password
+                target: SERVICE_DB_PASSWORD_FILE
+        networks:
+            - network
+    service-db:
+        deploy:
+            mode: replicated
+            replicas: 1
+            placement:
+                max_replicas_per_node: 1
+        healthcheck:
+            test: pg_isready --host=${DC_SERVICE_DB_HOST} --port=${DC_SERVICE_DB_PORT_INTERNAL} --dbname=${DC_SERVICE_DB_DATABASE} --username=${DC_SERVICE_DB_USER}
+            interval: 1s
+            timeout: 1s
+            retries: 10
+            start_period: 0s
+            start_interval: 0s
+        image: postgres:17.2-alpine
+        restart: unless-stopped
+        environment:
+            - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}/
+            - POSTGRES_DB=${DC_SERVICE_DB_DATABASE}
+            - POSTGRES_USER=${DC_SERVICE_DB_USER}
+            - POSTGRES_PASSWORD_FILE=/run/secrets/service_db_password
+        ports:
+            - ${DC_SERVICE_DB_PORT_EXTERNAL}:${DC_SERVICE_DB_PORT_INTERNAL}
+        secrets:
+            - service_db_password
+        networks:
+            - network
+        volumes:
+            - volume-db:/var/lib/postgresql/data/:rw
 
 secrets:
-  service_api_auth_jwt_key:
-    file: ./secret/.secret.SERVICE_API_AUTH_JWT_KEY
-  service_api_auth_jwt_algorithm:
-    file: ./secret/.secret.SERVICE_API_AUTH_JWT_ALGORITHM
-  service_api_user_root_password:
-    file: ./secret/.secret.SERVICE_API_USER_ROOT_PASSWORD
-  service_db_password:
-    file: ./secret/.secret.SERVICE_DB_PASSWORD
+    service_api_auth_jwt_key:
+        file: ./secret/.secret.SERVICE_API_AUTH_JWT_KEY
+    service_api_auth_jwt_algorithm:
+        file: ./secret/.secret.SERVICE_API_AUTH_JWT_ALGORITHM
+    service_api_user_root_password:
+        file: ./secret/.secret.SERVICE_API_USER_ROOT_PASSWORD
+    service_db_password:
+        file: ./secret/.secret.SERVICE_DB_PASSWORD
 
 networks:
-  network-entry-point:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point
-    driver: bridge
-  network:
-    name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
-    driver: bridge
+    network-entry-point:
+        name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point
+        driver: bridge
+    network:
+        name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
+        driver: bridge
 
 volumes:
-  volume-db:
-    name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
-    driver: local
-#    driver_opts:
-#      type: none
-#      o: bind
-#      device: ./service/db/volume/
+    volume-db:
+        name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+        driver: local
+#        driver_opts:
+#            type: none
+#            o: bind
+#            device: ./service/db/volume/
