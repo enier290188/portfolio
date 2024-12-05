@@ -42,7 +42,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PIPENV_VENV_IN_PROJECT=1
 
-WORKDIR /usr/src/service/api
+WORKDIR /usr/src/service/api/
 COPY ./Pipfile* ./
 RUN <<EOF
     pip install pipenv
@@ -98,7 +98,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PIPENV_VENV_IN_PROJECT=1
 
-WORKDIR /usr/src/service/api
+WORKDIR /usr/src/service/api/
 
 
 FROM stage-production-base AS stage-production-requirements

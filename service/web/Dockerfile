@@ -28,7 +28,7 @@ ENV VITE_SERVICE_API_PROTOCOL=$SERVICE_API_PROTOCOL
 ENV VITE_SERVICE_API_DOMAIN=$SERVICE_API_DOMAIN
 ENV VITE_SERVICE_API_PORT=$SERVICE_API_PORT
 
-WORKDIR /usr/src/service/web
+WORKDIR /usr/src/service/web/
 COPY ./package*.json ./
 RUN <<EOF
     npm i
@@ -67,7 +67,7 @@ ENV VITE_SERVICE_API_PROTOCOL=$SERVICE_API_PROTOCOL
 ENV VITE_SERVICE_API_DOMAIN=$SERVICE_API_DOMAIN
 ENV VITE_SERVICE_API_PORT=$SERVICE_API_PORT
 
-WORKDIR /usr/src/service/web
+WORKDIR /usr/src/service/web/
 
 
 FROM stage-production-base AS stage-production-dependencies
@@ -78,7 +78,7 @@ EOF
 
 
 FROM stage-production-base AS stage-production-builder
-COPY --from=stage-production-dependencies /usr/src/service/web/node_modules ./node_modules
+COPY --from=stage-production-dependencies /usr/src/service/web/node_modules/ ./node_modules/
 COPY ./ ./
 RUN <<EOF
     npm run tsc
@@ -114,10 +114,10 @@ ENV VITE_SERVICE_API_PORT=$SERVICE_API_PORT
 ENV NGINX_HOST=$NGINX_HOST
 ENV NGINX_PORT=$NGINX_PORT
 
-WORKDIR /usr/src/service/web
+WORKDIR /usr/src/service/web/
 RUN <<EOF
     cp -r -a /usr/share/nginx/html/* ./
 EOF
-COPY --from=stage-production-builder /usr/src/service/web/dist ./
+COPY --from=stage-production-builder /usr/src/service/web/dist/ ./
 EXPOSE $NGINX_PORT
 CMD ["nginx", "-g", "daemon off;"]

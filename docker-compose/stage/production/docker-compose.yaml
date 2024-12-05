@@ -61,7 +61,7 @@ services:
       platforms:
         - linux/arm64/v8
         - linux/amd64
-      context: ../../../service/web
+      context: ../../../service/web/
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
@@ -141,7 +141,7 @@ services:
       platforms:
         - linux/arm64/v8
         - linux/amd64
-      context: ../../../service/api
+      context: ../../../service/api/
       dockerfile: Dockerfile
       target: stage-${DC_PROJECT_STAGE}
       args:
@@ -187,7 +187,7 @@ services:
     image: postgres:17.2-alpine
     restart: unless-stopped
     environment:
-      - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}
+      - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}/
       - POSTGRES_DB=${DC_SERVICE_DB_DATABASE}
       - POSTGRES_USER=${DC_SERVICE_DB_USER}
       - POSTGRES_PASSWORD_FILE=/run/secrets/service_db_password
@@ -198,7 +198,7 @@ services:
     networks:
       - network
     volumes:
-      - volume-db:/var/lib/postgresql/data:rw
+      - volume-db:/var/lib/postgresql/data/:rw
 
 secrets:
   service_api_auth_jwt_key:
@@ -222,12 +222,7 @@ volumes:
   volume-db:
     name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
     driver: local
-
-#volumes:
-#  volume-db:
-#    name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
-#    driver: local
 #    driver_opts:
 #      type: none
 #      o: bind
-#      device: ./service/db/volume
+#      device: ./service/db/volume/
