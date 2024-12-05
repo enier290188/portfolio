@@ -45,8 +45,6 @@ RUN <<EOF
     apk update && apk upgrade --no-cache
     apk add --no-cache curl
     npm install -g npm@latest
-    addgroup --system --gid 10001 nonroot
-    adduser --system --uid 10001 nonroot --disabled-password --no-create-home
 EOF
 
 ARG SERVICE_WEB_HOST
@@ -90,6 +88,8 @@ FROM nginx:1.27.2-alpine AS stage-production
 RUN <<EOF
     apk update && apk upgrade --no-cache
     apk add --no-cache curl
+    addgroup --system --gid 10001 nonroot
+    adduser --system --uid 10001 nonroot --disabled-password --no-create-home
 EOF
 
 ARG SERVICE_WEB_HOST
@@ -118,6 +118,6 @@ WORKDIR /usr/src/service/web/
 RUN <<EOF
     cp -r -a /usr/share/nginx/html/* ./
 EOF
-COPY --from=stage-production-builder /usr/src/service/web/dist/ ./
+COPY --from=stage-production-builder --chown=nonroot:nonroot /usr/src/service/web/dist/ ./
 EXPOSE $NGINX_PORT
 CMD ["nginx", "-g", "daemon off;"]
