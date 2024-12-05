@@ -2,14 +2,14 @@
 .idea/
 .vscode/
 
+# misc
+.DS_Store
+
 # env files
 .env*
 
 # secret files
 .secret*
-
-# misc
-.DS_Store
 
 # dependencies
 node_modules/
@@ -20,12 +20,9 @@ dist/
 
 
 ########## ########## ########## ########## ##########
-LICENSE
-README.md
-
-.git/
-.gitignore*
-
 Dockerfile*
 docker-compose*
 .dockerignore*
+
+.git/
+.gitignore*

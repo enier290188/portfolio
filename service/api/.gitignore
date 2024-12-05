@@ -2,14 +2,14 @@
 .idea/
 .vscode/
 
+# misc
+.DS_Store
+
 # env files
 .env*
 
 # secret files
 .secret*
-
-# misc
-.DS_Store
 
 # dependencies
 .venv/
