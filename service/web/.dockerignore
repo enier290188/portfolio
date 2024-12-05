@@ -24,7 +24,7 @@ LICENSE
 README.md
 
 .git/
-.gitignore
+.gitignore*
 
 Dockerfile*
 docker-compose*
