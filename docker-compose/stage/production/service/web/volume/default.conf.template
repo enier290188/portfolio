@@ -3,7 +3,7 @@ server {
     listen ${NGINX_PORT};
 
     location / {
-        root /usr/src/service/web;
+        root /usr/src/service/web/;
         index index.html;
         try_files $uri $uri/ /index.html;
     }
