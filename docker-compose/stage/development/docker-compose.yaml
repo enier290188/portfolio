@@ -117,8 +117,6 @@ services:
                     path: ../../../service/api/Pipfile
                 -   action: rebuild
                     path: ../../../service/api/Pipfile.lock
-        post_start:
-            -   command: alembic upgrade head
     service-db:
         healthcheck:
             test: pg_isready --host=${DC_SERVICE_DB_HOST} --port=${DC_SERVICE_DB_PORT_INTERNAL} --dbname=${DC_SERVICE_DB_DATABASE} --username=${DC_SERVICE_DB_USER}

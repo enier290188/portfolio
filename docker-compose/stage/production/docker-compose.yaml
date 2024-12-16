@@ -18,24 +18,31 @@ services:
                 condition: service_healthy
                 restart: true
                 required: true
-        image: nginx:1.27.2-alpine
+        image: image-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_WEB_LOAD_BALANCER_HOST}:0.1.0
         restart: unless-stopped
         environment:
             - NGINX_HOST=${DC_SERVICE_WEB_LOAD_BALANCER_HOST}
             - NGINX_PORT=${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
             - NGINX_SERVER_REPLICAS={
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-1:${DC_SERVICE_WEB_PORT_INTERNAL};
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-2:${DC_SERVICE_WEB_PORT_INTERNAL};
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-web-3:${DC_SERVICE_WEB_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_WEB_HOST}-1:${DC_SERVICE_WEB_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_WEB_HOST}-2:${DC_SERVICE_WEB_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_WEB_HOST}-3:${DC_SERVICE_WEB_PORT_INTERNAL};
                 }
+        build:
+            platforms:
+                - linux/arm64/v8
+                - linux/amd64
+            context: ./
+            dockerfile_inline: |
+                FROM nginx:1.27.3-alpine
         ports:
             - ${DC_SERVICE_WEB_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_WEB_LOAD_BALANCER_PORT_INTERNAL}
         networks:
             - network-entry-point
             - network
         volumes:
-            - ./service/web-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
-            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.local"
+            - ./service/web-load-balancer/volume/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=web.portfolio.prod.local"
             - ./service/web-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
             - ./service/web-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
     service-web:
@@ -57,7 +64,7 @@ services:
                 condition: service_healthy
                 restart: true
                 required: true
-        image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-web:0.1.0
+        image: image-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_WEB_HOST}:0.1.0
         restart: unless-stopped
         build:
             platforms:
@@ -80,7 +87,7 @@ services:
         networks:
             - network
         volumes:
-            - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+            - ./service/web/volume/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro
     service-api-load-balancer:
         deploy:
             endpoint_mode: vip
@@ -100,24 +107,31 @@ services:
                 condition: service_healthy
                 restart: true
                 required: true
-        image: nginx:1.27.2-alpine
+        image: image-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_API_LOAD_BALANCER_HOST}:0.1.0
         restart: unless-stopped
         environment:
             - NGINX_HOST=${DC_SERVICE_API_LOAD_BALANCER_HOST}
             - NGINX_PORT=${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
             - NGINX_SERVER_REPLICAS={
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-1:${DC_SERVICE_API_PORT_INTERNAL};
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-2:${DC_SERVICE_API_PORT_INTERNAL};
-                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-api-3:${DC_SERVICE_API_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_API_HOST}-1:${DC_SERVICE_API_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_API_HOST}-2:${DC_SERVICE_API_PORT_INTERNAL};
+                server project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_API_HOST}-3:${DC_SERVICE_API_PORT_INTERNAL};
                 }
+        build:
+            platforms:
+                - linux/arm64/v8
+                - linux/amd64
+            context: ./
+            dockerfile_inline: |
+                FROM nginx:1.27.3-alpine
         ports:
             - ${DC_SERVICE_API_LOAD_BALANCER_PORT_EXTERNAL}:${DC_SERVICE_API_LOAD_BALANCER_PORT_INTERNAL}
         networks:
             - network-entry-point
             - network
         volumes:
-            - ./service/api-load-balancer/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
-            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.local"
+            - ./service/api-load-balancer/volume/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+            # openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./.ssl.key -out ./.ssl.crt -subj "/C=US/ST=Texas/L=Dallas/O=Celsitud/OU=IT/CN=api.portfolio.prod.local"
             - ./service/api-load-balancer/volume/ssl/.ssl.crt:/etc/nginx/ssl/.ssl.crt:ro
             - ./service/api-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
     service-api:
@@ -139,7 +153,7 @@ services:
                 condition: service_healthy
                 restart: true
                 required: true
-        image: image-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-api:0.1.0
+        image: image-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_API_HOST}:0.1.0
         restart: unless-stopped
         build:
             platforms:
@@ -175,8 +189,6 @@ services:
                 target: SERVICE_API_USER_ROOT_PASSWORD_FILE
             -   source: secret-service-db-password
                 target: SERVICE_DB_PASSWORD_FILE
-        post_start:
-            -   command: alembic upgrade head
     service-db:
         deploy:
             endpoint_mode: vip

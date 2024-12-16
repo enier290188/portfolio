@@ -1,4 +1,5 @@
 ARG NODE_VERSION=22.12.0
+ARG NGINX_VERSION=1.27.3
 
 
 
@@ -84,7 +85,7 @@ RUN <<EOF
 EOF
 
 
-FROM nginx:1.27.2-alpine AS stage-production
+FROM nginx:${NGINX_VERSION}-alpine AS stage-production
 RUN <<EOF
     apk update && apk upgrade --no-cache
     apk add --no-cache curl
