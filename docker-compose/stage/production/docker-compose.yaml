@@ -1,6 +1,7 @@
 services:
     service-web-load-balancer:
         deploy:
+            endpoint_mode: vip
             mode: replicated
             replicas: 1
             placement:
@@ -39,6 +40,7 @@ services:
             - ./service/web-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
     service-web:
         deploy:
+            endpoint_mode: vip
             mode: replicated
             replicas: 3
             placement:
@@ -81,6 +83,7 @@ services:
             - ./service/web/volume/default.conf.template:/etc/nginx/templates/default.conf.template:ro
     service-api-load-balancer:
         deploy:
+            endpoint_mode: vip
             mode: replicated
             replicas: 1
             placement:
@@ -119,6 +122,7 @@ services:
             - ./service/api-load-balancer/volume/ssl/.ssl.key:/etc/nginx/ssl/.ssl.key:ro
     service-api:
         deploy:
+            endpoint_mode: vip
             mode: replicated
             replicas: 3
             placement:
@@ -160,19 +164,22 @@ services:
                 - SERVICE_DB_USER=${DC_SERVICE_DB_USER}
         ports:
             - ${DC_SERVICE_API_PORT_EXTERNAL}:${DC_SERVICE_API_PORT_INTERNAL}
-        secrets:
-            -   source: service_api_auth_jwt_key
-                target: SERVICE_API_AUTH_JWT_KEY_FILE
-            -   source: service_api_auth_jwt_algorithm
-                target: SERVICE_API_AUTH_JWT_ALGORITHM_FILE
-            -   source: service_api_user_root_password
-                target: SERVICE_API_USER_ROOT_PASSWORD_FILE
-            -   source: service_db_password
-                target: SERVICE_DB_PASSWORD_FILE
         networks:
             - network
+        secrets:
+            -   source: secret-service-api-auth-jwt-key
+                target: SERVICE_API_AUTH_JWT_KEY_FILE
+            -   source: secret-service-api-auth-jwt-algorithm
+                target: SERVICE_API_AUTH_JWT_ALGORITHM_FILE
+            -   source: secret-service-api-user-root-password
+                target: SERVICE_API_USER_ROOT_PASSWORD_FILE
+            -   source: secret-service-db-password
+                target: SERVICE_DB_PASSWORD_FILE
+        post_start:
+            -   command: alembic upgrade head
     service-db:
         deploy:
+            endpoint_mode: vip
             mode: replicated
             replicas: 1
             placement:
@@ -184,45 +191,53 @@ services:
             retries: 10
             start_period: 0s
             start_interval: 0s
-        image: postgres:17.2-alpine
+        image: image-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-${DC_SERVICE_DB_HOST}:0.1.0
         restart: unless-stopped
         environment:
             - PGDATA=/var/lib/postgresql/data/${DC_SERVICE_DB_DATABASE}/
             - POSTGRES_DB=${DC_SERVICE_DB_DATABASE}
             - POSTGRES_USER=${DC_SERVICE_DB_USER}
-            - POSTGRES_PASSWORD_FILE=/run/secrets/service_db_password
+            - POSTGRES_PASSWORD_FILE=/run/secrets/SERVICE_DB_PASSWORD_FILE
+        build:
+            platforms:
+                - linux/arm64/v8
+                - linux/amd64
+            context: ./
+            dockerfile_inline: |
+                FROM postgres:17.2-alpine
         ports:
             - ${DC_SERVICE_DB_PORT_EXTERNAL}:${DC_SERVICE_DB_PORT_INTERNAL}
-        secrets:
-            - service_db_password
         networks:
             - network
+        secrets:
+            -   source: secret-service-db-password
+                target: SERVICE_DB_PASSWORD_FILE
         volumes:
-            - volume-db:/var/lib/postgresql/data/:rw
-
-secrets:
-    service_api_auth_jwt_key:
-        file: ./secret/.secret.SERVICE_API_AUTH_JWT_KEY
-    service_api_auth_jwt_algorithm:
-        file: ./secret/.secret.SERVICE_API_AUTH_JWT_ALGORITHM
-    service_api_user_root_password:
-        file: ./secret/.secret.SERVICE_API_USER_ROOT_PASSWORD
-    service_db_password:
-        file: ./secret/.secret.SERVICE_DB_PASSWORD
+            - volume-service-db:/var/lib/postgresql/data/:rw
 
 networks:
     network-entry-point:
-        name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point
+        name: network-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-entry-point
         driver: bridge
     network:
-        name: network-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
+        name: network-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}
         driver: bridge
 
+secrets:
+    secret-service-api-auth-jwt-key:
+        file: ./secret/.secret.SERVICE_API_AUTH_JWT_KEY
+    secret-service-api-auth-jwt-algorithm:
+        file: ./secret/.secret.SERVICE_API_AUTH_JWT_ALGORITHM
+    secret-service-api-user-root-password:
+        file: ./secret/.secret.SERVICE_API_USER_ROOT_PASSWORD
+    secret-service-db-password:
+        file: ./secret/.secret.SERVICE_DB_PASSWORD
+
 volumes:
-    volume-db:
-        name: volume-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-db
+    volume-service-db:
+        name: volume-project-${DC_PROJECT_NAME}-${DC_PROJECT_STAGE}-service-db
         driver: local
-#        driver_opts:
-#            type: none
-#            o: bind
-#            device: ./service/db/volume/
+        driver_opts:
+            type: none
+            o: bind
+            device: ./service/db/volume/
